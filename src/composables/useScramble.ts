@@ -10,6 +10,12 @@ export function useScramble(text: string, speed: number = 40, autoStart: boolean
   const triggerAnimation = () => {
     if (isAnimating.value) return;
 
+    // Respect user's reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      displayText.value = text;
+      return;
+    }
+
     isAnimating.value = true;
     let iteration = 0;
 

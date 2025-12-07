@@ -1,0 +1,33 @@
+steps:
+  install:
+    image: node:20-alpine
+    commands:
+      - npm ci
+
+  lint:
+    image: node:20-alpine
+    commands:
+      - npm run lint
+
+  build:
+    image: node:20-alpine
+    commands:
+      - npm run build
+
+  # Example deployment to Hetzner via Rsync
+  # Requires secrets: SSH_KEY, SSH_USER, SSH_HOST
+  # deploy:
+  #   image: drillster/drone-rsync
+  #   settings:
+  #     user:
+  #       from_secret: SSH_USER
+  #     key:
+  #       from_secret: SSH_KEY
+  #     host:
+  #       from_secret: SSH_HOST
+  #     source: ./dist/*
+  #     target: /var/www/html/ # Or your specific path
+  #     recursive: true
+  #     delete: true
+  #   when:
+  #     branch: main

@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <!-- Light Mode (Blue) -->
+  <!-- Light Mode -->
   <svg
     class="block dark:hidden"
     :width="size || 24"
@@ -59,7 +59,7 @@ defineProps<{
     </g>
   </svg>
 
-  <!-- Dark Mode (White) -->
+  <!-- Dark Mode -->
   <svg
     class="hidden dark:block"
     :width="size || 24"
@@ -80,9 +80,9 @@ defineProps<{
         gradientUnits="userSpaceOnUse"
       />
       <linearGradient id="linearGradient6924_dark">
-        <stop style="stop-color:#2185d0;stop-opacity:0" offset="0" />
-        <stop offset="0.49517274" style="stop-color:#2185d0;stop-opacity:0.48923996" />
-        <stop style="stop-color:#2185d0;stop-opacity:0.63279623" offset="1" />
+        <stop style="stop-color:#ffffff;stop-opacity:0" offset="0" />
+        <stop offset="0.49517274" style="stop-color:#ffffff;stop-opacity:0.30000001" />
+        <stop style="stop-color:#ffffff;stop-opacity:0.30000001" offset="1" />
       </linearGradient>
       <linearGradient
         xlink:href="#linearGradient6924-6_dark"
