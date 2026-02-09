@@ -7,7 +7,7 @@
     </p>
     <div class="text-xs text-secondary">
       <p class="mb-2">Created with Vue, TypeScript, Tailwind & the help of AI</p>
-      <a href="https://codeberg.org/user/portfolio" target="_blank" class="hover:text-accent transition-colors">
+      <a href="https://codeberg.org/Lxrs/larmart.de" target="_blank" class="hover:text-accent transition-colors">
         Source Code
       </a>
     </div>
