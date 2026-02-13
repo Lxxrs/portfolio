@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { nextTick } from 'vue';
+import { defineComponent, nextTick } from 'vue';
+import { mount } from '@vue/test-utils';
 
 describe('useScramble', () => {
   beforeEach(() => {
@@ -19,37 +20,57 @@ describe('useScramble', () => {
     vi.restoreAllMocks();
   });
 
+  // Helper to test composable in component context
+  const withSetup = async <T,>(composable: () => T) => {
+    let result: T | undefined;
+    const TestComponent = defineComponent({
+      setup() {
+        result = composable();
+        return () => {};
+      }
+    });
+    const wrapper = mount(TestComponent);
+    await nextTick();
+    return {
+      result: result as T,
+      wrapper
+    };
+  };
+
   it('should initialize with the original text', async () => {
     const { useScramble } = await import('./useScramble');
-    const { displayText } = useScramble('Hello', 40, false);
-    expect(displayText.value).toBe('Hello');
+    const { result, wrapper } = await withSetup(() => useScramble('Hello', 40, false));
+    expect(result.displayText.value).toBe('Hello');
+    wrapper.unmount();
   });
 
   it('should scramble text when animation is triggered', async () => {
     const { useScramble } = await import('./useScramble');
-    const { displayText, triggerAnimation } = useScramble('Test', 40, false);
+    const { result, wrapper } = await withSetup(() => useScramble('Test', 40, false));
     
-    triggerAnimation();
+    result.triggerAnimation();
     await nextTick();
     
     // Should be scrambling
     vi.advanceTimersByTime(40);
-    expect(displayText.value).not.toBe('Test');
-    expect(displayText.value.length).toBe(4);
+    expect(result.displayText.value).not.toBe('Test');
+    expect(result.displayText.value.length).toBe(4);
+    wrapper.unmount();
   });
 
   it('should eventually return to original text after scrambling', async () => {
     const { useScramble } = await import('./useScramble');
     const text = 'Final';
-    const { displayText, triggerAnimation } = useScramble(text, 40, false);
+    const { result, wrapper } = await withSetup(() => useScramble(text, 40, false));
     
-    triggerAnimation();
+    result.triggerAnimation();
     await nextTick();
     
     // Advance through entire animation (text.length * 3 * speed)
     vi.advanceTimersByTime(text.length * 3 * 40 + 100);
     
-    expect(displayText.value).toBe(text);
+    expect(result.displayText.value).toBe(text);
+    wrapper.unmount();
   });
 
   it('should respect prefers-reduced-motion', async () => {
@@ -63,25 +84,27 @@ describe('useScramble', () => {
 
     const { useScramble } = await import('./useScramble');
     const text = 'NoAnimation';
-    const { displayText, triggerAnimation } = useScramble(text, 40, false);
+    const { result, wrapper } = await withSetup(() => useScramble(text, 40, false));
     
-    triggerAnimation();
+    result.triggerAnimation();
     await nextTick();
     
     // Should immediately show final text without animation
-    expect(displayText.value).toBe(text);
+    expect(result.displayText.value).toBe(text);
+    wrapper.unmount();
   });
 
   it('should preserve spaces in text', async () => {
     const { useScramble } = await import('./useScramble');
     const text = 'Hello World';
-    const { displayText, triggerAnimation } = useScramble(text, 40, false);
+    const { result, wrapper } = await withSetup(() => useScramble(text, 40, false));
     
-    triggerAnimation();
+    result.triggerAnimation();
     await nextTick();
     vi.advanceTimersByTime(40);
     
     // Check that space is at correct position
-    expect(displayText.value[5]).toBe(' ');
+    expect(result.displayText.value[5]).toBe(' ');
+    wrapper.unmount();
   });
 });

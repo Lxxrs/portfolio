@@ -1,4 +1,4 @@
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 
 const STORAGE_KEY = 'theme-preference';
 
@@ -47,22 +47,28 @@ export function useTheme() {
     }
   };
 
+  let mediaQuery: MediaQueryList | null = null;
+  let handleChange: ((e: MediaQueryListEvent) => void) | null = null;
+
   onMounted(() => {
     applyTheme(isDark.value);
 
     // Listen for system preference changes
     if (typeof window !== 'undefined' && window.matchMedia) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleChange = (e: MediaQueryListEvent) => {
+      mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      handleChange = (e: MediaQueryListEvent) => {
         // Only auto-update if user hasn't set a preference
         if (getStoredTheme() === null) {
           isDark.value = e.matches;
         }
       };
       mediaQuery.addEventListener('change', handleChange);
+    }
+  });
 
-      // Cleanup listener
-      return () => mediaQuery.removeEventListener('change', handleChange);
+  onUnmounted(() => {
+    if (mediaQuery && handleChange) {
+      mediaQuery.removeEventListener('change', handleChange);
     }
   });
 

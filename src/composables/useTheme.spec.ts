@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { nextTick } from 'vue';
+import { defineComponent, nextTick } from 'vue';
+import { mount } from '@vue/test-utils';
 
 describe('useTheme', () => {
   const mockMatchMedia = (matches: boolean) => {
@@ -54,14 +55,32 @@ describe('useTheme', () => {
     vi.clearAllMocks();
   });
 
+  // Helper to test composable in component context
+  const withSetup = async <T,>(composable: () => T) => {
+    let result: T | undefined;
+    const TestComponent = defineComponent({
+      setup() {
+        result = composable();
+        return () => {};
+      }
+    });
+    const wrapper = mount(TestComponent);
+    await nextTick();
+    return {
+      result: result as T,
+      wrapper
+    };
+  };
+
   it('should initialize with dark mode from system preference when no stored value', async () => {
     window.matchMedia = vi.fn().mockImplementation(() => mockMatchMedia(true));
     
     // Dynamic import to get fresh module
     const { useTheme } = await import('./useTheme');
-    const { isDark } = useTheme();
+    const { result, wrapper } = await withSetup(() => useTheme());
     
-    expect(isDark.value).toBe(true);
+    expect(result.isDark.value).toBe(true);
+    wrapper.unmount();
   });
 
   it('should initialize from localStorage when value exists', async () => {
@@ -70,52 +89,55 @@ describe('useTheme', () => {
     
     // Dynamic import to get fresh module
     const { useTheme } = await import('./useTheme');
-    const { isDark } = useTheme();
+    const { result, wrapper } = await withSetup(() => useTheme());
     
-    expect(isDark.value).toBe(false);
+    expect(result.isDark.value).toBe(false);
+    wrapper.unmount();
   });
 
   it('should toggle theme and save to localStorage', async () => {
     localStorageMock['theme-preference'] = 'dark';
     
     const { useTheme } = await import('./useTheme');
-    const { isDark, toggleTheme } = useTheme();
+    const { result, wrapper } = await withSetup(() => useTheme());
     
     // Initial state (dark)
-    expect(isDark.value).toBe(true);
+    expect(result.isDark.value).toBe(true);
     
     // Toggle to light
-    toggleTheme();
+    result.toggleTheme();
     await nextTick();
-    expect(isDark.value).toBe(false);
+    expect(result.isDark.value).toBe(false);
     expect(localStorageMock['theme-preference']).toBe('light');
     
     // Toggle back to dark
-    toggleTheme();
+    result.toggleTheme();
     await nextTick();
-    expect(isDark.value).toBe(true);
+    expect(result.isDark.value).toBe(true);
     expect(localStorageMock['theme-preference']).toBe('dark');
+    wrapper.unmount();
   });
 
   it('should apply and remove dark class from document element', async () => {
     localStorageMock['theme-preference'] = 'dark';
     
     const { useTheme } = await import('./useTheme');
-    const { isDark, toggleTheme } = useTheme();
+    const { result, wrapper } = await withSetup(() => useTheme());
     
     // Initial state (dark)
-    expect(isDark.value).toBe(true);
+    expect(result.isDark.value).toBe(true);
     
     // Toggle to light
-    toggleTheme();
+    result.toggleTheme();
     await nextTick();
-    expect(isDark.value).toBe(false);
+    expect(result.isDark.value).toBe(false);
     expect(document.documentElement.classList.contains('dark')).toBe(false);
     
     // Toggle back to dark
-    toggleTheme();
+    result.toggleTheme();
     await nextTick();
-    expect(isDark.value).toBe(true);
+    expect(result.isDark.value).toBe(true);
     expect(document.documentElement.classList.contains('dark')).toBe(true);
+    wrapper.unmount();
   });
 });
