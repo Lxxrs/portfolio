@@ -17,8 +17,8 @@ defineProps<{
   >
     <defs>
       <linearGradient
-        xlink:href="#linearGradient6924"
         id="linearGradient6918"
+        xlink:href="#linearGradient6924"
         x1="42519.285"
         y1="-7078.7891"
         x2="42575.336"
@@ -26,13 +26,22 @@ defineProps<{
         gradientUnits="userSpaceOnUse"
       />
       <linearGradient id="linearGradient6924">
-        <stop style="stop-color:#2185d0;stop-opacity:0" offset="0" />
-        <stop offset="0.49517274" style="stop-color:#2185d0;stop-opacity:0.48923996" />
-        <stop style="stop-color:#2185d0;stop-opacity:0.63279623" offset="1" />
+        <stop
+          style="stop-color:#2185d0;stop-opacity:0"
+          offset="0"
+        />
+        <stop
+          offset="0.49517274"
+          style="stop-color:#2185d0;stop-opacity:0.48923996"
+        />
+        <stop
+          style="stop-color:#2185d0;stop-opacity:0.63279623"
+          offset="1"
+        />
       </linearGradient>
       <linearGradient
-        xlink:href="#linearGradient6924-6"
         id="linearGradient6918-3"
+        xlink:href="#linearGradient6924-6"
         x1="42519.285"
         y1="-7078.7891"
         x2="42575.336"
@@ -40,9 +49,18 @@ defineProps<{
         gradientUnits="userSpaceOnUse"
       />
       <linearGradient id="linearGradient6924-6">
-        <stop style="stop-color:#2185d0;stop-opacity:0;" offset="0" />
-        <stop offset="0.49517274" style="stop-color:#2185d0;stop-opacity:0.30000001;" />
-        <stop style="stop-color:#2185d0;stop-opacity:0.30000001;" offset="1" />
+        <stop
+          style="stop-color:#2185d0;stop-opacity:0;"
+          offset="0"
+        />
+        <stop
+          offset="0.49517274"
+          style="stop-color:#2185d0;stop-opacity:0.30000001;"
+        />
+        <stop
+          style="stop-color:#2185d0;stop-opacity:0.30000001;"
+          offset="1"
+        />
       </linearGradient>
     </defs>
     <g transform="matrix(0.06551432,0,0,0.06551432,-2.232417,-1.431776)">
@@ -71,8 +89,8 @@ defineProps<{
   >
     <defs>
       <linearGradient
-        xlink:href="#linearGradient6924_dark"
         id="linearGradient6918_dark"
+        xlink:href="#linearGradient6924_dark"
         x1="42519.285"
         y1="-7078.7891"
         x2="42575.336"
@@ -80,13 +98,22 @@ defineProps<{
         gradientUnits="userSpaceOnUse"
       />
       <linearGradient id="linearGradient6924_dark">
-        <stop style="stop-color:#ffffff;stop-opacity:0" offset="0" />
-        <stop offset="0.49517274" style="stop-color:#ffffff;stop-opacity:0.30000001" />
-        <stop style="stop-color:#ffffff;stop-opacity:0.30000001" offset="1" />
+        <stop
+          style="stop-color:#ffffff;stop-opacity:0"
+          offset="0"
+        />
+        <stop
+          offset="0.49517274"
+          style="stop-color:#ffffff;stop-opacity:0.30000001"
+        />
+        <stop
+          style="stop-color:#ffffff;stop-opacity:0.30000001"
+          offset="1"
+        />
       </linearGradient>
       <linearGradient
-        xlink:href="#linearGradient6924-6_dark"
         id="linearGradient6918-3_dark"
+        xlink:href="#linearGradient6924-6_dark"
         x1="42519.285"
         y1="-7078.7891"
         x2="42575.336"
@@ -94,9 +121,18 @@ defineProps<{
         gradientUnits="userSpaceOnUse"
       />
       <linearGradient id="linearGradient6924-6_dark">
-        <stop style="stop-color:#ffffff;stop-opacity:0;" offset="0" />
-        <stop offset="0.49517274" style="stop-color:#ffffff;stop-opacity:0.30000001;" />
-        <stop style="stop-color:#ffffff;stop-opacity:0.30000001;" offset="1" />
+        <stop
+          style="stop-color:#ffffff;stop-opacity:0;"
+          offset="0"
+        />
+        <stop
+          offset="0.49517274"
+          style="stop-color:#ffffff;stop-opacity:0.30000001;"
+        />
+        <stop
+          style="stop-color:#ffffff;stop-opacity:0.30000001;"
+          offset="1"
+        />
       </linearGradient>
     </defs>
     <g transform="matrix(0.06551432,0,0,0.06551432,-2.232417,-1.431776)">

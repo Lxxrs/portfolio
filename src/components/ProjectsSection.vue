@@ -6,7 +6,10 @@ import { projects } from '../data/portfolio';
 
 <template>
   <section class="py-20">
-    <SectionHeader num="2" title="Executables" />
+    <SectionHeader
+      num="2"
+      title="Executables"
+    />
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       <ProjectCard 
         v-for="project in projects" 
@@ -14,7 +17,7 @@ import { projects } from '../data/portfolio';
         :title="project.title"
         :desc="project.desc"
         :stack="project.stack"
-        :repoUrl="project.repoUrl"
+        :repo-url="project.repoUrl"
         :is-private="project.isPrivate"
       />
     </div>

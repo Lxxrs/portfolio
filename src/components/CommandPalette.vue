@@ -157,43 +157,66 @@ onUnmounted(() => {
       leave-from-class="opacity-100 scale-100"
       leave-to-class="opacity-0 scale-95"
     >
-      <div v-if="isOpen" class="fixed inset-0 z-100 flex items-start justify-center pt-[20vh] px-4">
+      <div
+        v-if="isOpen"
+        class="fixed inset-0 z-100 flex items-start justify-center pt-[20vh] px-4"
+      >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" @click="close"></div>
+        <div
+          class="fixed inset-0 bg-black/60 backdrop-blur-sm"
+          @click="close"
+        />
 
         <!-- Modal -->
         <div class="w-full max-w-xl bg-card border border-border rounded-xl shadow-2xl overflow-hidden relative flex flex-col max-h-[60vh]">
-          
           <!-- Search Bar -->
           <div class="flex items-center px-4 py-3 border-b border-border">
-            <Search :size="20" class="text-secondary mr-3" />
+            <Search
+              :size="20"
+              class="text-secondary mr-3"
+            />
             <input 
               ref="searchInput"
               v-model="searchQuery"
               type="text" 
               placeholder="Type a command..." 
+              autocomplete="off"
               class="flex-1 bg-transparent border-none outline-none text-primary placeholder-secondary font-mono text-sm h-6"
-            />
-            <div class="text-xs text-secondary border border-border px-1.5 py-0.5 rounded">ESC</div>
+            >
+            <div class="text-xs text-secondary border border-border px-1.5 py-0.5 rounded">
+              ESC
+            </div>
           </div>
 
           <!-- Results -->
           <div class="overflow-y-auto p-2">
-            <div v-if="commands.length === 0" class="p-4 text-center text-secondary text-sm">
+            <div
+              v-if="commands.length === 0"
+              class="p-4 text-center text-secondary text-sm"
+            >
               No commands found.
             </div>
 
             <button
               v-for="(cmd, index) in commands"
               :key="cmd.id"
-              @click="cmd.action"
-              @mouseenter="selectedIndex = index"
               class="w-full flex items-center px-3 py-3 rounded-md text-sm transition-colors group"
               :class="selectedIndex === index ? 'bg-accent/10 text-accent' : 'text-primary'"
+              @click="cmd.action"
+              @mouseenter="selectedIndex = index"
             >
-              <component :is="cmd.icon" :size="18" class="mr-3" :class="selectedIndex === index ? 'text-accent' : 'text-secondary'" />
+              <component
+                :is="cmd.icon"
+                :size="18"
+                class="mr-3"
+                :class="selectedIndex === index ? 'text-accent' : 'text-secondary'"
+              />
               <span class="flex-1 text-left font-medium">{{ cmd.label }}</span>
-              <ArrowRight v-if="selectedIndex === index" :size="16" class="opacity-50" />
+              <ArrowRight
+                v-if="selectedIndex === index"
+                :size="16"
+                class="opacity-50"
+              />
             </button>
           </div>
 
@@ -208,7 +231,6 @@ onUnmounted(() => {
               <span>sysadmin@local</span>
             </div>
           </div>
-
         </div>
       </div>
     </Transition>

@@ -12,7 +12,7 @@ defineProps<{
     <span class="text-accent font-bold text-sm">0{{ num }}.</span>
     <h2 class="text-2xl font-bold text-primary flex items-center gap-2">
       <DecryptedText :text="title" />
-      <span class="h-px bg-border w-32 ml-4"></span>
+      <span class="h-px bg-border w-32 ml-4" />
     </h2>
   </div>
 </template>

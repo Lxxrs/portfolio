@@ -25,10 +25,10 @@ onMounted(() => {
 
 <template>
   <span 
-    class="font-mono cursor-default hover:text-accent transition-colors" 
+    class="font-mono cursor-default motion-safe:hover:text-accent transition-colors" 
     :class="{ 'opacity-0': !isVisible }"
-    @mouseenter="triggerAnimation"
     :aria-label="text"
+    @mouseenter="triggerAnimation"
   >
     <span aria-hidden="true">{{ displayText }}</span>
   </span>
