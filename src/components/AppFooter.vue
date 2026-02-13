@@ -1,11 +1,5 @@
 <template>
   <footer class="text-center py-12 mt-12 border-t border-border print:hidden">
-    <p class="text-secondary text-sm mb-4">
-      <span class="text-accent">root@portfolio</span>:
-      <span class="mx-1">~#</span>
-      <span class="motion-safe:animate-blink">logout</span>
-    </p>
-    
     <div class="text-xs text-secondary space-y-3">
       <p>
         Built with security and privacy in mind. No analytics, tracking or cookies.
@@ -63,5 +57,10 @@
         </a>
       </p>
     </div>
+    <p class="text-secondary text-sm mb-4">
+      <span class="text-accent">lars@portfolio</span>:
+      <span class="mx-1">~#</span>
+      <span class="motion-safe:animate-blink">logout</span>
+    </p>
   </footer>
 </template>

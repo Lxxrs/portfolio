@@ -30,6 +30,7 @@ defineProps<{
           v-else
           :href="repoUrl"
           target="_blank"
+          rel="noopener noreferrer"
           class="hover:text-accent transition-colors"
           :aria-label="`View source code for ${title}`"
         >

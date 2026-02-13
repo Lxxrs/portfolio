@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps<{
   text: string;
@@ -10,6 +10,8 @@ const props = defineProps<{
 
 const displayText = ref('');
 const showCursor = ref(true);
+let intervalId: number | null = null;
+let timeoutId: number | null = null;
 
 onMounted(() => {
   // Respect prefers-reduced-motion
@@ -17,7 +19,7 @@ onMounted(() => {
   
   if (prefersReducedMotion) {
     // Show text immediately without animation
-    setTimeout(() => {
+    timeoutId = window.setTimeout(() => {
       displayText.value = props.text;
       if (props.hideCursorOnFinish) {
         showCursor.value = false;
@@ -26,20 +28,33 @@ onMounted(() => {
     return;
   }
 
-  setTimeout(() => {
+  timeoutId = window.setTimeout(() => {
     let i = 0;
-    const interval = setInterval(() => {
+    intervalId = window.setInterval(() => {
       if (i < props.text.length) {
         displayText.value += props.text.charAt(i);
         i++;
       } else {
-        clearInterval(interval);
+        if (intervalId !== null) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
         if (props.hideCursorOnFinish) {
           showCursor.value = false;
         }
       }
     }, props.speed || 100);
+    timeoutId = null;
   }, props.delay || 0);
+});
+
+onUnmounted(() => {
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+  }
+  if (timeoutId !== null) {
+    clearTimeout(timeoutId);
+  }
 });
 </script>
 

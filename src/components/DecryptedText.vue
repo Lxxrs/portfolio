@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useScramble } from '../composables/useScramble';
 
 const props = defineProps<{ 
@@ -10,15 +10,23 @@ const props = defineProps<{
 
 const { displayText, triggerAnimation } = useScramble(props.text, props.speed, false);
 const isVisible = ref(props.delay ? false : true);
+let timeoutId: number | null = null;
 
 onMounted(() => {
   if (props.delay) {
-    setTimeout(() => {
+    timeoutId = window.setTimeout(() => {
       isVisible.value = true;
       triggerAnimation();
+      timeoutId = null;
     }, props.delay);
   } else {
     triggerAnimation();
+  }
+});
+
+onUnmounted(() => {
+  if (timeoutId !== null) {
+    clearTimeout(timeoutId);
   }
 });
 </script>

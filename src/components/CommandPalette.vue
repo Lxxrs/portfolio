@@ -75,7 +75,8 @@ const commands = computed<Command[]>(() => {
       icon: link.icon, // Using the component directly
       group: 'Social',
       action: () => {
-        window.open(link.url, '_blank');
+        const newWindow = window.open(link.url, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
         close();
       }
     });

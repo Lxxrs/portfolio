@@ -58,6 +58,7 @@ import { socialLinks } from '../data/portfolio';
             :key="link.name"
             :href="link.url"
             target="_blank"
+            rel="noopener noreferrer"
             class="p-2 rounded-md border border-border text-secondary hover:border-accent hover:text-accent transition-colors"
             :aria-label="link.name"
           >
