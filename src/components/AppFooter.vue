@@ -5,17 +5,63 @@
       <span class="mx-1">~#</span>
       <span class="motion-safe:animate-blink">logout</span>
     </p>
-    <div class="text-xs text-secondary">
-      <p class="mb-2">
-        Created with Vue, TypeScript, Tailwind & the help of AI
+    
+    <div class="text-xs text-secondary space-y-3">
+      <p>
+        Built with security and privacy in mind. No analytics, tracking or cookies.
       </p>
-      <a
-        href="https://codeberg.org/Lxrs/larmart.de"
-        target="_blank"
-        class="hover:text-accent transition-colors"
-      >
-        Source Code
-      </a>
+
+      <!-- License -->
+      <p class="flex items-center justify-center gap-1 flex-wrap">
+        <span>© 2026 by</span>
+        <a
+          href="https://codeberg.org/lxrs"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-accent transition-colors"
+        >
+          Lars M.
+        </a>
+        <span>- Licensed under</span>
+        <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          target="_blank"
+          rel="noopener noreferrer license"
+          class="hover:text-accent transition-colors inline-flex items-center gap-1"
+        >
+          CC BY-NC-SA 4.0
+          <img
+            src="/icons/cc.svg"
+            alt="Creative Commons"
+            class="inline-block w-4 h-4"
+          >
+          <img
+            src="/icons/by.svg"
+            alt="Attribution"
+            class="inline-block w-4 h-4"
+          >
+          <img
+            src="/icons/nc.svg"
+            alt="Non-Commercial"
+            class="inline-block w-4 h-4"
+          >
+          <img
+            src="/icons/sa.svg"
+            alt="Share Alike"
+            class="inline-block w-4 h-4"
+          >
+        </a>
+      </p>
+      <p>
+        <a
+          href="https://codeberg.org/Lxrs/portfolio"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-accent transition-colors"
+        >
+          Source Code
+        </a>
+      </p>
     </div>
   </footer>
 </template>
