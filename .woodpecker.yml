@@ -42,9 +42,6 @@ steps:
       # Create .nojekyll file (prevents Jekyll processing on Codeberg Pages)
       - touch .nojekyll
       
-      # Add CNAME if you have a custom domain
-      # - echo "yourdomain.com" > CNAME
-      
       # Commit and push
       - git add -A
       - |
@@ -58,20 +55,3 @@ steps:
       branch: main
       event: push
 
-  # Example deployment to Hetzner via Rsync
-  # Requires secrets: SSH_KEY, SSH_USER, SSH_HOST
-  # deploy-server:
-  #   image: drillster/drone-rsync
-  #   settings:
-  #     user:
-  #       from_secret: SSH_USER
-  #     key:
-  #       from_secret: SSH_KEY
-  #     host:
-  #       from_secret: SSH_HOST
-  #     source: ./dist/*
-  #     target: /var/www/html/ # Or your specific path
-  #     recursive: true
-  #     delete: true
-  #   when:
-  #     branch: main
