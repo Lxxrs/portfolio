@@ -8,9 +8,12 @@ import CommandPalette from './components/CommandPalette.vue';
 import KeyboardShortcutsHelp from './components/KeyboardShortcutsHelp.vue';
 import { useActiveSection } from './composables/useActiveSection';
 import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts';
+import { useTheme } from './composables/useTheme';
 
 const { activeSection } = useActiveSection(['home', 'about', 'projects']);
 useKeyboardShortcuts();
+// Initialize theme
+useTheme();
 </script>
 
 <template>
