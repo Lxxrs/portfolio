@@ -39,6 +39,7 @@ function productionCSP(): Plugin {
 }
 
 export default defineConfig({
+  base: '/portfolio/',
   plugins: [
     vue(),
     tailwindcss(),
