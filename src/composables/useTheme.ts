@@ -1,26 +1,74 @@
 import { ref, watch, onMounted } from 'vue';
 
-const isDark = ref(true);
+const STORAGE_KEY = 'theme-preference';
+
+// Safely access localStorage
+const getStoredTheme = (): string | null => {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const setStoredTheme = (theme: string): void => {
+  try {
+    localStorage.setItem(STORAGE_KEY, theme);
+  } catch {
+    // localStorage not available (SSR, private mode, etc.)
+  }
+};
+
+// Initialize from localStorage or system preference
+const getInitialTheme = (): boolean => {
+  const stored = getStoredTheme();
+  if (stored !== null) {
+    return stored === 'dark';
+  }
+  // Fallback to system preference
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  return true; // Default to dark
+};
+
+const isDark = ref(getInitialTheme());
 
 export function useTheme() {
   const toggleTheme = () => {
     isDark.value = !isDark.value;
   };
 
-  onMounted(() => {
-    // Check system preference or local storage if needed in future
-    // For now, default to dark as per original code
-    if (isDark.value) {
-      document.documentElement.classList.add('dark');
-    }
-  });
-
-  watch(isDark, (val) => {
-    if (val) {
+  const applyTheme = (dark: boolean) => {
+    if (dark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
+  };
+
+  onMounted(() => {
+    applyTheme(isDark.value);
+
+    // Listen for system preference changes
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = (e: MediaQueryListEvent) => {
+        // Only auto-update if user hasn't set a preference
+        if (getStoredTheme() === null) {
+          isDark.value = e.matches;
+        }
+      };
+      mediaQuery.addEventListener('change', handleChange);
+
+      // Cleanup listener
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  });
+
+  watch(isDark, (val) => {
+    applyTheme(val);
+    setStoredTheme(val ? 'dark' : 'light');
   });
 
   return { isDark, toggleTheme };
