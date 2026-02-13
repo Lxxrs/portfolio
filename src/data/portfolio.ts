@@ -55,6 +55,6 @@ export const projects: Project[] = [
     title: 'Portfolio Website',
     desc: 'A SysAdmin portfolio with a custom terminal aesthetic. Built with Vue and Tailwind, prioritizing performance and accessibility in mind.',
     stack: ['Vue', 'TypeScript', 'Tailwind'],
-    repoUrl: 'https://codeberg.org/Lxrs/larmart.de'
+    repoUrl: 'https://codeberg.org/Lxrs/portfolio'
   }
 ];
