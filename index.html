@@ -4,7 +4,37 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Content Security Policy (CSP) - Strict Configuration -->
+    <!-- Deny by default with default-src 'none', then explicitly allow needed resources -->
+    <!-- Blocks inline styles ('unsafe-inline' removed from style-src) to prevent content injection -->
+    <!-- frame-ancestors 'none' prevents clickjacking attacks -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'self'; upgrade-insecure-requests;" />
+    
+    <!-- Security Headers - Mozilla Practical Implementation Guide -->
+    <!-- X-Content-Type-Options: Prevents MIME-sniffing attacks -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    
+    <!-- Referrer-Policy: Privacy protection - prevents leaking internal URLs -->
+    <meta http-equiv="Referrer-Policy" content="no-referrer" />
+    
+    <!-- Permissions-Policy: Disables unnecessary browser features -->
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()" />
+    
+    <!-- Cross-Origin Policies: Protection against speculative side-channel attacks -->
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+    <meta http-equiv="Cross-Origin-Resource-Policy" content="same-origin" />
+    
+    <!-- Privacy & Anti-Indexing -->
     <meta name="robots" content="noindex, nofollow, noimageindex, noarchive, nosnippet" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    
     <title>Lars M. | System Engineer</title>
   </head>
   <body>
