@@ -12,6 +12,20 @@ const displayText = ref('');
 const showCursor = ref(true);
 
 onMounted(() => {
+  // Respect prefers-reduced-motion
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  if (prefersReducedMotion) {
+    // Show text immediately without animation
+    setTimeout(() => {
+      displayText.value = props.text;
+      if (props.hideCursorOnFinish) {
+        showCursor.value = false;
+      }
+    }, props.delay || 0);
+    return;
+  }
+
   setTimeout(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -30,7 +44,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <span class="font-mono" :aria-label="text">
-    {{ displayText }}<span v-if="showCursor" class="animate-blink" aria-hidden="true">_</span>
+  <span
+    class="font-mono"
+    :aria-label="text"
+  >
+    {{ displayText }}<span
+      v-if="showCursor"
+      class="animate-blink"
+      aria-hidden="true"
+    >_</span>
   </span>
 </template>
