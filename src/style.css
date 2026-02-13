@@ -35,14 +35,14 @@
     50% { opacity: 0; }
   }
 
-  /* Semantic Colors */
+  /* Map Tailwind color utilities to CSS variables */
   --color-canvas: var(--bg-canvas);
   --color-card: var(--bg-card);
   --color-border: var(--border-color);
   --color-primary: var(--text-primary);
   --color-secondary: var(--text-secondary);
-  --color-accent: var(--color-accent);
-  --color-accent-dim: var(--color-accent-dim);
+  --color-accent: var(--accent-color);
+  --color-accent-dim: var(--accent-color-dim);
 }
 
 @layer base {
@@ -53,8 +53,8 @@
     --border-color: #d0d7de;
     --text-primary: #1f2328; /* Darker for better contrast */
     --text-secondary: #424a53; /* Darker for better contrast */
-    --color-accent: #0969da;
-    --color-accent-dim: rgba(9, 105, 218, 0.1);
+    --accent-color: #0969da;
+    --accent-color-dim: rgba(9, 105, 218, 0.1);
   }
 
   :root.dark {
@@ -64,8 +64,8 @@
     --border-color: #30363d;
     --text-primary: #f0f6fc; /* Brighter for better contrast */
     --text-secondary: #9198a1; /* Brighter for better contrast */
-    --color-accent: #2f81f7; 
-    --color-accent-dim: rgba(47, 129, 247, 0.15);
+    --accent-color: #2f81f7; 
+    --accent-color-dim: rgba(47, 129, 247, 0.15);
   }
 
   html {
@@ -75,7 +75,7 @@
   
   /* Global Focus Style for Accessibility */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--accent-color);
     outline-offset: 2px;
     border-radius: 2px;
   }
