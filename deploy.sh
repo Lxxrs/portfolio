@@ -110,9 +110,6 @@ cp -r "$TEMP_DIR"/* .
 # Create .nojekyll file
 touch .nojekyll
 
-# Optional: Add CNAME for custom domain
-# echo "yourdomain.com" > CNAME
-
 # Check if there are any changes
 if [[ -z $(git status -s) ]]; then
     echo -e "${GREEN}✅ No changes to deploy (site is up to date)${NC}"
