@@ -173,4 +173,9 @@ Temporary Items
 # VS Code
 .vscode
 
+# Environment variables (credentials)
+.env
+.env.local
+.env*
+
 docs/

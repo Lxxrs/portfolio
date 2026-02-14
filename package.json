@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:custom-domain": "tsc -b && vite build --base=/",
     "lint": "eslint .",
     "test": "vitest",
     "preview": "vite preview",
-    "deploy": "./deploy.sh"
+    "deploy": "./deploy.sh",
+    "deploy:hetzner": "./deploy-hetzner.sh"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
