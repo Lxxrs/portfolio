@@ -97,14 +97,6 @@ echo ""
 # Upload using scp (simpler, more reliable, allows interactive auth)
 echo -e "${BLUE}⬆️  Uploading files...${NC}"
 
-# Build scp options
-SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-
-# Add SSH key if specified
-if [ -n "$HETZNER_SSH_KEY" ]; then
-    SCP_OPTS="$SCP_OPTS -i $HETZNER_SSH_KEY"
-fi
-
 # Determine target path
 if [ "$HETZNER_REMOTE_PATH" != "." ] && [ -n "$HETZNER_REMOTE_PATH" ]; then
     TARGET_PATH="${HETZNER_USER}@${HETZNER_HOST}:${HETZNER_REMOTE_PATH}/"
@@ -114,6 +106,8 @@ fi
 
 # Check if password authentication is requested
 if [ -n "$HETZNER_PASSWORD" ]; then
+    # Build scp options for password authentication (no SSH key)
+    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password"
     # Use sshpass for password authentication
     if ! command -v sshpass &> /dev/null; then
         echo -e "${RED}❌ sshpass not found!${NC}"
@@ -128,7 +122,7 @@ if [ -n "$HETZNER_PASSWORD" ]; then
     
     # Test connection first (SFTP-only compatible)
     echo -e "${BLUE}🔌 Testing SFTP connection...${NC}"
-    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
+    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
         echo -e "${RED}❌ Connection test failed!${NC}"
         echo -e "${YELLOW}💡 Please check your password in .env${NC}"
         echo -e "${YELLOW}💡 Or try removing HETZNER_PASSWORD to use SSH key interactively${NC}"
@@ -139,6 +133,14 @@ if [ -n "$HETZNER_PASSWORD" ]; then
     
     SCP_CMD="sshpass -e scp $SCP_OPTS"
 else
+    # Build scp options for SSH key authentication
+    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    
+    # Add SSH key if specified
+    if [ -n "$HETZNER_SSH_KEY" ]; then
+        SCP_OPTS="$SCP_OPTS -i $HETZNER_SSH_KEY"
+    fi
+    
     SCP_CMD="scp $SCP_OPTS"
 fi
 
