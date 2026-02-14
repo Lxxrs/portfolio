@@ -160,12 +160,26 @@ cp -r "$TEMP_DIR_CODEBERG"/* .
 # Create .nojekyll file
 touch .nojekyll
 
+# Create .gitignore to prevent .env from being committed to pages branch
+echo -e "${BLUE}🔒 Ensuring .env is protected...${NC}"
+cat > .gitignore << 'EOF'
+.env
+.env.backup
+.env.*
+EOF
+
+# Double-check: remove .env from staging if it somehow got added
+git reset HEAD .env .env.backup 2>/dev/null || true
+
 # Check if there are any changes
 if [[ -z $(git status -s) ]]; then
     echo -e "${GREEN}✅ No changes to deploy to Codeberg (site is up to date)${NC}"
 else
-    # Add all files
+    # Add all files (except .env which is gitignored)
     git add -A
+    
+    # Final safety check: unstage .env files if somehow staged
+    git reset HEAD .env .env.backup .env.* 2>/dev/null || true
 
     # Commit
     git commit -m "$COMMIT_MSG [skip ci]"
