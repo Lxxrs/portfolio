@@ -180,6 +180,15 @@ else
     
     # Final safety check: unstage .env files if somehow staged
     git reset HEAD .env .env.backup .env.* 2>/dev/null || true
+    
+    # Verify .env is not in the commit
+    if git diff --cached --name-only | grep -qE "\.env"; then
+        echo -e "${RED}❌ SECURITY ERROR: .env file detected in staging area!${NC}"
+        echo -e "${RED}Aborting deployment to prevent credential leak.${NC}"
+        git checkout "$CURRENT_BRANCH"
+        rm -rf "$TEMP_DIR_CODEBERG"
+        exit 1
+    fi
 
     # Commit
     git commit -m "$COMMIT_MSG [skip ci]"
