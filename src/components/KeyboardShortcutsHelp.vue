@@ -85,6 +85,7 @@ onUnmounted(() => {
               <span class="text-accent">$</span> Keyboard Shortcuts
             </h2>
             <button
+              type="button"
               class="p-2 rounded-md hover:bg-border transition-colors text-secondary hover:text-primary"
               aria-label="Close shortcuts dialog"
               @click="close"

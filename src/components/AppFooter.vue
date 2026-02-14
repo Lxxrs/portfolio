@@ -27,21 +27,29 @@
           <img
             src="/icons/cc.svg"
             alt="Creative Commons"
+            width="16"
+            height="16"
             class="inline-block w-4 h-4"
           >
           <img
             src="/icons/by.svg"
             alt="Attribution"
+            width="16"
+            height="16"
             class="inline-block w-4 h-4"
           >
           <img
             src="/icons/nc.svg"
             alt="Non-Commercial"
+            width="16"
+            height="16"
             class="inline-block w-4 h-4"
           >
           <img
             src="/icons/sa.svg"
             alt="Share Alike"
+            width="16"
+            height="16"
             class="inline-block w-4 h-4"
           >
         </a>

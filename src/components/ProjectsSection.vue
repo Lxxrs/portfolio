@@ -8,7 +8,7 @@ import { projects } from '../data/portfolio';
   <section class="py-20">
     <SectionHeader
       num="2"
-      title="Executables"
+      title="Projects"
     />
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       <ProjectCard 

@@ -12,6 +12,8 @@ import { socialLinks } from '../data/portfolio';
         alt="Portrait of Lars M." 
         width="192"
         height="192"
+        loading="eager"
+        fetchpriority="high"
         class="w-32 h-32 md:w-48 md:h-48 rounded-full border-2 border-accent shadow-lg shadow-accent/20 transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:rotate-3 hover:shadow-accent/50" 
       >
     </div>

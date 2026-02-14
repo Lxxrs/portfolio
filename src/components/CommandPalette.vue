@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { 
   Terminal, 
   Search, 
@@ -11,6 +11,7 @@ import {
   Briefcase
 } from 'lucide-vue-next';
 import { useTheme } from '../composables/useTheme';
+import { useFocusTrap } from '../composables/useFocusTrap';
 import { socialLinks } from '../data/portfolio';
 import type { Component } from 'vue';
 
@@ -18,8 +19,21 @@ const isOpen = ref(false);
 const searchQuery = ref('');
 const selectedIndex = ref(0);
 const searchInput = ref<HTMLInputElement | null>(null);
+const modalRef = ref<HTMLElement | null>(null);
 
 const { toggleTheme, isDark } = useTheme();
+const { trapFocus, releaseFocus } = useFocusTrap(modalRef, isOpen);
+
+// Watch for modal open/close to manage focus
+watch(isOpen, (newValue) => {
+  if (newValue) {
+    nextTick(() => {
+      trapFocus();
+    });
+  } else {
+    releaseFocus();
+  }
+});
 
 interface Command {
   id: string;
@@ -160,7 +174,11 @@ onUnmounted(() => {
     >
       <div
         v-if="isOpen"
+        ref="modalRef"
         class="fixed inset-0 z-100 flex items-start justify-center pt-[20vh] px-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="command-palette-title"
       >
         <!-- Backdrop -->
         <div
@@ -170,11 +188,18 @@ onUnmounted(() => {
 
         <!-- Modal -->
         <div class="w-full max-w-xl bg-card border border-border rounded-xl shadow-2xl overflow-hidden relative flex flex-col max-h-[60vh]">
+          <h2
+            id="command-palette-title"
+            class="sr-only"
+          >
+            Command Palette
+          </h2>
           <!-- Search Bar -->
           <div class="flex items-center px-4 py-3 border-b border-border">
             <Search
               :size="20"
               class="text-secondary mr-3"
+              aria-hidden="true"
             />
             <input 
               ref="searchInput"
@@ -182,6 +207,7 @@ onUnmounted(() => {
               type="text" 
               placeholder="Type a command..." 
               autocomplete="off"
+              aria-label="Search commands"
               class="flex-1 bg-transparent border-none outline-none text-primary placeholder-secondary font-mono text-sm h-6"
             >
             <div class="text-xs text-secondary border border-border px-1.5 py-0.5 rounded">
@@ -201,6 +227,7 @@ onUnmounted(() => {
             <button
               v-for="(cmd, index) in commands"
               :key="cmd.id"
+              type="button"
               class="w-full flex items-center px-3 py-3 rounded-md text-sm transition-colors group"
               :class="selectedIndex === index ? 'bg-accent/10 text-accent' : 'text-primary'"
               @click="cmd.action"

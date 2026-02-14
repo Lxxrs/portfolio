@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Terminal, Sun, Moon } from 'lucide-vue-next';
+import { Terminal, Sun, Moon, Command } from 'lucide-vue-next';
 import { useTheme } from '../composables/useTheme';
 
 defineProps<{
@@ -7,6 +7,12 @@ defineProps<{
 }>();
 
 const { isDark, toggleTheme } = useTheme();
+
+// Show a hint that keyboard shortcuts are available
+const showShortcutHint = () => {
+  // Trigger the keyboard shortcuts help (? key)
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }));
+};
 </script>
 
 <template>
@@ -26,19 +32,33 @@ const { isDark, toggleTheme } = useTheme();
       </span>
     </div>
 
-    <button
-      class="p-2 rounded-full hover:bg-border transition-colors text-secondary cursor-pointer"
-      aria-label="Toggle Theme"
-      @click="toggleTheme"
-    >
-      <Sun
-        v-if="!isDark"
-        :size="20"
-      />
-      <Moon
-        v-else
-        :size="20"
-      />
-    </button>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="p-2 rounded-full hover:bg-border transition-colors text-secondary cursor-pointer hidden md:flex"
+        aria-label="Show keyboard shortcuts"
+        title="Keyboard shortcuts (?)"
+        @click="showShortcutHint"
+      >
+        <Command :size="20" />
+      </button>
+
+      <button
+        type="button"
+        class="p-2 rounded-full hover:bg-border transition-colors text-secondary cursor-pointer"
+        aria-label="Toggle Theme"
+        title="Toggle theme (T)"
+        @click="toggleTheme"
+      >
+        <Sun
+          v-if="!isDark"
+          :size="20"
+        />
+        <Moon
+          v-else
+          :size="20"
+        />
+      </button>
+    </div>
   </nav>
 </template>

@@ -8,7 +8,7 @@ import { skills } from '../data/portfolio';
   <section class="py-20">
     <SectionHeader
       num="1"
-      title="System Status"
+      title="About Me"
     />
 
     <div class="grid md:grid-cols-2 gap-12">
