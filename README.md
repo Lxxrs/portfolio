@@ -23,23 +23,48 @@ npm run build
 
 ## Deployment
 
-### Automatic (Codeberg Pages)
+### Deploy to Both (Recommended)
 
-This project auto-deploys to [Codeberg Pages](https://lxrs.codeberg.page/portfolio/) via Woodpecker CI on every push to `main`.
+Deploy to both Codeberg Pages and your custom domain in one command:
 
-**Setup:**
+```sh
+npm run deploy:all
+```
 
-1. Enable Woodpecker CI at [ci.codeberg.org](https://ci.codeberg.org)
-2. Activate your repository
-3. Push to `main` → site deploys automatically
+This ensures both platforms are always in sync.
 
-### Manual
+### Individual Deployments
+
+**Codeberg Pages only:**
 
 ```sh
 npm run deploy
 ```
 
-The script runs tests, builds, and pushes to the `pages` branch.
+**Hetzner (custom domain) only:**
+
+```sh
+npm run deploy:hetzner
+```
+
+### Automatic (Codeberg Pages)
+
+This project can auto-deploy to [Codeberg Pages](https://lxrs.codeberg.page/portfolio/) via Woodpecker CI on every push to `main`.
+
+**Setup:**
+
+1. Enable Woodpecker CI at [ci.codeberg.org](https://ci.codeberg.org/)
+2. Activate your repository
+3. Push to `main` → site deploys automatically
+
+### Configuration
+
+For Hetzner deployment, create a `.env` file:
+
+```sh
+cp .env.example .env
+# Edit .env with your credentials
+```
 
 ## Security
 

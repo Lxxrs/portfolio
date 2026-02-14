@@ -98,7 +98,7 @@ echo ""
 echo -e "${BLUE}⬆️  Uploading files...${NC}"
 
 # Build scp options
-SCP_OPTS="-r -P ${HETZNER_PORT}"
+SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Add SSH key if specified
 if [ -n "$HETZNER_SSH_KEY" ]; then
@@ -112,9 +112,39 @@ else
     TARGET_PATH="${HETZNER_USER}@${HETZNER_HOST}:~/"
 fi
 
+# Check if password authentication is requested
+if [ -n "$HETZNER_PASSWORD" ]; then
+    # Use sshpass for password authentication
+    if ! command -v sshpass &> /dev/null; then
+        echo -e "${RED}❌ sshpass not found!${NC}"
+        echo -e "${YELLOW}💡 Install it: brew install sshpass${NC}"
+        echo -e "${YELLOW}   Or remove HETZNER_PASSWORD from .env to use interactive password prompt${NC}"
+        exit 1
+    fi
+    echo -e "${BLUE}🔑 Using password authentication${NC}"
+    
+    # Export password for sshpass to use via environment variable (safer than -p)
+    export SSHPASS="$HETZNER_PASSWORD"
+    
+    # Test connection first (SFTP-only compatible)
+    echo -e "${BLUE}🔌 Testing SFTP connection...${NC}"
+    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
+        echo -e "${RED}❌ Connection test failed!${NC}"
+        echo -e "${YELLOW}💡 Please check your password in .env${NC}"
+        echo -e "${YELLOW}💡 Or try removing HETZNER_PASSWORD to use SSH key interactively${NC}"
+        unset SSHPASS
+        exit 1
+    fi
+    echo -e "${GREEN}✅ Connection test passed${NC}"
+    
+    SCP_CMD="sshpass -e scp $SCP_OPTS"
+else
+    SCP_CMD="scp $SCP_OPTS"
+fi
+
 # Upload entire dist directory contents
 # Using cd dist && scp to avoid creating extra "dist" folder on server
-(cd dist && scp $SCP_OPTS -r . "$TARGET_PATH") || {
+(cd dist && $SCP_CMD -r . "$TARGET_PATH") || {
     echo -e "${RED}❌ Deployment failed!${NC}"
     echo -e "${YELLOW}💡 Troubleshooting:${NC}"
     echo -e "   1. Test SSH: ssh -p ${HETZNER_PORT} -i ${HETZNER_SSH_KEY} ${HETZNER_USER}@${HETZNER_HOST}"

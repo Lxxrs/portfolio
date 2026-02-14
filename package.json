@@ -11,7 +11,8 @@
     "test": "vitest",
     "preview": "vite preview",
     "deploy": "./deploy.sh",
-    "deploy:hetzner": "./deploy-hetzner.sh"
+    "deploy:hetzner": "./deploy-hetzner.sh",
+    "deploy:all": "./deploy-all.sh"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
