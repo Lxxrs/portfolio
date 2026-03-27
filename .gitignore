@@ -46,6 +46,18 @@ jspm_packages/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
+# Yarn 4 (PnP) - ignore cache/state, keep sdks
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Build output
+dist/
+
 # TypeScript cache
 *.tsbuildinfo
 
@@ -144,6 +156,17 @@ test/
 
 # ---> macOS
 # General
+.env.*.local
+
+# Coverage
+coverage/
+*.lcov
+
+# Editor caches
+.eslintcache
+*.tgz
+
+# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -170,9 +193,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
-# VS Code
-.vscode
 
 docs/
 

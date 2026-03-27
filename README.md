@@ -1,82 +1,138 @@
 # Portfolio
 
-Personal portfolio with a terminal aesthetic. Built with Vue 3, TypeScript, and Tailwind CSS.
+Personal portfolio with a terminal/sysadmin aesthetic. Built with Vue 3, TypeScript, and Tailwind CSS v4. Privacy-first — no analytics, tracking, or cookies.
+
+## Tech Stack
+
+| Layer | Technology |
+| ----- | ---------- |
+| Framework | Vue 3 (Composition API, `<script setup>`) |
+| Language | TypeScript 5.9 |
+| Build | Vite 7 |
+| Styling | Tailwind CSS 4 (CSS-native `@theme`) |
+| Icons | lucide-vue-next + custom SVG components |
+| Testing | Vitest + Vue Test Utils + jsdom |
+| Linting | ESLint 9 (flat config) + eslint-plugin-vue |
+| PWA | vite-plugin-pwa |
+| Package Manager | Yarn 4 (Berry, PnP) |
+| Node | 24.x (pinned via `.nvmrc`) |
+
+## Project Structure
+
+```sh
+src/
+├── App.vue                  # Root layout, routing, theme init
+├── style.css                # Tailwind v4 theme, CSS variables, fonts
+├── types.ts                 # Shared TypeScript interfaces
+├── data/
+│   └── portfolio.ts         # Social links, skills, projects data
+├── components/
+│   ├── HeroSection.vue      # Animated hero with DecryptedText + TypewriterText
+│   ├── AboutSection.vue     # Bio + tech stack card
+│   ├── ProjectsSection.vue  # Project cards grid
+│   ├── ContactSection.vue   # Email CTA + social links
+│   ├── CommandPalette.vue   # Ctrl+K command palette with focus trap
+│   ├── NavBar.vue           # Terminal-style breadcrumb nav
+│   ├── AppFooter.vue        # Social links, sign-off, license
+│   └── ...                  # ProjectCard, SectionHeader, icon components
+├── composables/
+│   ├── useTheme.ts          # Dark/light toggle with system preference
+│   ├── useScramble.ts       # Text scramble/decrypt animation
+│   ├── useActiveSection.ts  # IntersectionObserver section tracking
+│   ├── useFocusTrap.ts      # Modal focus trap (WCAG compliant)
+│   └── useKeyboardShortcuts.ts
+└── assets/
+    └── jetbrai`s_mono_webfonts/  # Self-hosted JetBrains Mono
+```
 
 ## Development
 
+Requires [Node.js](https://nodejs.org/) 24.x and [Corepack](https://nodejs.org/api/corepack.html) (ships with Node).
+
 ```sh
-# Install dependencies
-npm install
-
-# Start dev server
-npm run dev
-
-# Run tests
-npm run test
-
-# Lint code
-npm run lint
-
-# Build for production
-npm run build
+corepack enable          # Activates Yarn 4 via packageManager field
+yarn install             # Install dependencies (PnP, no node_modules)
+yarn dev                 # Start dev server at http://localhost:5173
+yarn test                # Run unit tests (watch mode)
+yarn test --run          # Run tests once
+yarn lint                # Lint with ESLint
+yarn build               # Type-check + production build
+yarn preview             # Preview production build locally
 ```
 
 ## Deployment
 
-### Deploy to Both (Recommended)
-
-Deploy to both Codeberg Pages and your custom domain in one command:
+### Both Targets (Recommended)
 
 ```sh
-npm run deploy:all
+yarn deploy:all
 ```
 
-This ensures both platforms are always in sync.
+Deploys to Codeberg Pages and Hetzner (custom domain) in one step.
 
-### Individual Deployments
-
-**Codeberg Pages only:**
+### Individual Targets
 
 ```sh
-npm run deploy
+yarn deploy              # Codeberg Pages only
+yarn deploy:hetzner      # Hetzner (custom domain) only
 ```
 
-**Hetzner (custom domain) only:**
+### Hetzner Configuration
 
 ```sh
-npm run deploy:hetzner
+cp .env.example .env     # Create config from template
+# Edit .env — SSH key auth recommended over password
 ```
 
-### Automatic (Codeberg Pages)
+### Codeberg Pages (CI)
 
-This project can auto-deploy to [Codeberg Pages](https://lxrs.codeberg.page/portfolio/) via Woodpecker CI on every push to `main`.
-
-**Setup:**
+Auto-deploys via [Woodpecker CI](https://ci.codeberg.org/) on push to `main`:
 
 1. Enable Woodpecker CI at [ci.codeberg.org](https://ci.codeberg.org/)
-2. Activate your repository
-3. Push to `main` → site deploys automatically
+2. Activate the repository
+3. Push to `main` — site deploys automatically
 
-### Configuration
+## Keyboard Shortcuts
 
-For Hetzner deployment, create a `.env` file:
+| Key | Action |
+| --- | ------ |
+| `Ctrl/Cmd + K` | Open command palette |
+| `H` | Go to Home |
+| `A` | Go to About |
+| `P` | Go to Projects |
+| `C` | Go to Contact |
+| `T` | Toggle theme |
+| `?` | Show shortcuts help |
+| `Esc` | Close dialogs |
 
-```sh
-cp .env.example .env
-# Edit .env with your credentials
-```
+## Security & Privacy
 
-## Security
+Client-side hardening following [Mozilla's Practical Implementation Guides](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides):
 
-Client-side security following [Mozilla's Guidelines](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides):
+- Strict Content Security Policy — dev CSP auto-replaced with production CSP at build time (no `unsafe-inline`, no `unsafe-eval`)
+- Cross-Origin isolation — `COOP`, `COEP`, `CORP` headers injected in production builds
+- Self-hosted fonts and assets — zero external requests
+- No tracking, analytics, or cookies
+- `noindex`, `nofollow`, `no-referrer` — not indexed by search engines
+- `robots.txt` blocks all crawlers
+- `security.txt` ([RFC 9116](https://www.rfc-editor.org/rfc/rfc9116)) for vulnerability disclosure
+- Permissions-Policy disables unused browser APIs (camera, microphone, geolocation, etc.)
 
-- ✅ Strict Content Security Policy (CSP)
-- ✅ No inline scripts or styles
-- ✅ Self-hosted fonts and assets
-- ✅ Cross-Origin isolation
-- ✅ No tracking or analytics
-- ✅ Privacy-first (no referrer, no indexing)
+## Theming
+
+Theme is configured via CSS variables in `src/style.css` under `@theme` (Tailwind v4). Use semantic color utilities:
+
+| Utility | Purpose |
+| ------- | ------- |
+| `bg-canvas` | Page background |
+| `bg-card` | Card/component background |
+| `text-primary` | Main text |
+| `text-secondary` | Muted text |
+| `text-accent` | Highlight color |
+| `border-border` | Borders |
+
+Dark mode toggles via `.dark` class on `<html>`. Respects system preference on first visit.
 
 ## License
 
-CC BY-NC-SA 4.0
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
