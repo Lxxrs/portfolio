@@ -13,7 +13,7 @@ import MastodonIcon from '../components/MastodonIcon.vue';
 import SignalIcon from '../components/SignalIcon.vue';
 import LiberapayIcon from '../components/LiberapayIcon.vue';
 import CodebergIcon from '../components/CodebergIcon.vue';
-// import MatrixIcon from '../components/MatrixIcon.vue';
+import MatrixIcon from '../components/MatrixIcon.vue';
 
 import type { SocialLink, Project, Skill } from '../types';
 
@@ -24,8 +24,7 @@ export const socialLinks: SocialLink[] = [
   { name: 'LinkedIn', url: 'https://linkedin.com/in/m-lrs', icon: LinkedinIcon },
   { name: 'Codeberg', url: 'https://codeberg.org/lxrs', icon: CodebergIcon },
   { name: 'Liberapay', url: 'https://liberapay.com/lars/donate', icon: LiberapayIcon },
-  // { name: 'Matrix', url: 'https://matrix.to/#/@username:matrix.org', icon: MatrixIcon },
-
+  { name: 'Matrix', url: 'https://matrix.to/#/@lxrss:matrix.org', icon: MatrixIcon },
 ];
 
 export const skills: Skill[] = [
