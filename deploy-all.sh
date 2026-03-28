@@ -70,7 +70,7 @@ echo -e "${BLUE}💾 Creating .env backup...${NC}"
 cp .env .env.backup
 
 # Load environment variables from .env for Hetzner
-export $(cat .env | grep -v '^#' | grep -v '^$' | xargs)
+set -a; source .env; set +a
 
 # Validate Hetzner credentials
 if [ -z "$HETZNER_HOST" ] || [ -z "$HETZNER_USER" ]; then
@@ -84,21 +84,18 @@ HETZNER_REMOTE_PATH=${HETZNER_REMOTE_PATH:-.}
 
 # Install dependencies if needed
 echo -e "${BLUE}📦 Checking dependencies...${NC}"
-if [ ! -d "node_modules" ]; then
-    echo "Installing dependencies..."
-    npm ci
-fi
+yarn install --immutable 2>/dev/null || yarn install
 
 # Run tests once
 echo -e "${BLUE}🧪 Running tests...${NC}"
-npm run test -- --run || {
+yarn test --run || {
     echo -e "${RED}❌ Tests failed! Aborting deployment.${NC}"
     exit 1
 }
 
 # Run linter once
 echo -e "${BLUE}🔍 Running linter...${NC}"
-npm run lint || {
+yarn lint || {
     echo -e "${RED}❌ Linting failed! Aborting deployment.${NC}"
     exit 1
 }
@@ -111,7 +108,7 @@ echo ""
 
 # Build for Codeberg Pages (base: '/portfolio/')
 echo -e "${BLUE}🔨 Building for Codeberg Pages (base: /portfolio/)...${NC}"
-npm run build || {
+yarn build || {
     echo -e "${RED}❌ Build failed! Aborting deployment.${NC}"
     exit 1
 }
@@ -219,15 +216,12 @@ echo -e "${MAGENTA}    DEPLOYMENT 2/2: Hetzner${NC}"
 echo -e "${MAGENTA}═══════════════════════════════════════════════════${NC}"
 echo ""
 
-# Verify node_modules still exists and is valid after branch switch
-if [ ! -f "node_modules/.bin/tsc" ]; then
-    echo -e "${YELLOW}⚠️  Dependencies missing after branch switch, reinstalling...${NC}"
-    npm ci --quiet
-fi
+# Ensure dependencies are available after branch switch
+yarn install --immutable 2>/dev/null || yarn install
 
 # Build for Hetzner (base: '/')
 echo -e "${BLUE}🔨 Building for Hetzner (base: /)...${NC}"
-npm run build:custom-domain || {
+yarn build:custom-domain || {
     echo -e "${RED}❌ Build failed! Aborting deployment.${NC}"
     exit 1
 }
@@ -250,7 +244,7 @@ fi
 # Check if password authentication is requested
 if [ -n "$HETZNER_PASSWORD" ]; then
     # Build scp options for password authentication (no SSH key)
-    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password"
+    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=accept-new -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password"
     # Use sshpass for password authentication
     if ! command -v sshpass &> /dev/null; then
         echo -e "${RED}❌ sshpass not found!${NC}"
@@ -265,7 +259,7 @@ if [ -n "$HETZNER_PASSWORD" ]; then
     
     # Test connection first (SFTP-only compatible)
     echo -e "${BLUE}🔌 Testing SFTP connection...${NC}"
-    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
+    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
         echo -e "${RED}❌ Connection test failed!${NC}"
         echo -e "${YELLOW}💡 Please check your password in .env${NC}"
         echo -e "${YELLOW}💡 Or try removing HETZNER_PASSWORD to use SSH key interactively${NC}"
@@ -277,7 +271,7 @@ if [ -n "$HETZNER_PASSWORD" ]; then
     SCP_CMD="sshpass -e scp $SCP_OPTS"
 else
     # Build scp options for SSH key authentication
-    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=accept-new"
     
     # Add SSH key if specified
     if [ -n "$HETZNER_SSH_KEY" ]; then
@@ -291,10 +285,12 @@ fi
 (cd dist && $SCP_CMD -r . "$TARGET_PATH") || {
     echo -e "${RED}❌ Hetzner deployment failed!${NC}"
     echo -e "${YELLOW}💡 Codeberg Pages was deployed successfully, but Hetzner failed.${NC}"
+    unset SSHPASS 2>/dev/null
     [ "$STASHED" = true ] && git stash pop
     exit 1
 }
 
+unset SSHPASS 2>/dev/null
 echo -e "${GREEN}✅ Hetzner deployment successful!${NC}"
 
 # Restore stashed changes if any

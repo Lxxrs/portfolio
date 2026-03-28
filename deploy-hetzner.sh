@@ -24,7 +24,7 @@ fi
 
 # Load environment variables from .env
 echo -e "${BLUE}📋 Loading credentials from .env...${NC}"
-export $(cat .env | grep -v '^#' | grep -v '^$' | xargs)
+set -a; source .env; set +a
 
 # Validate required variables
 if [ -z "$HETZNER_HOST" ] || [ -z "$HETZNER_USER" ]; then
@@ -62,28 +62,25 @@ fi
 
 # Install dependencies if needed
 echo -e "${BLUE}📦 Checking dependencies...${NC}"
-if [ ! -d "node_modules" ]; then
-    echo "Installing dependencies..."
-    npm ci
-fi
+yarn install --immutable 2>/dev/null || yarn install
 
 # Run tests
 echo -e "${BLUE}🧪 Running tests...${NC}"
-npm run test -- --run || {
+yarn test --run || {
     echo -e "${RED}❌ Tests failed! Aborting deployment.${NC}"
     exit 1
 }
 
 # Run linter
 echo -e "${BLUE}🔍 Running linter...${NC}"
-npm run lint || {
+yarn lint || {
     echo -e "${RED}❌ Linting failed! Aborting deployment.${NC}"
     exit 1
 }
 
 # Build the site for custom domain (base: '/')
 echo -e "${BLUE}🔨 Building site for custom domain...${NC}"
-npm run build:custom-domain || {
+yarn build:custom-domain || {
     echo -e "${RED}❌ Build failed! Aborting deployment.${NC}"
     exit 1
 }
@@ -107,7 +104,7 @@ fi
 # Check if password authentication is requested
 if [ -n "$HETZNER_PASSWORD" ]; then
     # Build scp options for password authentication (no SSH key)
-    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password"
+    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=accept-new -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password"
     # Use sshpass for password authentication
     if ! command -v sshpass &> /dev/null; then
         echo -e "${RED}❌ sshpass not found!${NC}"
@@ -122,7 +119,7 @@ if [ -n "$HETZNER_PASSWORD" ]; then
     
     # Test connection first (SFTP-only compatible)
     echo -e "${BLUE}🔌 Testing SFTP connection...${NC}"
-    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
+    if ! echo "quit" | sshpass -e sftp -P "$HETZNER_PORT" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=no -o PasswordAuthentication=yes -o PreferredAuthentications=password "${HETZNER_USER}@${HETZNER_HOST}" 2>&1 | grep -q "Connected to"; then
         echo -e "${RED}❌ Connection test failed!${NC}"
         echo -e "${YELLOW}💡 Please check your password in .env${NC}"
         echo -e "${YELLOW}💡 Or try removing HETZNER_PASSWORD to use SSH key interactively${NC}"
@@ -134,7 +131,7 @@ if [ -n "$HETZNER_PASSWORD" ]; then
     SCP_CMD="sshpass -e scp $SCP_OPTS"
 else
     # Build scp options for SSH key authentication
-    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    SCP_OPTS="-r -P ${HETZNER_PORT} -o StrictHostKeyChecking=accept-new"
     
     # Add SSH key if specified
     if [ -n "$HETZNER_SSH_KEY" ]; then
@@ -152,9 +149,11 @@ fi
     echo -e "   1. Test SSH: ssh -p ${HETZNER_PORT} -i ${HETZNER_SSH_KEY} ${HETZNER_USER}@${HETZNER_HOST}"
     echo -e "   2. Check remote path exists and has write permissions"
     echo -e "   3. Verify credentials in .env file"
+    unset SSHPASS 2>/dev/null
     exit 1
 }
 
+unset SSHPASS 2>/dev/null
 echo ""
 echo -e "${GREEN}✅ Deployment successful!${NC}"
 echo -e "${GREEN}🌐 Your site should be live at your domain now${NC}"

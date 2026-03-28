@@ -10,6 +10,21 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Cleanup function to restore branch and stash on any exit
+STASHED=false
+CURRENT_BRANCH=""
+TEMP_DIR=""
+cleanup() {
+    local exit_code=$?
+    if [ -n "$CURRENT_BRANCH" ] && [ "$(git branch --show-current)" != "$CURRENT_BRANCH" ]; then
+        git checkout "$CURRENT_BRANCH" 2>/dev/null || true
+    fi
+    [ -n "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
+    [ "$STASHED" = true ] && git stash pop 2>/dev/null || true
+    exit $exit_code
+}
+trap cleanup EXIT
+
 echo -e "${BLUE}🚀 Starting deployment to Codeberg Pages...${NC}"
 
 # Check if we're on main branch
@@ -33,34 +48,32 @@ if [[ -n $(git status -s) ]]; then
         git stash
         STASHED=true
     else
+        trap - EXIT
         exit 1
     fi
 fi
 
 # Install dependencies if needed
 echo -e "${BLUE}📦 Checking dependencies...${NC}"
-if [ ! -d "node_modules" ]; then
-    echo "Installing dependencies..."
-    npm ci
-fi
+yarn install --immutable 2>/dev/null || yarn install
 
 # Run tests
 echo -e "${BLUE}🧪 Running tests...${NC}"
-npm run test -- --run || {
+yarn test --run || {
     echo -e "${RED}❌ Tests failed! Aborting deployment.${NC}"
     exit 1
 }
 
 # Run linter
 echo -e "${BLUE}🔍 Running linter...${NC}"
-npm run lint || {
+yarn lint || {
     echo -e "${RED}❌ Linting failed! Aborting deployment.${NC}"
     exit 1
 }
 
 # Build the site
 echo -e "${BLUE}🔨 Building site...${NC}"
-npm run build || {
+yarn build || {
     echo -e "${RED}❌ Build failed! Aborting deployment.${NC}"
     exit 1
 }
@@ -113,9 +126,6 @@ touch .nojekyll
 # Check if there are any changes
 if [[ -z $(git status -s) ]]; then
     echo -e "${GREEN}✅ No changes to deploy (site is up to date)${NC}"
-    git checkout "$CURRENT_BRANCH"
-    rm -rf "$TEMP_DIR"
-    [ "$STASHED" = true ] && git stash pop
     exit 0
 fi
 
@@ -133,24 +143,8 @@ git commit -m "$COMMIT_MSG [skip ci]"
 echo -e "${BLUE}⬆️  Pushing to pages branch...${NC}"
 git push origin pages || {
     echo -e "${RED}❌ Failed to push to pages branch!${NC}"
-    git checkout "$CURRENT_BRANCH"
-    rm -rf "$TEMP_DIR"
-    [ "$STASHED" = true ] && git stash pop
     exit 1
 }
-
-# Return to original branch
-echo -e "${BLUE}🔙 Returning to $CURRENT_BRANCH branch...${NC}"
-git checkout "$CURRENT_BRANCH"
-
-# Restore stashed changes if any
-[ "$STASHED" = true ] && {
-    echo -e "${BLUE}📦 Restoring stashed changes...${NC}"
-    git stash pop
-}
-
-# Cleanup
-rm -rf "$TEMP_DIR"
 
 echo -e "${GREEN}✅ Deployment successful!${NC}"
 echo -e "${GREEN}🌐 Your site will be available at: https://lxrs.codeberg.page/portfolio/${NC}"

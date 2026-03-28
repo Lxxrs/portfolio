@@ -1,5 +1,7 @@
 # Portfolio
 
+[![status-badge](https://ci.codeberg.org/api/badges/16662/status.svg)](https://ci.codeberg.org/repos/16662)
+
 Personal portfolio with a terminal/sysadmin aesthetic. Built with Vue 3, TypeScript, and Tailwind CSS v4. Privacy-first — no analytics, tracking, or cookies.
 
 ## Tech Stack
