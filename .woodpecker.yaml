@@ -83,7 +83,7 @@ steps:
       HETZNER_REMOTE_PATH:
         from_secret: hetzner_remote_path
     commands:
-      - apk add --no-cache openssh-client lftp
+      - apk add --no-cache openssh-client rclone
       - |
         if [ -z "$$HETZNER_HOST" ] || [ -z "$$HETZNER_USER" ] || [ -z "$$HETZNER_SSH_KEY" ] || [ -z "$$HETZNER_REMOTE_PATH" ]; then
           echo "Error: Hetzner secrets are empty. Check repo → Settings → Secrets."
@@ -93,12 +93,16 @@ steps:
       - printf '%b\n' "$$HETZNER_SSH_KEY" > ~/.ssh/deploy_key
       - chmod 600 ~/.ssh/deploy_key
       - |
-        lftp -c "
-          set sftp:connect-program 'ssh -i $${HOME}/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -o UpdateHostKeys=no -o PasswordAuthentication=no';
-          set net:max-retries 3;
-          open sftp://$${HETZNER_USER}:dummy@$${HETZNER_HOST};
-          mirror --reverse --delete --ignore-time --verbose dist/ $${HETZNER_REMOTE_PATH};
-        "
+        # Pre-populate known_hosts so rclone's Go SSH library trusts the host
+        ssh-keyscan -H "$$HETZNER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+      - |
+        export RCLONE_CONFIG_HETZNER_TYPE=sftp
+        export RCLONE_CONFIG_HETZNER_HOST="$$HETZNER_HOST"
+        export RCLONE_CONFIG_HETZNER_USER="$$HETZNER_USER"
+        export RCLONE_CONFIG_HETZNER_KEY_FILE="$${HOME}/.ssh/deploy_key"
+        export RCLONE_CONFIG_HETZNER_KNOWN_HOSTS_FILE="$${HOME}/.ssh/known_hosts"
+        rclone sync dist/ "hetzner:$${HETZNER_REMOTE_PATH}" \
+          --verbose
       - rm -f ~/.ssh/deploy_key
       - echo "Hetzner deployment complete"
     depends_on:
