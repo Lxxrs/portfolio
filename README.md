@@ -6,18 +6,19 @@ Personal portfolio with a terminal/sysadmin aesthetic. Built with Vue 3, TypeScr
 
 ## Tech Stack
 
-| Layer | Technology |
-| ----- | ---------- |
-| Framework | Vue 3 (Composition API, `<script setup>`) |
-| Language | TypeScript 5.9 |
-| Build | Vite 7 |
-| Styling | Tailwind CSS 4 (CSS-native `@theme`) |
-| Icons | lucide-vue-next + custom SVG components |
-| Testing | Vitest + Vue Test Utils + jsdom |
-| Linting | ESLint 9 (flat config) + eslint-plugin-vue |
-| PWA | vite-plugin-pwa |
-| Package Manager | Yarn 4 (Berry, PnP) |
-| Node | 24.x (pinned via `.nvmrc`) |
+| Layer           | Technology                                  |
+| --------------- | ------------------------------------------- |
+| Framework       | Vue 3 (Composition API, `<script setup>`)   |
+| Language        | TypeScript 6                                |
+| Build           | Vite+ (Rolldown + Vite 8)                   |
+| Styling         | Tailwind CSS 4 (CSS-native `@theme`)        |
+| Icons           | lucide-vue-next + custom SVG components     |
+| Testing         | Vitest (via Vite+) + Vue Test Utils + jsdom |
+| Linting         | Oxlint (via Vite+)                          |
+| Formatting      | Oxfmt (via Vite+)                           |
+| PWA             | vite-plugin-pwa                             |
+| Package Manager | Yarn 4 (node-modules linker)                |
+| Node            | 24.x (pinned via `.node-version`)           |
 
 ## Project Structure
 
@@ -53,13 +54,14 @@ Requires [Node.js](https://nodejs.org/) 24.x and [Corepack](https://nodejs.org/a
 
 ```sh
 corepack enable          # Activates Yarn 4 via packageManager field
-yarn install             # Install dependencies (PnP, no node_modules)
-yarn dev                 # Start dev server at http://localhost:5173
-yarn test                # Run unit tests (watch mode)
-yarn test --run          # Run tests once
-yarn lint                # Lint with ESLint
-yarn build               # Type-check + production build
-yarn preview             # Preview production build locally
+yarn install             # Install dependencies
+vp dev                   # Start dev server at http://localhost:5173
+vp test                  # Run unit tests (watch mode)
+vp test --run            # Run tests once
+vp lint                  # Lint with Oxlint
+vp check                 # Format + lint + type-check in one pass
+vp build                 # Production build
+vp preview               # Preview production build locally
 ```
 
 ## Deployment
@@ -96,16 +98,16 @@ Auto-deploys via [Woodpecker CI](https://ci.codeberg.org/) on push to `main`:
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-| --- | ------ |
+| Key            | Action               |
+| -------------- | -------------------- |
 | `Ctrl/Cmd + K` | Open command palette |
-| `H` | Go to Home |
-| `A` | Go to About |
-| `P` | Go to Projects |
-| `C` | Go to Contact |
-| `T` | Toggle theme |
-| `?` | Show shortcuts help |
-| `Esc` | Close dialogs |
+| `H`            | Go to Home           |
+| `A`            | Go to About          |
+| `P`            | Go to Projects       |
+| `C`            | Go to Contact        |
+| `T`            | Toggle theme         |
+| `?`            | Show shortcuts help  |
+| `Esc`          | Close dialogs        |
 
 ## Security & Privacy
 
@@ -124,14 +126,14 @@ Client-side hardening following [Mozilla's Practical Implementation Guides](http
 
 Theme is configured via CSS variables in `src/style.css` under `@theme` (Tailwind v4). Use semantic color utilities:
 
-| Utility | Purpose |
-| ------- | ------- |
-| `bg-canvas` | Page background |
-| `bg-card` | Card/component background |
-| `text-primary` | Main text |
-| `text-secondary` | Muted text |
-| `text-accent` | Highlight color |
-| `border-border` | Borders |
+| Utility          | Purpose                   |
+| ---------------- | ------------------------- |
+| `bg-canvas`      | Page background           |
+| `bg-card`        | Card/component background |
+| `text-primary`   | Main text                 |
+| `text-secondary` | Muted text                |
+| `text-accent`    | Highlight color           |
+| `border-border`  | Borders                   |
 
 Dark mode toggles via `.dark` class on `<html>`. Respects system preference on first visit.
 

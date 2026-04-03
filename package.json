@@ -1,41 +1,41 @@
 {
   "name": "portfolio",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
-  "packageManager": "yarn@4.13.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "build:custom-domain": "tsc -b && vite build --base=/",
-    "lint": "eslint .",
-    "test": "vitest",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "build": "tsc -b && vp build",
+    "build:custom-domain": "tsc -b && vp build --base=/",
+    "lint": "vp lint .",
+    "test": "vp test",
+    "preview": "vp preview",
     "deploy": "./deploy.sh",
     "deploy:hetzner": "./deploy-hetzner.sh",
     "deploy:all": "./deploy-all.sh",
-    "test:deployment": "./test-deployment.sh"
+    "test:deployment": "./test-deployment.sh",
+    "prepare": "vp config"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.17",
-    "lucide-vue-next": "^0.564.0",
-    "vue": "^3.5.25"
+    "@tailwindcss/vite": "^4.2.2",
+    "lucide-vue-next": "^1.0.0",
+    "vue": "^3.5.31"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^6.0.2",
+    "@types/node": "^25.5.0",
+    "@vitejs/plugin-vue": "^6.0.5",
     "@vue/test-utils": "^2.4.6",
-    "eslint": "^9.39.1",
-    "eslint-plugin-vue": "^10.6.2",
-    "globals": "^16.5.0",
-    "jsdom": "^27.3.0",
-    "tailwindcss": "^4.1.17",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4",
+    "jsdom": "^29.0.1",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.3",
     "vite-plugin-pwa": "^1.2.0",
-    "vitest": "^4.0.15",
-    "vue-eslint-parser": "^10.4.0"
-  }
+    "vite-plus": "^0.1.15",
+    "vitest": "^4.1.2"
+  },
+  "resolutions": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.15",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.15"
+  },
+  "packageManager": "yarn@4.13.0"
 }

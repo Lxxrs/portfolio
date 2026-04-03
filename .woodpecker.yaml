@@ -22,7 +22,7 @@
 #   4. rm /tmp/hetzner-deploy /tmp/hetzner-deploy.pub
 
 variables:
-  - &node_image 'node:24-alpine'
+  - &node_image "node:24-alpine"
 
 when:
   branch: main
@@ -30,6 +30,7 @@ when:
 
 steps:
   # ── Lint & Test ──────────────────────────────────────────────────────
+  # yarn scripts proxy to Vite+ (vp): lint → vp lint, test → vp test
   - name: validate
     image: *node_image
     commands:
@@ -107,4 +108,3 @@ steps:
       - echo "Hetzner deployment complete"
     depends_on:
       - build-hetzner
-

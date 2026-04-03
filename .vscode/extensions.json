@@ -1,12 +1,8 @@
 {
   "recommendations": [
     "vue.volar",
-    "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
     "gamunu.vscode-yarn",
-    "arcanis.vscode-zipfs"
-  ],
-  "unwantedRecommendations": [
-    "octref.vetur"
+    "VoidZero.vite-plus-extension-pack"
   ]
 }

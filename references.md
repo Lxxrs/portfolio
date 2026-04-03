@@ -79,6 +79,10 @@
 
 - [Tailwind CSS Docs](https://tailwindcss.com/docs/installation/using-vite)
 
+### Vite+
+
+- [Vite+ Docs](https://viteplus.dev/)
+
 ### Vite
 
 - [Vite Docs](https://vite.dev/guide/)
@@ -87,14 +91,18 @@
 
 - [Vitest Docs](https://vitest.dev/guide/)
 
-### Deno
+### Rolldown
 
-- [Deno Docs](https://docs.deno.com/runtime/)
+- [Rolldown Docs](https://rolldown.rs/)
+
+### Oxc
+
+- [Oxc Docs](https://osc.rs/)
+
+### yarn
+
+- [yarn Docs](https://yarnpkg.com/)
 
 ### Node.js
 
 - [Node.js Docs](https://nodejs.org/docs/latest/api/)
-
-### npm
-
-- [npm Docs](https://docs.npmjs.com/)
