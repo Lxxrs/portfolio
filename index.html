@@ -4,39 +4,64 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Preload Critical Fonts -->
-    <link rel="preload" href="/src/assets/jetbrains_mono_webfonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/src/assets/jetbrains_mono_webfonts/JetBrainsMono-Bold.woff2" as="font" type="font/woff2" crossorigin />
-    
+    <link
+      rel="preload"
+      href="/src/assets/jetbrains_mono_webfonts/JetBrainsMono-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/src/assets/jetbrains_mono_webfonts/JetBrainsMono-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/src/assets/jetbrains_mono_webfonts/JetBrainsMono-Medium.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <!-- Content Security Policy (CSP) -->
     <!-- DEV: Relaxed for Vite HMR (hot module replacement) with unsafe-inline and WebSocket support -->
     <!-- PROD: Build plugin automatically replaces with strict CSP (no unsafe-inline/eval) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: wss: http: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" />
-    
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; font-src 'self'; connect-src 'self' ws: wss: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';"
+    />
+
     <!-- Security Headers - Mozilla Practical Implementation Guide -->
     <!-- X-Content-Type-Options: Prevents MIME-sniffing attacks -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    
+
     <!-- Referrer-Policy: Privacy protection - prevents leaking internal URLs -->
     <meta http-equiv="Referrer-Policy" content="no-referrer" />
-    
+
     <!-- Permissions-Policy: Disables unnecessary browser features -->
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()" />
-    
+    <meta
+      http-equiv="Permissions-Policy"
+      content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), browsing-topics=(), interest-cohort=()"
+    />
+
     <!-- DEV: Cross-Origin policies removed to avoid CORS issues with Vite dev server -->
     <!-- PROD: Build plugin automatically adds strict Cross-Origin-* headers -->
     <!-- Note: Cross-Origin policies removed for development. Add back in production deployment via server headers. -->
-    
+
     <!-- Privacy & Anti-Indexing -->
     <meta name="robots" content="noindex, nofollow, noimageindex, noarchive, nosnippet" />
     <meta name="googlebot" content="noindex, nofollow" />
     <meta name="referrer" content="no-referrer" />
-    
+
     <!-- Theme Color -->
     <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    
+
     <title>Lars M. | System Engineer</title>
   </head>
   <body>

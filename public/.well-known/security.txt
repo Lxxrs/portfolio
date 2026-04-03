@@ -1,0 +1,7 @@
+# Security Policy (RFC 9116)
+# https://securitytxt.org/
+
+Contact: mailto:admin@larmart.de
+Expires: 2027-03-27T00:00:00.000Z
+Preferred-Languages: en, de
+Canonical: https://larmart.de/.well-known/security.txt
