@@ -33,18 +33,20 @@ steps:
   - name: validate
     image: *node_image
     commands:
+      - apk add --no-cache git
       - corepack enable
-      - yarn install --immutable
-      - yarn lint
-      - yarn test --run
+      - pnpm install --frozen-lockfile
+      - pnpm run lint
+      - pnpm run test -- --run
 
   # ── Build for Codeberg Pages (base: /portfolio/) ─────────────────────
   - name: build-codeberg
     image: *node_image
     commands:
+      - apk add --no-cache git
       - corepack enable
-      - yarn install --immutable
-      - yarn build
+      - pnpm install --frozen-lockfile
+      - pnpm run build
     depends_on:
       - validate
 
@@ -62,9 +64,10 @@ steps:
   - name: build-hetzner
     image: *node_image
     commands:
+      - apk add --no-cache git
       - corepack enable
-      - yarn install --immutable
-      - yarn build:custom-domain
+      - pnpm install --frozen-lockfile
+      - pnpm run build:custom-domain
     depends_on:
       - deploy-codeberg
 

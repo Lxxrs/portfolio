@@ -45,11 +45,10 @@ jspm_packages/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
-# Yarn 4 (node-modules linker) - ignore node_modules and install state
+# pnpm
+pnpm-debug.log*
+.pnpm-store/
 node_modules/
-.yarn/install-state.gz
-.yarn/build-state.yml
-.yarn/cache
 
 # Build output
 dist/
@@ -77,9 +76,6 @@ dist/
 
 # Output of 'npm pack'
 *.tgz
-
-# Yarn Integrity file
-.yarn-integrity
 
 # dotenv environment variable files
 .env
@@ -191,3 +187,5 @@ RECOMMENDATIONS.md
 requirements.md
 
 .vite/
+
+.github/skills/*
