@@ -30,7 +30,6 @@ when:
 
 steps:
   # ── Lint & Test ──────────────────────────────────────────────────────
-  # yarn scripts proxy to Vite+ (vp): lint → vp lint, test → vp test
   - name: validate
     image: *node_image
     commands:
