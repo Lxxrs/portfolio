@@ -1,81 +1,50 @@
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { ref, watch } from "vue";
 
-const STORAGE_KEY = 'theme-preference';
+const STORAGE_KEY = "theme-preference";
 
-// Safely access localStorage
-const getStoredTheme = (): string | null => {
+function storedTheme(): boolean | null {
   try {
-    return localStorage.getItem(STORAGE_KEY);
+    const v = localStorage.getItem(STORAGE_KEY);
+    if (v === "dark") return true;
+    if (v === "light") return false;
   } catch {
-    return null;
+    // localStorage unavailable (private mode, security restrictions)
   }
-};
+  return null;
+}
 
-const setStoredTheme = (theme: string): void => {
-  try {
-    localStorage.setItem(STORAGE_KEY, theme);
-  } catch {
-    // localStorage not available (SSR, private mode, etc.)
-  }
-};
+// Singleton reactive state — shared across all useTheme() calls
+const mq = window.matchMedia("(prefers-color-scheme: dark)");
+const isDark = ref(storedTheme() ?? mq.matches);
 
-// Initialize from localStorage or system preference
-const getInitialTheme = (): boolean => {
-  const stored = getStoredTheme();
-  if (stored !== null) {
-    return stored === 'dark';
-  }
-  // Fallback to system preference
-  if (typeof window !== 'undefined' && window.matchMedia) {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  }
-  return true; // Default to dark
-};
+// Apply class immediately so there is no flash before Vue mounts
+document.documentElement.classList.toggle("dark", isDark.value);
+document.documentElement.classList.toggle("light", !isDark.value);
 
-const isDark = ref(getInitialTheme());
+// Sync DOM on any isDark change — localStorage is NOT written here so that
+// system mq changes never accidentally persist a stale stored preference.
+watch(isDark, (dark) => {
+  document.documentElement.classList.toggle("dark", dark);
+  document.documentElement.classList.toggle("light", !dark);
+});
+
+// Follow system preference when the user has not manually overridden it.
+// Does NOT write to localStorage — only explicit toggles should do that.
+mq.addEventListener("change", (e) => {
+  if (storedTheme() === null) isDark.value = e.matches;
+});
 
 export function useTheme() {
-  const toggleTheme = () => {
-    isDark.value = !isDark.value;
+  return {
+    isDark,
+    toggleTheme: () => {
+      isDark.value = !isDark.value;
+      // Persist only on explicit user action, never on system mq changes.
+      try {
+        localStorage.setItem(STORAGE_KEY, isDark.value ? "dark" : "light");
+      } catch {
+        // localStorage unavailable (private mode, security restrictions)
+      }
+    },
   };
-
-  const applyTheme = (dark: boolean) => {
-    if (dark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
-  let mediaQuery: MediaQueryList | null = null;
-  let handleChange: ((e: MediaQueryListEvent) => void) | null = null;
-
-  onMounted(() => {
-    applyTheme(isDark.value);
-
-    // Listen for system preference changes
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      handleChange = (e: MediaQueryListEvent) => {
-        // Only auto-update if user hasn't set a preference
-        if (getStoredTheme() === null) {
-          isDark.value = e.matches;
-        }
-      };
-      mediaQuery.addEventListener('change', handleChange);
-    }
-  });
-
-  onUnmounted(() => {
-    if (mediaQuery && handleChange) {
-      mediaQuery.removeEventListener('change', handleChange);
-    }
-  });
-
-  watch(isDark, (val) => {
-    applyTheme(val);
-    setStoredTheme(val ? 'dark' : 'light');
-  });
-
-  return { isDark, toggleTheme };
 }

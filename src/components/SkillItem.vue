@@ -1,11 +1,11 @@
 <script setup lang="ts">
-// We use slots for icons in Vue to keep it flexible, 
+// We use slots for icons in Vue to keep it flexible,
 // or pass the component, but slots are cleaner here.
 defineProps<{ label: string }>();
 </script>
 
 <template>
-  <div class="flex items-center gap-3 text-secondary hover:text-primary transition-colors">
+  <div class="flex items-center gap-3 text-primary hover:text-primary transition-colors">
     <slot />
     <span>{{ label }}</span>
   </div>

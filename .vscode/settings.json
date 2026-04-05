@@ -1,9 +1,8 @@
 {
+  "css.customData": [".vscode/css-custom-data.json"],
   "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
+    "**/node_modules": true
   },
-  "eslint.nodePath": ".yarn/sdks",
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "oxc.fmt.configPath": "./vite.config.ts",
   "editor.formatOnSave": true,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useScramble } from '../composables/useScramble';
+import { ref, onMounted, onUnmounted } from "vue";
+import { useScramble } from "../composables/useScramble";
 
-const props = defineProps<{ 
+const props = defineProps<{
   text: string;
   speed?: number;
   delay?: number;
@@ -32,8 +32,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <span 
-    class="font-mono cursor-default motion-safe:hover:text-accent transition-colors" 
+  <span
+    class="font-mono cursor-default motion-safe:hover:text-accent transition-colors"
     :class="{ 'opacity-0': !isVisible }"
     :aria-label="text"
     @mouseenter="triggerAnimation"

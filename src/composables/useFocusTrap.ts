@@ -1,10 +1,10 @@
-import { onMounted, onUnmounted, Ref } from 'vue';
+import { onMounted, onUnmounted, Ref } from "vue";
 
 /**
  * Focus trap composable for modal dialogs
  * Implements WCAG 2.1 keyboard navigation best practices
  * Reference: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role
- * 
+ *
  * @param containerRef - Reference to the modal container element
  * @param isActive - Ref indicating if the trap should be active
  */
@@ -12,13 +12,13 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>, isActive: Re
   let previousActiveElement: HTMLElement | null = null;
 
   const FOCUSABLE_SELECTORS = [
-    'a[href]',
-    'button:not([disabled])',
-    'textarea:not([disabled])',
-    'input:not([disabled])',
-    'select:not([disabled])',
+    "a[href]",
+    "button:not([disabled])",
+    "textarea:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
     '[tabindex]:not([tabindex="-1"])',
-  ].join(',');
+  ].join(",");
 
   const getFocusableElements = (): HTMLElement[] => {
     if (!containerRef.value) return [];
@@ -29,7 +29,7 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>, isActive: Re
     if (!isActive.value || !containerRef.value) return;
 
     // Only trap Tab key
-    if (e.key !== 'Tab') return;
+    if (e.key !== "Tab") return;
 
     const focusableElements = getFocusableElements();
     if (focusableElements.length === 0) return;
@@ -67,18 +67,18 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>, isActive: Re
 
   const releaseFocus = () => {
     // Restore focus to the previously focused element
-    if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+    if (previousActiveElement && typeof previousActiveElement.focus === "function") {
       previousActiveElement.focus();
       previousActiveElement = null;
     }
   };
 
   onMounted(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
   });
 
   onUnmounted(() => {
-    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener("keydown", handleKeyDown);
   });
 
   return {

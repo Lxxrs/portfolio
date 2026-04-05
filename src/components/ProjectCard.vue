@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Lock } from 'lucide-vue-next';
-import CodebergIcon from './CodebergIcon.vue';
+import { Lock } from "lucide-vue-next";
+import IconCodeberg from "./IconCodeberg.vue";
 
 defineProps<{
   title: string;
@@ -16,10 +16,12 @@ defineProps<{
     class="group border border-border bg-card hover:border-accent focus-within:border-accent p-6 rounded-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/20 flex flex-col h-full"
   >
     <div class="flex justify-between items-start mb-4">
-      <div class="text-primary font-bold text-lg group-hover:text-accent transition-colors">
+      <div
+        class="min-w-0 flex-1 text-primary font-bold text-lg group-hover:text-accent transition-colors"
+      >
         {{ title }}
       </div>
-      <div class="text-secondary">
+      <div class="shrink-0 ml-2 text-secondary">
         <div
           v-if="isPrivate"
           class="flex items-center gap-2 text-xs border border-border px-2 py-1 rounded"
@@ -34,7 +36,7 @@ defineProps<{
           class="hover:text-accent transition-colors"
           :aria-label="`View source code for ${title}`"
         >
-          <CodebergIcon :size="20" />
+          <IconCodeberg :size="20" />
         </a>
       </div>
     </div>

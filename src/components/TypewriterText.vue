@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from "vue";
 
 const props = defineProps<{
   text: string;
@@ -8,15 +8,15 @@ const props = defineProps<{
   hideCursorOnFinish?: boolean;
 }>();
 
-const displayText = ref('');
+const displayText = ref("");
 const showCursor = ref(true);
 let intervalId: number | null = null;
 let timeoutId: number | null = null;
 
 onMounted(() => {
   // Respect prefers-reduced-motion
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   if (prefersReducedMotion) {
     // Show text immediately without animation
     timeoutId = window.setTimeout(() => {
@@ -59,14 +59,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <span
-    class="font-mono"
-    :aria-label="text"
-  >
-    {{ displayText }}<span
-      v-if="showCursor"
-      class="animate-blink"
-      aria-hidden="true"
-    >_</span>
+  <span class="font-mono" :aria-label="text">
+    {{ displayText }}<span v-if="showCursor" class="animate-blink" aria-hidden="true">_</span>
   </span>
 </template>

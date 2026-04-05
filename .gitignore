@@ -188,4 +188,8 @@ requirements.md
 
 .vite/
 
+.vite
+
+.vite/*
+
 .github/skills/*

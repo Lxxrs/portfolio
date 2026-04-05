@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from "vue";
 
 const CHARS = "abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+-=[]{}|;':,./<>?";
 
@@ -11,7 +11,7 @@ export function useScramble(text: string, speed: number = 40, autoStart: boolean
     if (isAnimating.value) return;
 
     // Respect user's reduced motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       displayText.value = text;
       return;
     }

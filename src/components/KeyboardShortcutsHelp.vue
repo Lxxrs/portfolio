@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import { X } from 'lucide-vue-next';
+import { ref, onMounted, onUnmounted } from "vue";
+import { X } from "lucide-vue-next";
 
 const isOpen = ref(false);
 
 const shortcuts = [
-  { key: 'Ctrl/Cmd + K', description: 'Open command palette' },
-  { key: 'H', description: 'Go to Home section' },
-  { key: 'A', description: 'Go to About section' },
-  { key: 'P', description: 'Go to Projects section' },
-  { key: 'T', description: 'Toggle theme (dark/light)' },
-  { key: '?', description: 'Show this help dialog' },
-  { key: 'Esc', description: 'Close dialogs' },
+  { key: "Ctrl/Cmd + K", description: "Open command palette" },
+  { key: "H", description: "Go to Home section" },
+  { key: "A", description: "Go to About section" },
+  { key: "P", description: "Go to Projects section" },
+  { key: "C", description: "Go to Contact section" },
+  { key: "T", description: "Toggle theme (dark/light)" },
+  { key: "?", description: "Show this help dialog" },
+  { key: "Esc", description: "Close dialogs" },
 ];
 
 const open = () => {
@@ -28,20 +29,20 @@ const handleKeydown = (e: KeyboardEvent) => {
     return;
   }
 
-  if (e.key === '?' && !isOpen.value) {
+  if (e.key === "?" && !isOpen.value) {
     e.preventDefault();
     open();
-  } else if (e.key === 'Escape' && isOpen.value) {
+  } else if (e.key === "Escape" && isOpen.value) {
     close();
   }
 };
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeydown);
+  window.addEventListener("keydown", handleKeydown);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeydown);
+  window.removeEventListener("keydown", handleKeydown);
 });
 </script>
 
@@ -78,10 +79,7 @@ onUnmounted(() => {
         >
           <!-- Header -->
           <div class="flex items-center justify-between p-6 border-b border-border">
-            <h2
-              id="shortcuts-title"
-              class="text-xl font-bold text-primary flex items-center gap-2"
-            >
+            <h2 id="shortcuts-title" class="text-xl font-bold text-primary flex items-center gap-2">
               <span class="text-accent">$</span> Keyboard Shortcuts
             </h2>
             <button
@@ -112,7 +110,11 @@ onUnmounted(() => {
 
           <!-- Footer -->
           <div class="p-6 pt-0 text-xs text-secondary text-center border-t border-border">
-            <p>Press <kbd class="px-2 py-1 bg-canvas border border-border rounded font-mono">?</kbd> anytime to view shortcuts</p>
+            <p>
+              Press
+              <kbd class="px-2 py-1 bg-canvas border border-border rounded font-mono">?</kbd>
+              anytime to view shortcuts
+            </p>
           </div>
         </div>
       </Transition>
