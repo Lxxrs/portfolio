@@ -10,32 +10,67 @@
     "lint": "vp lint .",
     "test": "vp test",
     "preview": "vp preview",
-    "deploy": "./deploy.sh",
-    "deploy:hetzner": "./deploy-hetzner.sh",
-    "deploy:all": "./deploy-all.sh",
-    "test:deployment": "./test-deployment.sh",
     "prepare": "vp config"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
     "lucide-vue-next": "^1.0.0",
-    "vue": "^3.5.31"
+    "vue": "^3.5.32"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
+    "@types/node": "^25.5.2",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^29.0.1",
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.2",
-    "vite": "^8.0.3",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.15",
+    "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-vue-devtools": "^8.1.1",
     "vite-plus": "^0.1.15",
-    "vitest": "^4.1.2"
+    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.15",
+    "web-vitals": "^5.2.0"
   },
   "resolutions": {
     "vite": "npm:@voidzero-dev/vite-plus-core@0.1.15",
     "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.15"
   },
-  "packageManager": "yarn@4.13.0"
+  "packageManager": "pnpm@10.33.0",
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.15",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.15"
+    },
+    "packageExtensions": {
+      "@vue/test-utils@*": {
+        "dependencies": {
+          "@vue/compiler-dom": "*",
+          "@vue/server-renderer": "*",
+          "vue": "*"
+        }
+      },
+      "@tailwindcss/vite@*": {
+        "peerDependenciesMeta": {
+          "vite": {
+            "optional": true
+          }
+        }
+      },
+      "@vitejs/plugin-vue@*": {
+        "peerDependenciesMeta": {
+          "vite": {
+            "optional": true
+          }
+        }
+      },
+      "vite-plugin-pwa@*": {
+        "peerDependenciesMeta": {
+          "vite": {
+            "optional": true
+          }
+        }
+      }
+    }
+  }
 }
