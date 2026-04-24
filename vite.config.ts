@@ -184,11 +184,16 @@ const DEV_SECURITY_HEADERS: Record<string, string> = {
 
 /**
  * Production Vite plugin that:
- *  1. Computes SHA-384 SRI hashes for all JS and CSS chunks in generateBundle.
+ *  1. Computes SHA-384 SRI hashes for JS chunks in generateBundle.
  *  2. Injects a strict CSP <meta> tag and SRI integrity attributes into the
  *     built HTML (frame-ancestors excluded — HTTP-header–only per CSP Level 2).
  *  3. Emits `dist/_headers` — Codeberg Pages (Netlify format) with full
  *     PROD_SECURITY_HEADERS including HSTS, CORP, COOP, COEP, X-Frame-Options.
+ *
+ * Note: SRI is applied to JS only. CSS SRI is omitted because Vite's CSS
+ * post-processing (charset injection, LightningCSS) can modify asset content
+ * after generateBundle fires, causing a hash mismatch that silently blocks
+ * the stylesheet. Same-origin CSS SRI adds minimal security value anyway.
  */
 function productionCSP(): Plugin {
   // fileName (no leading slash) → "sha384-<base64>" — populated in generateBundle,
@@ -200,9 +205,9 @@ function productionCSP(): Plugin {
     apply: "build",
 
     generateBundle(_options, bundle) {
-      // ── SRI hashes ──────────────────────────────────────────────────
+      // ── SRI hashes (JS only) ─────────────────────────────────────
       for (const [fileName, chunk] of Object.entries(bundle)) {
-        if (!fileName.endsWith(".js") && !fileName.endsWith(".css")) continue;
+        if (!fileName.endsWith(".js")) continue;
         const source =
           chunk.type === "chunk"
             ? chunk.code
@@ -243,18 +248,6 @@ function productionCSP(): Plugin {
             const hash = integrity.get(src.replace(/^\//, ""));
             if (!hash) return match;
             return `<script ${before}src="${src}" integrity="${hash}"${after}>`;
-          },
-        );
-
-        // ── SRI — <link rel="stylesheet" href> ───────────────────────
-        // Vite already emits `crossorigin` on stylesheet links; only add integrity.
-        result = result.replace(
-          /<link ([^>]*?)href="(\/[^"]+\.css)"([^>]*?)>/g,
-          (match, before: string, href: string, after: string) => {
-            if (match.includes("integrity=")) return match;
-            const hash = integrity.get(href.replace(/^\//, ""));
-            if (!hash) return match;
-            return `<link ${before}href="${href}" integrity="${hash}"${after}>`;
           },
         );
 
