@@ -291,7 +291,7 @@ export default defineConfig({
   preview: {
     headers: PROD_SECURITY_HEADERS,
   },
-  base: "/portfolio/",
+  base: "/",
   plugins: [
     vue(),
     tailwindcss() as unknown as Plugin,
