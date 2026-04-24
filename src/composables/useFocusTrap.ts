@@ -1,4 +1,5 @@
-import { onMounted, onUnmounted, Ref } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import type { Ref } from "vue";
 
 /**
  * Focus trap composable for modal dialogs

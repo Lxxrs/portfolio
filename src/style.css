@@ -24,19 +24,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Apple Color Emoji";
-  src: url("./assets/apple-emojis/AppleColorEmoji-Linux.ttf") format("truetype");
-  unicode-range: U+1F1E0-1F1FF, U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF;
-  font-display: swap;
-}
-
-.emoji {
-  font-family: "Apple Color Emoji", system-ui, sans-serif;
-  font-size: 20px;
-  line-height: 1;
-}
-
 @variant dark (&:where(.dark, .dark *));
 
 @theme {

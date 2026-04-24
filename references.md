@@ -97,7 +97,7 @@
 
 ### Oxc
 
-- [Oxc Docs](https://osc.rs/)
+- [Oxc Docs](https://oxc.rs/)
 
 ### yarn
 
