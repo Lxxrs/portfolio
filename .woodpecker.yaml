@@ -1,25 +1,14 @@
 # Portfolio CI/CD Pipeline
-# Triggers on push to main → validates, builds, deploys to Codeberg Pages + Hetzner
+# Triggers on push to main → validates, builds, deploys to Codeberg Pages
 #
 # Required Woodpecker Secrets (repo settings → Secrets):
 #   ssh_key               - Ed25519 SSH private key for Codeberg Pages deploy
-#   hetzner_host          - Hetzner server hostname (e.g. www111.your-server.de)
-#   hetzner_user          - Hetzner SSH username
-#   hetzner_ssh_key       - Ed25519 SSH private key for Hetzner deploy
-#   hetzner_remote_path   - Remote path on Hetzner (e.g. /var/www/html/)
 #
 # One-time setup — Codeberg Pages SSH deploy key:
 #   1. ssh-keygen -t ed25519 -f /tmp/codeberg-pages -C "woodpecker-ci"
 #   2. Add PUBLIC key → Codeberg repo → Settings → Deploy Keys (Write Access)
 #   3. Add PRIVATE key → Woodpecker secret "ssh_key"
 #   4. rm /tmp/codeberg-pages /tmp/codeberg-pages.pub
-#
-# One-time setup — Hetzner SSH deploy key:
-#   1. ssh-keygen -t ed25519 -f /tmp/hetzner-deploy -C "woodpecker-ci"
-#   2. Copy PUBLIC key to Hetzner: ssh-copy-id -i /tmp/hetzner-deploy.pub user@host
-#      (or append to ~/.ssh/authorized_keys on the server)
-#   3. Add PRIVATE key → Woodpecker secret "hetzner_ssh_key"
-#   4. rm /tmp/hetzner-deploy /tmp/hetzner-deploy.pub
 
 variables:
   - &node_image "node:24-alpine"
@@ -39,7 +28,7 @@ steps:
       - pnpm run lint
       - pnpm run test -- --run
 
-  # ── Build for Codeberg Pages (base: /portfolio/) ─────────────────────
+  # ── Build ────────────────────────────────────────────────────────────
   - name: build-codeberg
     image: *node_image
     commands:
@@ -59,54 +48,3 @@ steps:
         from_secret: ssh_key
     depends_on:
       - build-codeberg
-
-  # ── Build for Hetzner (base: /) ──────────────────────────────────────
-  - name: build-hetzner
-    image: *node_image
-    commands:
-      - apk add --no-cache git
-      - corepack enable
-      - pnpm install --frozen-lockfile
-      - pnpm run build:custom-domain
-    depends_on:
-      - deploy-codeberg
-
-  # ── Deploy to Hetzner via SCP ────────────────────────────────────────
-  # Use $$ escaping — the preprocessor expands dollar-brace expressions
-  # before containers start. Secrets via from_secret are runtime-only.
-  - name: deploy-hetzner
-    image: alpine:latest
-    environment:
-      HETZNER_HOST:
-        from_secret: hetzner_host
-      HETZNER_USER:
-        from_secret: hetzner_user
-      HETZNER_SSH_KEY:
-        from_secret: hetzner_ssh_key
-      HETZNER_REMOTE_PATH:
-        from_secret: hetzner_remote_path
-    commands:
-      - apk add --no-cache openssh-client rclone
-      - |
-        if [ -z "$$HETZNER_HOST" ] || [ -z "$$HETZNER_USER" ] || [ -z "$$HETZNER_SSH_KEY" ] || [ -z "$$HETZNER_REMOTE_PATH" ]; then
-          echo "Error: Hetzner secrets are empty. Check repo → Settings → Secrets."
-          exit 1
-        fi
-      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-      - printf '%b\n' "$$HETZNER_SSH_KEY" > ~/.ssh/deploy_key
-      - chmod 600 ~/.ssh/deploy_key
-      - |
-        # Pre-populate known_hosts so rclone's Go SSH library trusts the host
-        ssh-keyscan -H "$$HETZNER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-      - |
-        export RCLONE_CONFIG_HETZNER_TYPE=sftp
-        export RCLONE_CONFIG_HETZNER_HOST="$$HETZNER_HOST"
-        export RCLONE_CONFIG_HETZNER_USER="$$HETZNER_USER"
-        export RCLONE_CONFIG_HETZNER_KEY_FILE="$${HOME}/.ssh/deploy_key"
-        export RCLONE_CONFIG_HETZNER_KNOWN_HOSTS_FILE="$${HOME}/.ssh/known_hosts"
-        rclone sync dist/ "hetzner:$${HETZNER_REMOTE_PATH}" \
-          --verbose
-      - rm -f ~/.ssh/deploy_key
-      - echo "Hetzner deployment complete"
-    depends_on:
-      - build-hetzner

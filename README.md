@@ -17,8 +17,8 @@ Personal portfolio with a terminal/sysadmin aesthetic. Built with Vue 3, TypeScr
 | Linting         | Oxlint (via Vite+)                          |
 | Formatting      | Oxfmt (via Vite+)                           |
 | PWA             | vite-plugin-pwa                             |
-| Package Manager | Yarn 4 (node-modules linker)                |
-| Node            | 24.x (pinned via `.node-version`)           |
+| Package Manager | pnpm 10                                     |
+| Node            | 24.x                                        |
 
 ## Project Structure
 
@@ -45,16 +45,15 @@ src/
 │   ├── useFocusTrap.ts      # Modal focus trap (WCAG compliant)
 │   └── useKeyboardShortcuts.ts
 └── assets/
-    └── jetbrai`s_mono_webfonts/  # Self-hosted JetBrains Mono
+    └── jetbrains_mono_webfonts/  # Self-hosted JetBrains Mono
 ```
 
 ## Development
 
-Requires [Node.js](https://nodejs.org/) 24.x and [Corepack](https://nodejs.org/api/corepack.html) (ships with Node).
+Requires [Node.js](https://nodejs.org/) 24.x.
 
 ```sh
-corepack enable          # Activates Yarn 4 via packageManager field
-yarn install             # Install dependencies
+pnpm install             # Install dependencies
 vp dev                   # Start dev server at http://localhost:5173
 vp test                  # Run unit tests (watch mode)
 vp test --run            # Run tests once
@@ -65,30 +64,6 @@ vp preview               # Preview production build locally
 ```
 
 ## Deployment
-
-### Both Targets (Recommended)
-
-```sh
-yarn deploy:all
-```
-
-Deploys to Codeberg Pages and Hetzner (custom domain) in one step.
-
-### Individual Targets
-
-```sh
-yarn deploy              # Codeberg Pages only
-yarn deploy:hetzner      # Hetzner (custom domain) only
-```
-
-### Hetzner Configuration
-
-```sh
-cp .env.example .env     # Create config from template
-# Edit .env — SSH key auth recommended over password
-```
-
-### Codeberg Pages (CI)
 
 Auto-deploys via [Woodpecker CI](https://ci.codeberg.org/) on push to `main`:
 
