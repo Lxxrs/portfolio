@@ -48,6 +48,47 @@ This is a **Vue 3** application built with **Vite+** and **TypeScript**. It serv
   ```
 - **Icons**: Use `lucide-vue-next` for standard icons. Pass `:size` prop for sizing. Custom icons (e.g., `IconCodeberg.vue`) are in `src/components/`.
 
+### Composables
+
+Before adding new state logic, check if a composable already covers it:
+
+| Composable                              | Returns                             | What it does                                                                                                                                         |
+| --------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useTheme()`                            | `{ isDark, toggleTheme }`           | Singleton. Applies `.dark`/`.light` to `<html>` synchronously at import (no FOUC). Follows `prefers-color-scheme`; persists only on explicit toggle. |
+| `useActiveSection(ids)`                 | `{ activeSection }`                 | Tracks the in-viewport section ID via `IntersectionObserver`.                                                                                        |
+| `useKeyboardShortcuts()`                | —                                   | Global `keydown`: `h/a/p/c` scroll to section, `t` toggle theme. No-op when an input/textarea is focused.                                            |
+| `useFocusTrap(containerRef, isActive)`  | `{ trapFocus, releaseFocus }`       | WCAG 2.1 focus trap for modals — cycles Tab/Shift+Tab, restores previous focus on release.                                                           |
+| `useScramble(text, speed?, autoStart?)` | `{ displayText, triggerAnimation }` | Scrambles text through random chars on interval. Respects `prefers-reduced-motion`.                                                                  |
+
+### Data Model
+
+Portfolio content lives in [`src/data/portfolio.ts`](../src/data/portfolio.ts), typed in [`src/types.ts`](../src/types.ts). To add projects, skills, or social links, only edit `portfolio.ts`.
+
+```ts
+interface Project {
+  title: string;
+  desc: string;
+  stack: string[];
+  repoUrl?: string;
+  isPrivate?: boolean;
+}
+interface Skill {
+  label: string;
+  icon: Component;
+}
+interface SocialLink {
+  name: string;
+  url: string;
+  icon: Component;
+}
+```
+
+### TypeScript Constraints
+
+- `erasableSyntaxOnly: true` — do **not** use `enum` or `namespace`.
+- No path aliases — use relative imports (no `@/` shorthand).
+- `strict: true`, `noUnusedLocals`, `noUnusedParameters` are all enabled.
+
 ## Development Workflow
 
 ### Commands (Vite+)
@@ -66,27 +107,24 @@ All commands use the `vp` CLI directly — do not use `yarn <command>` for these
 - **Updating Theme**: Modify CSS variables in `src/style.css` inside `@layer base` for colors, and `@theme` for Tailwind configuration.
 - **Composables**: Place shared logic (like animations or state management) in `src/composables/`.
 
+### Testing
+
+- **Run**: `vp test` (Vitest via jsdom environment).
+- **Import test utilities from `vite-plus/test`**, not `vitest` directly: `import { describe, it, expect, vi } from "vite-plus/test"`.
+- **Co-located specs**: place `*.spec.ts` next to the source file (e.g. `useScramble.spec.ts` beside `useScramble.ts`).
+- **Singleton composables**: reset module registry between tests with `vi.resetModules()` + `const { composable } = await import("./composable")`.
+- **Vue lifecycle context**: use the `withSetup` helper — wrap the composable call inside `defineComponent` + `mount()` from `@vue/test-utils`.
+- **`window.matchMedia` mock** required for any test touching `useScramble` or `useTheme`.
+
+See [`.github/skills/unit-test-vue-pinia/`](./skills/unit-test-vue-pinia/) for the full testing skill.
+
 ### Best Practices
 
-- **Type Safety**: Always use TypeScript types for props, state, and function signatures.
-- **Component Reusability**: Create reusable components for common UI patterns (e.g., buttons, cards).
-- **Consistent Styling**: Use Tailwind utility classes and custom semantic classes for consistent styling across the app.
-- **Accessibility**: Ensure components are accessible (e.g., use `aria` attributes where necessary).
-- **Performance**: Optimize images and use lazy loading for better performance.
-- **Security**: Avoid exposing sensitive information in the frontend code. Use environment variables for any API keys or secrets.
-- **Web Security**: Implement Content Security Policy (CSP) headers to mitigate XSS attacks. Use `rel="noopener noreferrer"` for external links to prevent tabnabbing.
-- **Testing**: Write unit tests for critical components and logic using a testing framework like Jest or Vue Test Utils.
-- **Privacy**: Privacy is a priority. No SEO is used. The site is designed to be a personal portfolio without tracking or analytics. Ensure that any third-party libraries used do not include tracking scripts or collect user data. Always review the privacy policies of dependencies and avoid those that compromise user privacy.
-- **Documentation**: Keep code well-documented with comments and maintain a clear README for the project. Include instructions for setup, development, and deployment.
-- **Local First**: The application is designed to run locally without reliance on external services. Ensure that all necessary assets and dependencies are included in the project to allow for offline usage. Avoid using APIs or services that require internet access, and ensure that any data used is stored locally within the application.
-- **Content Security**: Implement a strict Content Security Policy (CSP) to prevent cross-site scripting (XSS) attacks. This can be done by configuring the server to include appropriate CSP headers, specifying allowed sources for scripts, styles, and other resources. Additionally, use `rel="noopener noreferrer"` for all external links to prevent tabnabbing attacks.
-- **Performance Optimization**: Optimize the application for performance by minimizing bundle size, using code-splitting, and lazy-loading components where appropriate. Ensure that images are optimized and consider using a tool like Webpack Bundle Analyzer to identify and address any performance bottlenecks.
-- **Security Best Practices**: Follow security best practices by keeping dependencies up to date, avoiding the use of vulnerable libraries, and regularly auditing the code for potential security issues. Use tools like npm audit to identify and fix vulnerabilities in dependencies.
-- **Privacy Considerations**: Since this is a personal portfolio, ensure that no tracking or analytics tools are included in the project. Avoid using third-party libraries that may collect user data or include tracking scripts. Always review the privacy policies of any dependencies used and prioritize user privacy in all aspects of the application.
-- **Clean Code**: Maintain clean and readable code by following consistent coding conventions, using meaningful variable and function names, and avoiding unnecessary complexity. Regularly refactor code to improve readability and maintainability.
-- **Keep It Simple**: Focus on simplicity in both design and implementation. Avoid over-engineering solutions and strive for clear, straightforward code that is easy to understand and maintain. Prioritize functionality and user experience over unnecessary features or complexity.
-
-After every change, ensure that the application runs smoothly and that all features work as intended. Regularly test the application in different environments and browsers to ensure compatibility and a consistent user experience.
+- **Privacy first**: No SEO, no tracking, no analytics. Audit new dependencies for telemetry before adding them.
+- **Security**: All external links require `rel="noopener noreferrer"`. Edit CSP headers only in `vite.config.ts` — never in host config files or `<meta>` tags directly.
+- **Local-first**: No runtime external API calls. All assets must be bundled; nothing fetched at page load.
+- **Accessibility**: Add `aria-label` to icon-only interactive elements. Use `useFocusTrap` for modal dialogs.
+- **Simplicity**: No over-engineering. Use semantic Tailwind classes (`text-accent`, `bg-card`, etc.) — never hardcode color values.
 
 ## Hosting & Deployment
 
