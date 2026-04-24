@@ -26,7 +26,13 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    // @vue/test-utils@2.4.7 has broken types: package.json claims "types": "dist/index.d.ts"
+    // but that file is missing. The actual types live in dist/src/index.d.ts.
+    // Remove this paths override once the package fixes its type declarations.
+    "paths": {
+      "@vue/test-utils": ["./node_modules/@vue/test-utils/dist/src/index.d.ts"]
+    }
   },
   "include": ["src/**/*", "src/**/*.vue"]
 }
