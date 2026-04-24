@@ -24,7 +24,7 @@ steps:
     commands:
       - apk add --no-cache git
       - corepack enable
-      - pnpm install --frozen-lockfile
+      - pnpm install
       - pnpm run lint
       - pnpm run test -- --run
 
@@ -34,7 +34,7 @@ steps:
     commands:
       - apk add --no-cache git
       - corepack enable
-      - pnpm install --frozen-lockfile
+      - pnpm install
       - pnpm run build
     depends_on:
       - validate
