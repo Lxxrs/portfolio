@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import linkedinLight from "../assets/linkedin-light-mode.svg?url";
-import linkedinDark from "../assets/linkedin-dark-mode.svg?url";
+import linkedinLight from "../assets/linkedin-light-mode.png?url";
+import linkedinDark from "../assets/linkedin-dark-mode.png?url";
 
 defineProps<{
   size?: number | string;

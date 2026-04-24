@@ -5,7 +5,7 @@ defineProps<{ label: string }>();
 </script>
 
 <template>
-  <div class="flex items-center gap-3 text-primary hover:text-primary transition-colors">
+  <div class="flex items-center gap-3 text-primary hover:text-accent transition-colors">
     <slot />
     <span>{{ label }}</span>
   </div>

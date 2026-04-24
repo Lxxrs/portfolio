@@ -60,6 +60,7 @@ onUnmounted(() => {
 
 <template>
   <span class="font-mono" :aria-label="text">
-    {{ displayText }}<span v-if="showCursor" class="animate-blink" aria-hidden="true">_</span>
+    {{ displayText
+    }}<span v-if="showCursor" class="motion-safe:animate-blink" aria-hidden="true">_</span>
   </span>
 </template>

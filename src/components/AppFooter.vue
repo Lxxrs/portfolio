@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import palestineFlag from "../assets/apple-emojis/palestine-flag.svg?url";
+import palestineFlag from "../assets/apple-emojis/palestine-flag.png?url";
 </script>
 
 <template>

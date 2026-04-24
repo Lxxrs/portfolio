@@ -97,8 +97,7 @@ const commands = computed<Command[]>(() => {
       icon: link.icon, // Using the component directly
       group: "Social",
       action: () => {
-        const newWindow = window.open(link.url, "_blank", "noopener,noreferrer");
-        if (newWindow) newWindow.opener = null;
+        window.open(link.url, "_blank", "noopener,noreferrer");
         close();
       },
     });
@@ -202,6 +201,13 @@ onUnmounted(() => {
               ref="searchInput"
               v-model="searchQuery"
               type="text"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="true"
+              aria-controls="command-palette-results"
+              :aria-activedescendant="
+                commands.length > 0 ? `cmd-${commands[selectedIndex]?.id}` : undefined
+              "
               placeholder="Type a command..."
               autocomplete="off"
               aria-label="Search commands"
@@ -211,15 +217,27 @@ onUnmounted(() => {
           </div>
 
           <!-- Results -->
-          <div class="overflow-y-auto p-2">
-            <div v-if="commands.length === 0" class="p-4 text-center text-secondary text-sm">
+          <div
+            id="command-palette-results"
+            role="listbox"
+            aria-label="Commands"
+            class="overflow-y-auto p-2"
+          >
+            <div
+              v-if="commands.length === 0"
+              role="status"
+              class="p-4 text-center text-secondary text-sm"
+            >
               No commands found.
             </div>
 
             <button
               v-for="(cmd, index) in commands"
               :key="cmd.id"
+              :id="`cmd-${cmd.id}`"
               type="button"
+              role="option"
+              :aria-selected="selectedIndex === index"
               class="w-full flex items-center px-3 py-3 rounded-md text-sm transition-colors group"
               :class="selectedIndex === index ? 'bg-accent/10 text-accent' : 'text-primary'"
               @click="cmd.action"

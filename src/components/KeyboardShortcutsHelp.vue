@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, watch, nextTick, onMounted, onUnmounted } from "vue";
 import { X } from "lucide-vue-next";
+import { useFocusTrap } from "../composables/useFocusTrap";
 
 const isOpen = ref(false);
+const modalRef = ref<HTMLElement | null>(null);
+const { trapFocus, releaseFocus } = useFocusTrap(modalRef, isOpen);
+
+watch(isOpen, (val) => {
+  if (val) nextTick(() => trapFocus());
+  else releaseFocus();
+});
 
 const shortcuts = [
   { key: "Ctrl/Cmd + K", description: "Open command palette" },
@@ -74,7 +82,7 @@ onUnmounted(() => {
         leave-to-class="opacity-0 scale-95"
       >
         <div
-          v-if="isOpen"
+          ref="modalRef"
           class="bg-card border border-border rounded-lg shadow-2xl max-w-md w-full max-h-[80vh] overflow-auto"
         >
           <!-- Header -->

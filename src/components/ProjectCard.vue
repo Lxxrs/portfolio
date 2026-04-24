@@ -29,7 +29,7 @@ defineProps<{
           <Lock :size="14" /> <span>Private</span>
         </div>
         <a
-          v-else
+          v-else-if="repoUrl"
           :href="repoUrl"
           target="_blank"
           rel="noopener noreferrer"
