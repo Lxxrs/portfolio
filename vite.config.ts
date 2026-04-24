@@ -126,7 +126,7 @@ const DEV_CSP: Record<string, string[]> = {
 };
 
 const PROD_CSP: Record<string, string[]> = {
-  "default-src": ["'self'"],
+  "default-src": ["'none'"],
   "script-src": ["'self'"],
   "style-src": ["'self'"],
   "img-src": ["'self'", "data:"],
@@ -164,7 +164,7 @@ function serializeMetaCSP(directives: Record<string, string[]>): string {
 // HSTS: 2-year max-age with includeSubDomains.
 const PROD_SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy": serializeCSP(PROD_CSP),
-  "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
+  "Strict-Transport-Security": "max-age=300; includeSubDomains",
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",
   "Referrer-Policy": "no-referrer",
