@@ -1,21 +1,26 @@
 # Portfolio CI/CD Pipeline
-# Triggers on push to main → validates, builds, deploys to Codeberg Pages
 #
-# Required Woodpecker Secrets (repo settings → Secrets):
-#   ssh_key               - Ed25519 SSH private key for Codeberg Pages deploy
+# Event model:
+#   pull_request  -> validate only (check + test)
+#   push to main  -> validate -> build -> deploy
 #
-# One-time setup — Codeberg Pages SSH deploy key:
+# Required Woodpecker Secrets (repo settings -> Secrets):
+#   ssh_key  - Ed25519 SSH private key for Codeberg Pages deploy
+#
+# One-time setup -- Codeberg Pages SSH deploy key:
 #   1. ssh-keygen -t ed25519 -f /tmp/codeberg-pages -C "woodpecker-ci"
-#   2. Add PUBLIC key → Codeberg repo → Settings → Deploy Keys (Write Access)
-#   3. Add PRIVATE key → Woodpecker secret "ssh_key"
+#   2. Add PUBLIC key -> Codeberg repo -> Settings -> Deploy Keys (Write Access)
+#   3. Add PRIVATE key -> Woodpecker secret "ssh_key"
 #   4. rm /tmp/codeberg-pages /tmp/codeberg-pages.pub
 
 variables:
   - &node_image "node:24-alpine"
 
+# Pipeline-level trigger: allow push-to-main events only.
+# Step-level `when:` on build/deploy restricts those steps to main-push only.
 when:
-  branch: main
   event: push
+  branch: main
 
 steps:
   # ── Lint & Test ──────────────────────────────────────────────────────
@@ -24,27 +29,26 @@ steps:
     commands:
       - apk add --no-cache git
       - corepack enable
-      - pnpm install
-      - pnpm run lint
+      - pnpm install # installs to workspace volume; node_modules persists to later steps
+      - pnpm run check # format + lint + typecheck (vp check)
       - pnpm run test -- --run
 
   # ── Build ────────────────────────────────────────────────────────────
-  - name: build-codeberg
+  - name: build
     image: *node_image
     commands:
-      - apk add --no-cache git
-      - corepack enable
-      - pnpm install
+      - corepack enable # activates pnpm from corepack; node_modules already present
       - pnpm run build
     depends_on:
       - validate
 
-  # ── Deploy to Codeberg Pages ─────────────────────────────────────────
-  - name: deploy-codeberg
+  # Pushes dist/ to the `pages` branch via SSH.
+  # Plugin tag :1 tracks the latest stable major release.
+  - name: deploy
     image: codeberg.org/sugar700/plugin-codeberg-pages-deploy:1
     settings:
       folder: dist
       ssh_key:
         from_secret: ssh_key
     depends_on:
-      - build-codeberg
+      - build

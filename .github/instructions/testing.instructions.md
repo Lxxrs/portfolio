@@ -113,3 +113,14 @@ afterEach(() => {
   vi.useRealTimers();
 });
 ```
+
+## `@vue/test-utils` Types
+
+`@vue/test-utils@2.4.7` ships broken package metadata: its `package.json` declares
+`"types": "dist/index.d.ts"` but that file does not exist. A `paths` override in
+`tsconfig.app.json` redirects TypeScript to the actual `dist/src/index.d.ts`.
+
+This is transparent — no special import paths or workarounds are needed in spec files.
+If TypeScript reports `TS7016: Could not find declaration file for @vue/test-utils`,
+check that the `paths` override is present in `tsconfig.app.json` and remove it
+once the package ships a fixed version.

@@ -161,7 +161,8 @@ function serializeMetaCSP(directives: Record<string, string[]>): string {
 // COOP + COEP together enable cross-origin isolation. Every resource on this
 // site is served from 'self', so COEP require-corp is safe to use.
 // X-Frame-Options is belt-and-suspenders with frame-ancestors for old browsers.
-// HSTS: 2-year max-age with includeSubDomains.
+// HSTS: 2-year max-age (63072000 s) with includeSubDomains.
+// To enroll in the HSTS Preload List, add `; preload` and submit at hstspreload.org.
 const PROD_SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy": serializeCSP(PROD_CSP),
   "Strict-Transport-Security": "max-age=300; includeSubDomains",

@@ -89,11 +89,17 @@ interface SocialLink {
 - No path aliases — use relative imports (no `@/` shorthand).
 - `strict: true`, `noUnusedLocals`, `noUnusedParameters` are all enabled.
 
+### Known TypeScript Pitfalls
+
+- **`vite.config.ts` TS2321**: The `UserConfig` / `PluginOption` types have deep union hierarchies that overflow tsc's recursion limit when put into a single large `defineConfig({})` call. The config is intentionally split into `toolingConfig` (staged/fmt/lint) + `vitePlugins` (plugins array cast `as PluginOption[]`) + a final `mergeConfig(toolingConfig, defineConfig({...}))`. **Do not collapse these back into one `defineConfig` call.**
+- **`@vue/test-utils` types**: v2.4.7 ships broken package metadata — `types: "dist/index.d.ts"` points to a file that doesn't exist. A `paths` override in `tsconfig.app.json` redirects to the actual `dist/src/index.d.ts`. Remove when the package is fixed.
+- **CSS SRI is intentionally absent**: `productionCSP()` only injects `integrity` hashes on `<script>` tags. CSS SRI is omitted because Vite's LightningCSS post-processing modifies CSS content after `generateBundle`, causing hash mismatches that silently block stylesheets.
+
 ## Development Workflow
 
 ### Commands (Vite+)
 
-All commands use the `vp` CLI directly — do not use `yarn <command>` for these.
+All commands use the `vp` CLI directly — do not use `pnpm run <command>` for these.
 
 - `vp dev`: Start development server.
 - `vp lint`: Lint with Oxlint.
@@ -128,49 +134,30 @@ See [`.github/skills/unit-test-vue-pinia/`](./skills/unit-test-vue-pinia/) for t
 
 ## Hosting & Deployment
 
-This project deploys to **two** static hosting environments. Both are built by Woodpecker CI on Codeberg. Security headers are generated automatically on every `vp build` by the `productionCSP()` plugin in `vite.config.ts` — edit headers there, not in the host config directly.
+The site deploys to **Codeberg Pages** via Woodpecker CI on push to `main`. Security headers are generated automatically on every `vp build` by the `productionCSP()` plugin in `vite.config.ts` — edit headers there, not in host config files.
 
-### Codeberg Pages (primary)
+### Codeberg Pages
 
 - **Backend:** [git-pages](https://codeberg.org/git-pages/git-pages) — open-source Go static site server, TLS via Caddy/Let's Encrypt.
-- **Deployment:** Woodpecker CI pushes to the `pages` branch via the [git-pages Forgejo Action](https://codeberg.org/git-pages/action). The site is served from that branch root.
+- **Deployment:** Woodpecker CI pushes the `dist/` folder to the `pages` branch via the [`sugar700/plugin-codeberg-pages-deploy`](https://codeberg.org/sugar700/plugin-codeberg-pages-deploy) Woodpecker plugin.
 - **HTTP headers:** Controlled by the `_headers` file in the site root (Netlify format). `vp build` emits `dist/_headers` automatically.
 - **Redirects:** Controlled by a `_redirects` file (Netlify format). git-pages does not support URL normalization — `/foo` and `/foo/` are distinct paths.
 - **Limitations:** Static only — no server-side execution. `frame-ancestors` and other HTTP-header-only directives must be in `_headers`, not in `<meta>` tags.
-- **`_headers` format:**
-  ```
-  /*
-    Content-Security-Policy: ...
-    X-Content-Type-Options: nosniff
-    ...
-  ```
-
-### Hetzner konsoleH (custom domain)
-
-- **Backend:** Apache with PHP 8.5. `mod_headers` is available.
-- **HTTP headers:** Configured via `.htaccess` using an `<IfModule mod_headers.c>` block.
-- **Build output:** `vp build` emits `dist/_apache-security-headers.conf` — a ready-to-paste Apache snippet. After each deploy, copy its `<IfModule>` block into `.htaccess` on the server.
-- **Deployment:** Woodpecker CI uploads `dist/` via rclone SFTP. The `.conf` file lands on the server but does not self-apply — manual `.htaccess` paste is required.
-- **`.htaccess` snippet format:**
-  ```apache
-  <IfModule mod_headers.c>
-    Header always set Content-Security-Policy "..."
-    Header always set X-Frame-Options "DENY"
-    ...
-  </IfModule>
-  ```
+- **CI:** Uses `pnpm install` (no `--frozen-lockfile`) so the lockfile syncs automatically when `package.json` changes.
+- **CI workspace sharing:** Woodpecker steps share a workspace volume — `node_modules` installed in the `validate` step persist to `build`. Only run `pnpm install` once (in `validate`).
+- **CI invocation:** `vp` is not a global binary inside Docker containers. CI calls `pnpm run <script>` which resolves `vp` from `node_modules/.bin/` via the package.json scripts.
+- **CI event model:** `pull_request` events run `validate` only; `push` to `main` runs the full `validate → build → deploy` chain. This is enforced via step-level `when:` on `build` and `deploy`.
 
 ### Security Header Architecture
 
 All security headers are defined in `vite.config.ts` as the single source of truth:
 
-| Context          | Headers used                       | How applied                                                   |
-| ---------------- | ---------------------------------- | ------------------------------------------------------------- |
-| `vp dev`         | `DEV_SECURITY_HEADERS` (CSP only)  | `server.headers` in Vite config                               |
-| `vp preview`     | `PROD_SECURITY_HEADERS` (full set) | `preview.headers` in Vite config                              |
-| Codeberg Pages   | `PROD_SECURITY_HEADERS`            | `dist/_headers` (emitted by `productionCSP()` plugin)         |
-| Hetzner konsoleH | `PROD_SECURITY_HEADERS`            | `dist/_apache-security-headers.conf` → paste into `.htaccess` |
-| `<meta>` tag     | `PROD_CSP` minus `frame-ancestors` | Injected into `dist/index.html` by `productionCSP()` plugin   |
+| Context        | Headers used                       | How applied                                           |
+| -------------- | ---------------------------------- | ----------------------------------------------------- |
+| `vp dev`       | `DEV_SECURITY_HEADERS` (CSP only)  | `server.headers` in Vite config                       |
+| `vp preview`   | `PROD_SECURITY_HEADERS` (full set) | `preview.headers` in Vite config                      |
+| Codeberg Pages | `PROD_SECURITY_HEADERS`            | `dist/_headers` (emitted by `productionCSP()` plugin) |
+| `<meta>` tag   | `PROD_CSP` minus `frame-ancestors` | Injected into `dist/index.html` by `productionCSP()`  |
 
 > `frame-ancestors`, `Permissions-Policy`, COOP, COEP, and CORP are HTTP-header-only — `<meta http-equiv>` is ineffective for all of them (MDN spec). Only a CSP subset and `<meta name="referrer">` work as meta tags.
 
