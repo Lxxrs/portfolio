@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Terminal, Sun, Moon, Command } from "lucide-vue-next";
+import { Terminal, Sun, Moon, Command } from "@lucide/vue";
 import { useTheme } from "../composables/useTheme";
 
 defineProps<{

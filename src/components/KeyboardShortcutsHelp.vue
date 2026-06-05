@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted, onUnmounted } from "vue";
-import { X } from "lucide-vue-next";
+import { X } from "@lucide/vue";
 import { useFocusTrap } from "../composables/useFocusTrap";
 
 const isOpen = ref(false);

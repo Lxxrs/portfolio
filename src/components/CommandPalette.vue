@@ -1,16 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from "vue";
-import {
-  Terminal,
-  Search,
-  ArrowRight,
-  Sun,
-  Moon,
-  Home,
-  User,
-  Briefcase,
-  Mail,
-} from "lucide-vue-next";
+import { Terminal, Search, ArrowRight, Sun, Moon, Home, User, Briefcase, Mail } from "@lucide/vue";
 import { useTheme } from "../composables/useTheme";
 import { useFocusTrap } from "../composables/useFocusTrap";
 import { socialLinks } from "../data/portfolio";

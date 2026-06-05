@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SectionHeader from "./SectionHeader.vue";
-import { Mail } from "lucide-vue-next";
+import { Mail } from "@lucide/vue";
 import { socialLinks } from "../data/portfolio";
 </script>
 

@@ -6,7 +6,7 @@ import {
   CodeXml,
   GitPullRequestArrow,
   Shield,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 
 import IconLinkedin from "../components/IconLinkedin.vue";
 import IconMastodon from "../components/IconMastodon.vue";
