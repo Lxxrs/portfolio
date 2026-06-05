@@ -24,21 +24,21 @@
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.3.0",
     "typescript": "~6.0.3",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.19",
+    "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.24",
     "vite-plugin-pwa": "^1.3.0",
     "vite-plugin-vue-devtools": "^8.1.2",
     "vite-plus": "^0.1.24",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.19"
+    "vitest": "npm:@voidzero-dev/vite-plus-test@^0.1.24"
   },
   "resolutions": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.19",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.19"
+    "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.24",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@^0.1.24"
   },
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "overrides": {
-      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.19",
-      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.19"
+      "vite": "npm:@voidzero-dev/vite-plus-core@^0.1.24",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@^0.1.24"
     },
     "packageExtensions": {
       "@vue/test-utils@*": {
@@ -55,7 +55,7 @@
           }
         }
       },
-      "@vitejs/plugin-vue@*": {
+      "@vitejs/plugin-vue@^1.3.0": {
         "peerDependenciesMeta": {
           "vite": {
             "optional": true
