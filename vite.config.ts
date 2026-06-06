@@ -322,12 +322,11 @@ const toolingConfig = defineConfig({
 
 // Plugins extracted and cast so TypeScript doesn't recurse into PluginOption's
 // deep union type when checking the outer config object (part of the TS2321 fix).
-const vitePlugins = [
+const vitePlugins: PluginOption[] = [
   vue(),
-  tailwindcss() as unknown as Plugin,
+  tailwindcss(),
   productionCSP(),
-  // Only include devtools in dev — avoids shipping the devtools payload to production
-  ...(process.env["NODE_ENV"] === "production" ? [] : [vueDevTools() as unknown as Plugin]),
+  ...(process.env["NODE_ENV"] === "production" ? [] : [vueDevTools()]),
   VitePWA({
     registerType: "autoUpdate",
     includeAssets: [
@@ -355,8 +354,8 @@ const vitePlugins = [
         //       and: { src: "icons/pwa-512x512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
       ],
     },
-  }) as unknown as Plugin,
-] as PluginOption[];
+  }),
+];
 
 export default mergeConfig(
   toolingConfig,
