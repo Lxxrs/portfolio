@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Terminal, Sun, Moon, Command } from "@lucide/vue";
 import { useTheme } from "../composables/useTheme";
+import { isShortcutsHelpOpen } from "../composables/useShortcutsHelp";
 
 defineProps<{
   activeSection?: string;
@@ -8,10 +9,9 @@ defineProps<{
 
 const { isDark, toggleTheme } = useTheme();
 
-// Show a hint that keyboard shortcuts are available
+// Open the keyboard shortcuts help dialog
 const showShortcutHint = () => {
-  // Trigger the keyboard shortcuts help (? key)
-  window.dispatchEvent(new KeyboardEvent("keydown", { key: "?" }));
+  isShortcutsHelpOpen.value = true;
 };
 </script>
 

@@ -15,7 +15,12 @@ export function useActiveSection(sectionIds: string[]) {
         });
       },
       {
-        threshold: 0.5, // Trigger when 50% of the section is visible
+        // A section is "active" when any part of it is in the top 10%–middle
+        // band of the viewport. This works for short bottom sections (e.g. a
+        // Contact section that never reaches 50% visibility when the footer
+        // fills the rest of the fold) and for tall sections alike.
+        rootMargin: "-40% 0px -50% 0px",
+        threshold: 0,
       },
     );
 

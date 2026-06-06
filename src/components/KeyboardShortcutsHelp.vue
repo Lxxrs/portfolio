@@ -2,8 +2,9 @@
 import { ref, watch, nextTick, onMounted, onUnmounted } from "vue";
 import { X } from "@lucide/vue";
 import { useFocusTrap } from "../composables/useFocusTrap";
+import { isShortcutsHelpOpen } from "../composables/useShortcutsHelp";
 
-const isOpen = ref(false);
+const isOpen = isShortcutsHelpOpen;
 const modalRef = ref<HTMLElement | null>(null);
 const { trapFocus, releaseFocus } = useFocusTrap(modalRef, isOpen);
 
