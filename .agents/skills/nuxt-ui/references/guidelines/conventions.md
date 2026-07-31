@@ -10,15 +10,9 @@ Nuxt UI automatically registers `@nuxt/icon`, `@nuxt/fonts`, and `@nuxtjs/color-
 // nuxt.config.ts
 export default defineNuxtConfig({
   modules: ["@nuxt/ui"],
-  icon: {
-    /* @nuxt/icon options */
-  },
-  fonts: {
-    /* @nuxt/fonts options */
-  },
-  colorMode: {
-    /* @nuxtjs/color-mode options */
-  },
+  icon: {/* @nuxt/icon options */},
+  fonts: {/* @nuxt/fonts options */},
+  colorMode: {/* @nuxtjs/color-mode options */},
 });
 ```
 

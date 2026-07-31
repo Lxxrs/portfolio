@@ -191,3 +191,8 @@ requirements.md
 .vite
 
 .vite/*
+
+.agents/
+.github/
+AGENTS.md
+skills-lock.json
