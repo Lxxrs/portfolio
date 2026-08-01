@@ -1,0 +1,185 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import SkillsTree from "../components/SkillsTree.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import NowLine from "../components/NowLine.astro";
+import { site } from "../data/site";
+import { projects } from "../data/projects";
+import { socialLinks } from "../data/social";
+---
+
+<BaseLayout>
+  <article class="page">
+    <!-- ── HERO ─────────────────────────────────────────────────── -->
+    <section id="home" class="section section--hero" aria-labelledby="home-title">
+      <div class="hero-shell">
+        <div>
+          <div class="boot" aria-hidden="true">
+            <p><span class="ok">[ ok ]</span> term <span class="det">/dev/tty0 — phosphor-blue</span></p>
+            <p><span class="ok">[ ok ]</span> link <span class="det">uplink stable</span></p>
+            <p><span class="ok">[ ok ]</span> auth <span class="det">operator verified</span></p>
+            <p><span class="ok">[ ok ]</span> ready <span class="det">console idle</span></p>
+          </div>
+          <p class="hero-prompt">
+            <span class="prompt" aria-hidden="true">$</span><span class="typed">whoami</span><span class="cursor-blink" aria-hidden="true"></span>
+          </p>
+          <p class="hero-callsign" aria-hidden="true"><span class="br">[</span> {site.callsign} <span class="br">]</span></p>
+          <h1 id="home-title" class="hero-name"><span id="decrypt-name" data-text={site.name}>{site.name}</span></h1>
+          <p class="hero-role"><span class="typed2">{site.role}</span></p>
+          <p class="hero-lede">{site.lede}</p>
+          <div class="hero-cta">
+            <a class="cta" href="#projects">$ ls projects/</a>
+            <a class="cta cta--ghost" href="#contact">$ ping lars</a>
+          </div>
+        </div>
+        <div class="avatar-wrap" aria-hidden="true">
+          <img class="avatar-img" src="/lars_memoji.webp" alt="" width="1665" height="1665" loading="eager" fetchpriority="high" decoding="async" />
+          <img class="avatar-img avatar-img--ghost" src="/lars_memoji.webp" alt="" width="1665" height="1665" loading="eager" decoding="async" />
+        </div>
+      </div>
+      <NowLine />
+    </section>
+
+    <!-- ── ABOUT ────────────────────────────────────────────────── -->
+    <section id="about" class="section" aria-labelledby="about-title">
+      <SectionHeader num="01" command="cat about.md" />
+      <h2 id="about-title" class="visually-hidden">About</h2>
+      <div class="about-text">
+        <p>
+          I'm <strong>{site.name}</strong>, a junior system engineer in <strong>{site.location}</strong>.
+          I build, break, and secure Unix systems — <em>infrastructure as code</em>,
+          <em>network automation</em>, and enough offensive work to keep the defensive reflexes sharp.
+        </p>
+        <p>
+          I work quietly. I document what I do. I sign what I sign.
+          Source on <a class="inline-link" href={site.repo} rel="noopener noreferrer">Codeberg</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── SKILLS ───────────────────────────────────────────────── -->
+    <section id="skills" class="section" aria-labelledby="skills-title">
+      <SectionHeader num="02" command="tree skills/" />
+      <h2 id="skills-title" class="visually-hidden">Skills</h2>
+      <SkillsTree />
+    </section>
+
+    <!-- ── PROJECTS ─────────────────────────────────────────────── -->
+    <section id="projects" class="section" aria-labelledby="projects-title">
+      <SectionHeader num="03" command="ls -la projects/" />
+      <h2 id="projects-title" class="visually-hidden">Projects</h2>
+      <p class="ls-row" aria-hidden="true">
+        total {projects.length}&nbsp;&nbsp;·&nbsp;&nbsp;<b>drwxr-xr-x</b>&nbsp; lars &nbsp;operators&nbsp; <b>4096</b>&nbsp; {new Date().toISOString().slice(0, 10)}&nbsp; <b>./</b>
+      </p>
+      <ul class="case-stack" role="list">
+        {projects.map((p, i) => (
+          <li><ProjectCard project={p} index={i} /></li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- ── CONTACT ──────────────────────────────────────────────── -->
+    <section id="contact" class="section" aria-labelledby="contact-title">
+      <SectionHeader num="04" command="ping lars" />
+      <h2 id="contact-title" class="visually-hidden">Contact</h2>
+      <p class="avail"><span class="led" aria-hidden="true"></span>status: open for sysadmin / network engineering / security work</p>
+      <p class="contact-lede">
+        End-to-end encryption is the only kind I trust:
+        <a class="inline-link" href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+      <div class="social-row">
+        {socialLinks.map((s) => (
+          <a class="social-chip" href={s.url} rel="noopener noreferrer">{s.name}</a>
+        ))}
+      </div>
+      <p class="sectxt">$ cat /.well-known/security.txt <span>· RFC 9116 vulnerability disclosure</span></p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .page { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--gutter) 4rem; }
+  .section { padding: 4rem 0; border-top: 1px solid var(--border); }
+  .section--hero { padding-top: calc(var(--nav-h) + 3.5rem); padding-bottom: 5rem; border-top: 0; }
+
+  /* hero layout + load choreography */
+  .hero-shell { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center; }
+  @media (min-width: 880px) { .hero-shell { grid-template-columns: 1.5fr 1fr; } }
+  .boot { font-size: var(--t-xs); line-height: 1.8; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1.4rem; }
+  .boot p { margin: 0; display: flex; gap: 0.7rem; opacity: 0; animation: boot-line 0.18s ease-out forwards; }
+  .boot p:nth-child(1) { animation-delay: 0.1s; }
+  .boot p:nth-child(2) { animation-delay: 0.28s; }
+  .boot p:nth-child(3) { animation-delay: 0.46s; }
+  .boot p:nth-child(4) { animation-delay: 0.64s; }
+  .boot .ok { color: var(--accent); font-weight: 700; min-width: 3.2rem; }
+  .boot .det { color: var(--text-faint); }
+  .hero-prompt { margin: 0 0 0.5rem; font-size: var(--t-sm); color: var(--text-muted); display: flex; align-items: baseline; }
+  .prompt { color: var(--accent); font-weight: 700; margin-right: 0.5rem; }
+  .typed { display: inline-block; overflow: hidden; white-space: nowrap; width: 0;
+    animation: typing 0.7s steps(6, end) 0.9s forwards; color: var(--text); }
+  @keyframes typing { to { width: 6ch; } }
+  .cursor-blink { display: inline-block; width: 0.55em; height: 1.05em; background: var(--accent);
+    vertical-align: -0.15em; margin-left: 0.25rem; animation: blink 1s step-end infinite; }
+  .hero-callsign { margin: 0 0 1.2rem; color: var(--accent); letter-spacing: 0.18em; font-size: var(--t-sm);
+    opacity: 0; animation: fade-in 0.4s ease 1.3s forwards; }
+  .br { color: var(--text-faint); }
+  .hero-name { margin: 0 0 0.5rem; font-size: clamp(3rem, 8vw, var(--t-3xl)); line-height: 1;
+    letter-spacing: -0.03em; min-height: 1em; }
+  .hero-name :global(.glitch-on) { text-shadow: -3px 0 var(--accent), 3px 0 var(--glitch-2);
+    animation: glitch-flicker 4s steps(1) infinite; }
+  .hero-role { margin: 0 0 1.6rem; color: var(--accent); font-size: var(--t-lg); font-weight: 700; display: flex; }
+  .typed2 { display: inline-block; overflow: hidden; white-space: nowrap; width: 0;
+    animation: typing2 1.3s steps(22, end) 2.2s forwards, role-blink 2.5s step-end 4s infinite; }
+  @keyframes typing2 { to { width: 22ch; } }
+  .hero-lede { max-width: 34rem; margin: 0 0 2rem; text-wrap: pretty;
+    opacity: 0; animation: fade-in 0.5s ease 2.6s forwards; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 0.9rem; opacity: 0; animation: fade-in 0.5s ease 2.9s forwards; }
+  .cta { display: inline-block; text-decoration: none; font-size: var(--t-sm); font-weight: 700;
+    padding: 0.7rem 1.15rem; border: 1px solid var(--accent); color: var(--ink); background: var(--accent);
+    border-radius: var(--r-md); box-shadow: 0 0 18px var(--accent-dim);
+    transition: transform var(--dur-fast) var(--ease-out-quint), box-shadow var(--dur-fast) ease; }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 0 26px var(--accent-glow); }
+  .cta--ghost { background: transparent; color: var(--accent); box-shadow: none; }
+  .cta--ghost:hover { background: var(--accent-dim); }
+
+  /* avatar: glitch at rest (0.5s burst, event every 2s), classic on hover */
+  .avatar-wrap { justify-self: center; width: min(52vw, 300px); aspect-ratio: 1; border-radius: 50%;
+    border: 2px solid var(--accent); overflow: hidden; display: grid; place-items: center;
+    box-shadow: 0 0 0 6px var(--accent-dim), 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 24px var(--accent-dim);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; background: var(--ink-2); position: relative; }
+  .avatar-img { width: 100%; height: 100%; object-fit: cover; object-position: center;
+    transition: transform 0.3s ease, filter 0.3s ease; user-select: none; }
+  .avatar-img--ghost { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+  .avatar-wrap:not(:hover) .avatar-img:not(.avatar-img--ghost) { animation: avatar-int 4s steps(1) infinite; }
+  .avatar-wrap:not(:hover) .avatar-img--ghost { animation: avatar-slice 4s steps(1) infinite 2s;
+    filter: drop-shadow(-4px 0 rgba(122, 162, 247, 1)) drop-shadow(3px 0 rgba(255, 92, 138, 0.6)); }
+  .avatar-wrap:hover { transform: translateY(-4px) rotate(3deg);
+    box-shadow: 0 0 0 6px var(--accent-dim), 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 40px var(--accent-glow); }
+  .avatar-wrap:hover .avatar-img { transform: scale(1.06); animation: none; filter: none; }
+  .avatar-wrap:hover .avatar-img--ghost { opacity: 0 !important; animation: none; }
+
+  /* about + contact */
+  .about-text { max-width: 44rem; }
+  .about-text p { margin: 0 0 1.1rem; }
+  .about-text strong { color: var(--accent); font-weight: 400; }
+  .about-text em { font-style: normal; border-bottom: 1px dashed var(--border-strong); }
+  .inline-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+  .inline-link:hover { border-bottom-color: var(--accent); }
+  .ls-row { font-size: var(--t-xs); color: var(--text-faint); margin: 0 0 1rem; letter-spacing: 0.04em;
+    white-space: nowrap; overflow-x: auto; }
+  .ls-row b { color: var(--text-muted); font-weight: 400; }
+  .case-stack { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.5rem; }
+  .avail { color: var(--text-muted); font-size: var(--t-sm); margin: 0 0 1.4rem; }
+  .led { display: inline-block; width: 0.6em; height: 0.6em; border-radius: 50%; background: var(--success);
+    margin-right: 0.45rem; box-shadow: 0 0 8px var(--success); animation: led-pulse 2.4s ease-in-out infinite; }
+  .contact-lede { max-width: 40rem; margin: 0 0 1rem; }
+  .social-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .social-chip { text-decoration: none; font-size: var(--t-sm); color: var(--text-muted);
+    border: 1px solid var(--border); border-radius: var(--r-md); padding: 0.45rem 0.85rem;
+    transition: all var(--dur-fast) ease; }
+  .social-chip:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
+  .sectxt { font-size: var(--t-xs); color: var(--text-faint); margin: 1.4rem 0 0; letter-spacing: 0.06em; }
+  .sectxt span { color: var(--text-muted); }
+</style>
