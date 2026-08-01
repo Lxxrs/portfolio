@@ -1,0 +1,66 @@
+---
+import { skillGroups, statusChar, statusLabel } from "../data/skills";
+
+// Precompute ASCII connectors: groups get ├──/└──, leaves get │/space rails.
+const rows: { conn: string; kind: "root" | "dir" | "leaf"; text: string; hint?: string; status?: keyof typeof statusChar }[] = [
+  { conn: "", kind: "root", text: "skills/" },
+];
+skillGroups.forEach((g, gi) => {
+  const lastGroup = gi === skillGroups.length - 1;
+  rows.push({ conn: lastGroup ? "└── " : "├── ", kind: "dir", text: `${g.label}/`, hint: g.hint });
+  const rail = lastGroup ? "    " : "│   ";
+  g.children.forEach((c, ci) => {
+    const lastLeaf = ci === g.children.length - 1;
+    rows.push({ conn: rail + (lastLeaf ? "└── " : "├── "), kind: "leaf", text: c.label, status: c.status });
+  });
+});
+---
+
+<p class="lede">
+  Things I reach for.
+  <span class="legend" aria-hidden="true">
+    — <b class="st-prod">■</b> production · <b class="st-familiar">◐</b> familiar · <b class="st-learning">○</b> learning
+  </span>
+</p>
+
+<ul class="tree" aria-label="Skills, grouped">
+  {rows.map((r, i) => (
+    <li style={`--i:${i}`}>
+      {r.conn && <span class="conn">{r.conn}</span>}
+      {r.kind !== "leaf" ? (
+        <>
+          <span class="dir">{r.text}</span>
+          {r.hint && <span class="hint"> — {r.hint}</span>}
+        </>
+      ) : (
+        <>
+          <span class={`st-${r.status}`} aria-hidden="true">{statusChar[r.status!]}</span>{" "}
+          <span class="leaf">{r.text}</span>
+          <span class="visually-hidden">({statusLabel[r.status!]})</span>
+        </>
+      )}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .lede { color: var(--text-muted); margin: 0 0 1.6rem; font-size: var(--t-sm); }
+  .legend { color: var(--text-faint); }
+  .legend b { font-weight: 400; }
+  .tree { list-style: none; margin: 0; padding: 1.1rem 1.2rem; font-size: var(--t-sm);
+    line-height: 1.95; border: 1px solid var(--border); border-radius: var(--r-lg);
+    background: var(--ink-2); overflow-x: auto; }
+  .tree li { white-space: nowrap; }
+  /* type-in reveal: hidden only pre-reveal so no-JS users see everything */
+  :global(html.js) .tree li { opacity: 0; transform: translateX(-6px); }
+  :global(html.js) .tree.is-visible li { animation: boot-line 0.16s ease-out forwards;
+    animation-delay: calc(var(--i) * 55ms); }
+  .conn { color: var(--text-faint); white-space: pre; }
+  .dir { color: var(--text); }
+  .hint { color: var(--text-faint); }
+  .leaf { color: var(--text-muted); }
+  .tree li:hover .leaf { color: var(--text); }
+  :global(.st-prod) { color: var(--accent); }
+  :global(.st-familiar) { color: var(--text-muted); }
+  :global(.st-learning) { color: var(--warning); }
+</style>

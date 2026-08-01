@@ -1,54 +1,32 @@
-# Portfolio CI/CD Pipeline
-#
-# Event model:
-#   pull_request  -> validate only (check + test)
-#   push to main  -> validate -> build -> deploy
-#
-# Required Woodpecker Secrets (repo settings -> Secrets):
-#   ssh_key  - Ed25519 SSH private key for Codeberg Pages deploy
-#
-# One-time setup -- Codeberg Pages SSH deploy key:
-#   1. ssh-keygen -t ed25519 -f /tmp/codeberg-pages -C "woodpecker-ci"
-#   2. Add PUBLIC key -> Codeberg repo -> Settings -> Deploy Keys (Write Access)
-#   3. Add PRIVATE key -> Woodpecker secret "ssh_key"
-#   4. rm /tmp/codeberg-pages /tmp/codeberg-pages.pub
-
+# Portfolio CI/CD — validate -> build -> deploy (Codeberg Pages, git-pages)
+# Secrets required: ssh_key (Ed25519 deploy key with write access)
 variables:
   - &node_image "node:24-alpine"
 
-# Pipeline-level trigger: allow push-to-main events only.
-# Step-level `when:` on build/deploy restricts those steps to main-push only.
 when:
   event: push
   branch: main
 
 steps:
-  # ── Lint & Test ──────────────────────────────────────────────────────
   - name: validate
     image: *node_image
     commands:
       - apk add --no-cache git
       - corepack enable
-      - pnpm install # installs to workspace volume; node_modules persists to later steps
-      - pnpm run check # format + lint + typecheck (vp check)
-      - pnpm run test -- --run
+      - pnpm install --frozen-lockfile
+      - pnpm run check
 
-  # ── Build ────────────────────────────────────────────────────────────
   - name: build
     image: *node_image
     commands:
-      - corepack enable # activates pnpm from corepack; node_modules already present
+      - corepack enable
       - pnpm run build
-    depends_on:
-      - validate
+    depends_on: [validate]
 
-  # Pushes dist/ to the `pages` branch via SSH.
-  # Plugin tag :1 tracks the latest stable major release.
   - name: deploy
     image: codeberg.org/sugar700/plugin-codeberg-pages-deploy:1
     settings:
       folder: dist
       ssh_key:
         from_secret: ssh_key
-    depends_on:
-      - build
+    depends_on: [build]

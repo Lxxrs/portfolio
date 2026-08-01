@@ -1,0 +1,81 @@
+---
+import type { ProjectEntry } from "../data/projects";
+
+interface Props { project: ProjectEntry; index: number; }
+const { project, index } = Astro.props;
+const num = String(index + 1).padStart(2, "0");
+---
+
+<article class="case">
+  <header class="head">
+    <span class="num" aria-hidden="true">{num}</span>
+    <div>
+      <h3 class="title">{project.title}</h3>
+      <p class="meta">
+        {project.role}<span class="sep" aria-hidden="true">·</span>{project.dates}
+        <span class="sep" aria-hidden="true">·</span>
+        <span class="status" data-status={project.status}>{project.status}</span>
+        {project.isPrivate && <><span class="sep" aria-hidden="true">·</span><span class="priv">🔒 private</span></>}
+      </p>
+      <p class="oneline">{project.oneLine}</p>
+    </div>
+  </header>
+
+  <div class="tags" aria-label="Stack">
+    {project.stack.map((t) => <span class="tag">{t}</span>)}
+  </div>
+
+  <details open={index === 0}>
+    <summary>cat case-study.md</summary>
+    <div class="grid">
+      <div class="field"><h4>Problem</h4><p>{project.problem}</p></div>
+      <div class="field"><h4>Approach</h4><p>{project.approach}</p></div>
+      <div class="field"><h4>Result</h4><p>{project.result}</p></div>
+    </div>
+    {project.codebergBanner && (
+      <p class="banner">
+        <a class="cb" href="https://codeberg.org/Lxrs/portfolio">
+          <img src="/badges/get-it-on-codeberg.svg" alt="Get it on Codeberg" height="60" loading="lazy" decoding="async" />
+        </a>
+      </p>
+    )}
+  </details>
+</article>
+
+<style>
+  .case { border: 1px solid var(--border); background: var(--ink-2); padding: 1.4rem 1.5rem;
+    border-radius: var(--r-lg); transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease; }
+  .case:hover { border-color: var(--border-strong); box-shadow: 0 0 0 3px var(--accent-dim); }
+  .head { display: flex; gap: 1.1rem; align-items: baseline; }
+  .num { color: var(--text-faint); font-size: var(--t-lg); font-weight: 700; }
+  .title { margin: 0; font-size: var(--t-lg); }
+  .meta { margin: 0.35rem 0 0; font-size: var(--t-xs); color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em; }
+  .sep { color: var(--text-faint); margin: 0 0.4rem; }
+  .status[data-status="ongoing"] { color: var(--warning); }
+  .status[data-status="shipped"] { color: var(--success); }
+  .status[data-status="archived"] { color: var(--text-faint); }
+  .priv { color: var(--text-faint); }
+  .oneline { margin: 0.7rem 0 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+  .tag { font-size: var(--t-xs); color: var(--accent); background: var(--accent-dim);
+    border-radius: var(--r-sm); padding: 0.18rem 0.55rem; letter-spacing: 0.04em; }
+  details { margin-top: 1.1rem; border-top: 1px dashed var(--border); }
+  summary { cursor: pointer; list-style: none; padding: 0.8rem 0 0; color: var(--accent); font-size: var(--t-sm); }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "$ "; font-weight: 700; }
+  summary::after { content: "  ▾"; color: var(--text-faint); }
+  details[open] summary::after { content: "  ▴"; }
+  summary:hover { text-decoration: underline; }
+  .grid { display: grid; gap: 1rem; padding-top: 0.6rem; }
+  @media (min-width: 880px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .field h4 { margin: 0 0 0.35rem; font-size: var(--t-xs); color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.12em; }
+  .field p { margin: 0; font-size: var(--t-sm); color: var(--text-muted); }
+  .banner { margin: 1.1rem 0 0; }
+  .cb { display: inline-block; }
+  .cb img { display: block; height: 60px; width: auto; border-radius: 8px;
+    filter: drop-shadow(0 0 8px rgba(71, 147, 204, 0.3));
+    transition: filter var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out-quint); }
+  .cb:hover img { filter: drop-shadow(0 0 18px rgba(71, 147, 204, 0.7)); transform: translateY(-2px); }
+</style>

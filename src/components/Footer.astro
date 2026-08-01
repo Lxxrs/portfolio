@@ -1,0 +1,52 @@
+---
+import { site } from "../data/site";
+// Build stamp: baked at build time. Woodpecker sets CI_COMMIT_SHA.
+const commit = (process.env.CI_COMMIT_SHA ?? "dev").slice(0, 7);
+const date = new Date().toISOString().slice(0, 10);
+---
+
+<footer class="colophon">
+  <button type="button" id="egg-para" class="para" aria-label="paragraph mark">¶</button>
+  <div class="grid">
+    <div>
+      <p class="col-title">Edition</p>
+      <p class="line">© {new Date().getFullYear()} {site.name}</p>
+      <p class="line"><a class="link" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license noopener noreferrer">CC BY-NC-SA 4.0</a></p>
+    </div>
+    <div>
+      <p class="col-title">Source</p>
+      <p class="line"><a class="link" href={site.repo} rel="noopener noreferrer">codeberg.org/Lxrs/portfolio</a></p>
+    </div>
+    <div>
+      <p class="col-title">Privacy</p>
+      <p class="line">no analytics · no cookies · no third-party requests</p>
+      <p class="line">noindex · robots.txt: Disallow /</p>
+    </div>
+  </div>
+  <p class="exit-line">
+    <span class="p">$</span> exit&nbsp;&nbsp;<span class="ok">[build {commit} · {date} · exit 0]</span>
+    <a class="astro-badge" href="https://astro.build" rel="noopener noreferrer">
+      <img src="/badges/built-with-astro.svg" alt="Built with Astro" width="120" height="20" loading="lazy" decoding="async" />
+    </a>
+  </p>
+</footer>
+
+<style>
+  .colophon { border-top: 1px solid var(--border); padding: 2.5rem var(--gutter) 3rem;
+    max-width: var(--content-max); margin: 0 auto; position: relative; z-index: 1; }
+  .para { background: none; border: none; color: var(--text-faint); font-family: inherit;
+    font-size: var(--t-lg); cursor: pointer; padding: 0; }
+  .grid { display: grid; gap: 1.6rem; margin-top: 0.6rem; }
+  @media (min-width: 720px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .col-title { font-size: var(--t-xs); color: var(--accent); text-transform: uppercase;
+    letter-spacing: 0.12em; margin: 0 0 0.5rem; }
+  .line { margin: 0 0 0.3rem; font-size: var(--t-sm); color: var(--text-muted); }
+  .link { color: var(--text-muted); text-decoration: none; border-bottom: 1px solid var(--border-strong); }
+  .link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .exit-line { margin: 2rem 0 0; font-size: var(--t-sm); color: var(--text-faint);
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; }
+  .p { color: var(--accent); font-weight: 700; }
+  .ok { color: var(--success); }
+  .astro-badge { margin-left: 0.6rem; display: inline-flex; }
+  .astro-badge img { border-radius: 4px; }
+</style>

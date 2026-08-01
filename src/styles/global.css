@@ -1,0 +1,148 @@
+/* ════════════════════════════════════════════════════════════════════
+   fsociety Lite — design system
+   Locked in review v10 (2026-07-31): blue accent · rounded corners ·
+   0.5s glitch bursts every 2s · re-decrypt name · <details> cases.
+   Tokens only here; component styles live scoped in their .astro files.
+   ════════════════════════════════════════════════════════════════════ */
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Fonts (self-hosted) ── */
+@font-face { font-family: "JetBrains Mono"; src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("/fonts/JetBrainsMono-Medium.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+/* ── Tokens ── */
+:root {
+  --ink: #0a0e1a; --ink-2: #0f1524; --ink-3: #1a2236;
+  --border: #1f2940; --border-strong: #2e3a5a;
+  --text: #e8eef4; --text-muted: #7a8aa5; --text-faint: #4a556e;
+  --accent: #7aa2f7;
+  --accent-dim: rgba(122, 162, 247, 0.13);
+  --accent-glow: rgba(122, 162, 247, 0.38);
+  --accent-2: #16233f;
+  --danger: #ff5577; --success: #4ade80; --warning: #fbbf24;
+  --glitch-2: #ff5c8a;
+  --scanline: rgba(122, 162, 247, 0.03);
+  --dot-grid: rgba(122, 162, 247, 0.045);
+  --vignette: rgba(0, 0, 0, 0.5);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 180ms; --dur-base: 320ms; --dur-slow: 600ms;
+  --content-max: 80rem; --nav-h: 64px; --gutter: clamp(1rem, 4vw, 2.5rem);
+  --t-xs: 0.72rem; --t-sm: 0.85rem; --t-base: 0.95rem; --t-md: 1.05rem;
+  --t-lg: 1.5rem; --t-xl: 2.5rem; --t-3xl: 6rem;
+  --r-sm: 5px; --r-md: 9px; --r-lg: 14px;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+/* Light mode — opt-in via .light on <html>; dark is the default identity. */
+:root.light {
+  --ink: #f5f7fa; --ink-2: #e8eef4; --ink-3: #d6dde7;
+  --border: #cbd5e1; --border-strong: #94a3b8;
+  --text: #0a0e1a; --text-muted: #475569; --text-faint: #94a3b8;
+  --accent: #0369a1;
+  --accent-dim: rgba(3, 105, 161, 0.1);
+  --accent-glow: rgba(3, 105, 161, 0.25);
+  --accent-2: #e0f2fe;
+  --scanline: rgba(3, 105, 161, 0.02);
+  --dot-grid: rgba(3, 105, 161, 0.05);
+  --vignette: rgba(0, 0, 0, 0.08);
+}
+
+/* Bridge tokens into Tailwind utilities (bg-canvas, text-accent, …) */
+@theme inline {
+  --color-canvas: var(--ink);
+  --color-card: var(--ink-2);
+  --color-panel: var(--ink-3);
+  --color-line: var(--border);
+  --color-primary: var(--text);
+  --color-secondary: var(--text-muted);
+  --color-accent: var(--accent);
+  --font-mono: var(--font-mono);
+}
+
+/* ── Base ── */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 8px); scrollbar-width: thin; scrollbar-color: var(--accent-2) var(--ink); }
+body {
+  margin: 0; background: var(--ink); color: var(--text);
+  font-family: var(--font-mono); font-size: var(--t-base);
+  line-height: 1.65; letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+  position: relative; overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+/* atmosphere: phosphor dot grid + scanlines + CRT vignette (pure CSS) */
+body::before { content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-image: radial-gradient(circle, var(--dot-grid) 1px, transparent 1px);
+  background-size: 32px 32px; }
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0, transparent 3px, var(--scanline) 3px, var(--scanline) 4px),
+    radial-gradient(ellipse at center, transparent 50%, var(--vignette) 100%); }
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
+h1, h2, h3 { font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--accent-2); border-radius: 5px; border: 2px solid var(--ink); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* cursor spotlight (element lives in BaseLayout; vars set by ui.ts) */
+.spotlight { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(340px circle at var(--mx, -999px) var(--my, -999px),
+    color-mix(in srgb, var(--accent) 8%, transparent),
+    color-mix(in srgb, var(--accent) 3%, transparent) 45%, transparent 70%); }
+@media (hover: none) { .spotlight { display: none; } }
+
+/* ── Shared keyframes ── */
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes fade-in { to { opacity: 1; } }
+@keyframes boot-line { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes glitch-flicker {
+  0%, 92%, 100% { transform: translate(0, 0); } 93% { transform: translate(-1px, 0); }
+  94% { transform: translate(1px, 0); } 95% { transform: translate(-1px, 1px); }
+  96% { transform: translate(1px, -1px); } 97% { transform: translate(0, 1px); } }
+@keyframes role-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes led-pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--success); } 50% { opacity: 0.55; box-shadow: 0 0 3px var(--success); } }
+/* avatar: interference (base) + slice (ghost) — 0.5s burst, 4s cycle, ghost offset 2s */
+@keyframes avatar-int {
+  0%, 86%, 99.5%, 100% { filter: none; transform: translate(0, 0); }
+  87% { filter: drop-shadow(-5px 0 rgba(122,162,247,1)) drop-shadow(5px 0 rgba(255,92,138,.9)) contrast(1.15); transform: translate(-3px, 0); }
+  89% { filter: drop-shadow(4px 0 rgba(122,162,247,1)) drop-shadow(-4px 0 rgba(255,92,138,.85)); transform: translate(3px, 1px); }
+  91% { filter: drop-shadow(-5px 0 rgba(122,162,247,1)) drop-shadow(5px 0 rgba(255,92,138,1)) contrast(1.2); transform: translate(-3px, -2px); }
+  93% { filter: drop-shadow(3px 0 rgba(122,162,247,.9)) drop-shadow(-3px 0 rgba(255,92,138,.7)); transform: translate(2px, 1px); }
+  95% { filter: drop-shadow(-4px 0 rgba(122,162,247,1)) drop-shadow(4px 0 rgba(255,92,138,.8)); transform: translate(-2px, 0); }
+  97% { filter: drop-shadow(5px 0 rgba(122,162,247,.95)) contrast(1.1); transform: translate(3px, 0); }
+  98.5% { filter: drop-shadow(-2px 0 rgba(122,162,247,.8)); transform: translate(0, 0); } }
+@keyframes avatar-slice {
+  0%, 86%, 99.5%, 100% { opacity: 0; clip-path: none; transform: none; }
+  87% { opacity: 1; clip-path: inset(8% 0 68% 0); transform: translate(9px, 0); }
+  89% { opacity: 1; clip-path: inset(50% 0 22% 0); transform: translate(-9px, 1px); }
+  91% { opacity: 1; clip-path: inset(26% 0 48% 0); transform: translate(8px, -1px); }
+  93% { opacity: 1; clip-path: inset(64% 0 8% 0); transform: translate(-10px, 0); }
+  95% { opacity: 1; clip-path: inset(14% 0 62% 0); transform: translate(7px, 1px); }
+  97% { opacity: 1; clip-path: inset(42% 0 34% 0); transform: translate(-8px, 0); }
+  98.5% { opacity: 0; } }
+@keyframes egg-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes egg-j1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-2px, 1px); } }
+@keyframes egg-j2 { 0%, 100% { transform: translate(-6px, 0); } 33% { transform: translate(-9px, 2px); } 66% { transform: translate(-4px, -2px); } }
+@keyframes egg-j3 { 0%, 100% { transform: translate(6px, 0); } 50% { transform: translate(9px, -2px); } }
+
+/* ── Reduced motion: everything settles instantly ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ── Print: clean one-page resume ── */
+@media print {
+  body::before, body::after, .spotlight { display: none !important; }
+  body { background: #fff; color: #000; }
+  nav, footer .exit-line, .egg-mask { display: none !important; }
+  a { color: #000; text-decoration: none; }
+  details { display: block; }
+  details > *:not(summary) { display: block; }
+  summary { display: none; }
+}
