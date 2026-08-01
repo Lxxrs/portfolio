@@ -1,6 +1,6 @@
 # Portfolio
 
-[![status-badge](https://ci.codeberg.org/api/badges/16662/status.svg)](https://ci.codeberg.org/repos/16662)
+[![Built with Astro](public/badges/built-with-astro.svg)](https://astro.build) [![status-badge](https://ci.codeberg.org/api/badges/16662/status.svg)](https://ci.codeberg.org/repos/16662)
 
 One-page portfolio with a terminal/fsociety-lite aesthetic. Privacy-first:
 no analytics, no cookies, no third-party requests, noindex everywhere.
@@ -34,3 +34,7 @@ Everything editable lives in `src/data/`:
 
 Push to `main` → Woodpecker validates, builds, pushes `dist/` to the
 `pages` branch via SSH deploy key → git-pages serves it. See `.woodpecker.yaml`.
+
+## License
+
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

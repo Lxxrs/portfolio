@@ -206,3 +206,7 @@ vite.config.ts.timestamp-*
 
 
 .astro/
+
+.agents/
+
+.github/

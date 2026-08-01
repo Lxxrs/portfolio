@@ -1,5 +1,8 @@
-# REPLACE ME: copy your existing security.txt from the current site.
-# RFC 9116 — https://www.rfc-editor.org/rfc/rfc9116
-Contact: mailto:lm@larmart.de
-Expires: 2027-07-31T00:00:00.000Z
+# Security Policy (RFC 9116) — https://www.rfc-editor.org/rfc/rfc9116
+# https://securitytxt.org/
+
+Contact: https://signal.me/#eu/ckC_oGqqyOXvnQE_GX2syStPgfip87lPFXsNvGn9Ytpe8BkapedCuKLiesQQgivm
+Contact: mailto:admin@larmart.de
+Expires: 2027-08-01T21:59:00.000Z
 Preferred-Languages: en, de
+Canonical: https://larmart.de/.well-known/security.txt
