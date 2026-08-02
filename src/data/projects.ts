@@ -21,17 +21,17 @@ export interface ProjectEntry {
 // ─────────────────────────────────────────────────────────────────────
 export const projects: ProjectEntry[] = [
   {
-    title: "Provisioning of OpenBSD-Routers in HTC environment using pyinfra",
+    title: "Provisioning of productive OpenBSD Routers",
     role: "Internship project",
     dates: "2025-09 – 2026-03",
-    oneLine: 'OpenBSD router fleet managed as code, no more "what did I change at 2am?"',
+    oneLine: '[placeholder] OpenBSD router fleet managed as code, no more "what did I change at 2am?"',
     problem:
-      "Router configs lived in git with copy-paste and manual edits. Drift was the norm. A typo during a late-night reload cost an hour of debugging.",
+      "[placeholder] Router configs lived in git with copy-paste and manual edits. Drift was the norm. A typo during a late-night reload cost an hour of debugging.",
     approach:
-      "Rewrote everything in Pyinfra: idempotent modules for the OpenBSD bits (pf, nginx, dhcpd, unbound, pxe).",
+      "[placeholder] Rewrote everything in Pyinfra: idempotent modules for the OpenBSD bits (pf, nginx, dhcpd, unbound, pxe).",
     result:
-      "Every device boots to a known state. Adding a node or rolling a change is one command. No more drift.",
-    stack: ["Python", "Pyinfra", "uv", "OpenBSD", "pf", "Unbound", "nginx", "GitLab", ],
+      "[placeholder] Every device boots to a known state. Adding a node or rolling a change is one command. No more drift.",
+    stack: ["OpenBSD", "Python", "pyinfra", "uv", "OpenBSD", "GitLab"],
     status: "shipped",
     isPrivate: true,
   },
@@ -47,23 +47,23 @@ export const projects: ProjectEntry[] = [
       "[placeholder] containerlab topologies spun up per experiment: OpenBSD nodes, FRR peers, the same Pyinfra modules as production — lab and prod share one source of truth.",
     result:
       "[placeholder] CARP failover, pf rules, and routing changes rehearsed in minutes, thrown away after. Production only sees rehearsed changes.",
-    stack: ["containerlab", "OpenBSD", "Pyinfra", "FRR", "WireGuard"],
+    stack: ["Containerlab", "OpenBSD", "pyinfra", "Docker"],
     status: "ongoing",
     isPrivate: false,
     codebergBanner: true,
   },
   {
-    title: "Homelab NAS",
+    title: "Homelab & Network Infrastructure",
     role: "personal infra",
     dates: "2023 – ongoing",
-    oneLine: "Self-hosted storage, offsite backups, and a stack of services I'd otherwise rent",
+    oneLine: "[placeholder] Self-hosted storage, offsite backups, and a stack of services I'd otherwise rent",
     problem:
-      "Needed storage and always-on services without a cloud subscription or closed NAS firmware. Offsite backup non-negotiable after a disk died once.",
+      "[placeholder] Needed storage and always-on services without a cloud subscription or closed NAS firmware. Offsite backup non-negotiable after a disk died once.",
     approach:
-      "TrueNAS Scale, ZFS mirrors, nightly snapshots, encrypted rsync over WireGuard to a friend's attic box. Services in incus containers via the same Pyinfra modules.",
+      "[placeholder] TrueNAS Scale, ZFS mirrors, nightly snapshots, encrypted rsync over WireGuard to a friend's attic box. Services in incus containers via the same Pyinfra modules.",
     result:
-      "Two years of uptime, one disk replaced without drama, restores tested quarterly. No vendor lock-in, no monthly bill.",
-    stack: ["TrueNAS Scale", "ZFS", "WireGuard", "incus", "Alpine"],
+      "[placeholder] Two years of uptime, one disk replaced without drama, restores tested quarterly. No vendor lock-in, no monthly bill.",
+    stack: ["OPNsense", "Mikrotik", "Raspberry Pi", "Home Assistant", "TrueNAS Scale"],
     status: "ongoing",
     isPrivate: true,
   },
@@ -78,7 +78,7 @@ export const projects: ProjectEntry[] = [
       "Astro 7 static output, CSS-first animations, one tiny hashed script (theme, reveals, decrypt). Strict CSP, security headers, noindex everywhere. Built and deployed by Woodpecker CI to Codeberg Pages.",
     result:
       "Fast, private, auditable: no analytics, no cookies, no third-party requests. The commit hash in the footer is the one serving this page.",
-    stack: ["Astro 7", "TypeScript", "Tailwind 4", "Woodpecker CI", "Codeberg Pages"],
+    stack: ["Astro", "TypeScript", "Tailwind", "Woodpecker CI",],
     status: "ongoing",
     isPrivate: false,
     codebergBanner: true,

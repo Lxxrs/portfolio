@@ -9,7 +9,7 @@ export interface NowEntry {
 // Update me whenever life changes — this is a one-file edit.
 export const now: NowEntry = {
   month: "2026-07",
-  building: "this site (the Astro rewrite you're reading)",
+  building: "this site that you're reading",
   reading: "Florian Dalwigk - Cyberspionage",
-  pondering: "how to physically flash libreboot on my OPNsense machine after I bricked its BIOS due too much tinkering xD",
+  pondering: "how to flash libreboot on my OPNsense machine, after I bricked its BIOS. lmao",
 };
