@@ -1,10 +1,10 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders, svgoOptimizer } from "astro/config";
+import { visualizer } from "rollup-plugin-visualizer";
 import tailwindcss from "@tailwindcss/vite";
+import yaml from "@rollup/plugin-yaml";
 
 export default defineConfig({
-  site: "https://larmart.de",
-  output: "static",
   compressHTML: true,
   security: {
     csp: {
@@ -37,5 +37,14 @@ export default defineConfig({
       ],
     },
   },
-  vite: { plugins: [tailwindcss()] },
+
+  site: "https://larmart.de",
+
+  vite: {
+    plugins: [
+      tailwindcss(),
+      yaml(),
+      visualizer({ emitFile: true, filename: "stats.html" }),
+    ],
+  },
 });
