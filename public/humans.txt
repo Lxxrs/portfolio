@@ -1,5 +1,5 @@
 # /etc/passwd — humans only
 lars:x:1000:1000:Junior System Engineer:/home/lars:/usr/bin/zsh
 
-# team: just me. stack: astro, tailwind, pnpm, woodpecker, codeberg.
+# team: just me. stack: astro, tailwind, pnpm, forgejo actions, codeberg.
 # no trackers were harmed (or used) in the making of this site.

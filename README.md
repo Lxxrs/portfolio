@@ -1,6 +1,6 @@
 # Portfolio
 
-[![Built with Astro](public/badges/built-with-astro.svg)](https://astro.build) [![status-badge](https://ci.codeberg.org/api/badges/16662/status.svg)](https://ci.codeberg.org/repos/16662)
+[![Built with Astro](src/assets/badges/built-with-astro.svg)](https://astro.build) [![status-badge](https://codeberg.org/Lxrs/portfolio/badges/workflows/publish.yaml/badge.svg)](https://codeberg.org/Lxrs/portfolio/actions)
 
 One-page portfolio with a terminal/fsociety-lite aesthetic. Privacy-first:
 no analytics, no cookies, no third-party requests, noindex everywhere.
@@ -10,8 +10,8 @@ no analytics, no cookies, no third-party requests, noindex everywhere.
 | Framework | Astro 7 (static output, zero islands) |
 | Styling   | Tailwind CSS 4 + CSS design tokens    |
 | Client JS | Bundled `src/scripts/ui.ts`           |
-| CI/CD     | Woodpecker CI → Codeberg Pages        |
-| Package   | pnpm 10 · Node 24                     |
+| CI/CD     | Forgejo Actions → Codeberg Pages      |
+| Package   | pnpm 11 · Node 24                     |
 
 ## Commands
 
@@ -32,8 +32,9 @@ Everything editable lives in `src/data/`:
 
 ## Deploy
 
-Push to `main` → Woodpecker validates, builds, pushes `dist/` to the
-`pages` branch via SSH deploy key → git-pages serves it. See `.woodpecker.yaml`.
+Push to `main` → Forgejo Actions validates (prettier + astro check), builds,
+and publishes `dist/` to Codeberg Pages via `actions/git-pages`. See
+`.forgejo/workflows/publish.yaml`.
 
 ## License
 

@@ -84,10 +84,10 @@ export const projects: ProjectEntry[] = [
     problem:
       "Most sysadmin portfolios are matrix rain and three lines about being a hacker. I wanted real case studies with the terminal aesthetic as seasoning, not the meal.",
     approach:
-      "Astro 7 static output, CSS-first animations, one tiny hashed script (theme, reveals, decrypt). Strict CSP, security headers, noindex everywhere. Built and deployed by Woodpecker CI to Codeberg Pages.",
+      "Astro 7 static output, CSS-first animations, one tiny hashed script (theme, reveals, decrypt). Strict CSP, security headers, noindex everywhere. Built and deployed by Forgejo Actions to Codeberg Pages.",
     result:
-      "Fast, private, auditable: no analytics, no cookies, no third-party requests. The commit hash in the footer is the one serving this page.",
-    stack: ["Astro", "TypeScript", "Tailwind", "Woodpecker CI"],
+      "Fast, private, auditable: no analytics, no cookies, no third-party requests (one opt-in exception: an embedded Tor Snowflake proxy). The commit hash in the footer is the one serving this page.",
+    stack: ["Astro", "Forgejo Actions", "TypeScript", "Tailwind"],
     status: "ongoing",
     isPrivate: false,
     codebergBanner: true,

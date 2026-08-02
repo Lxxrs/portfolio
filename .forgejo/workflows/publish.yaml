@@ -1,0 +1,52 @@
+# .forgejo/workflows/publish.yaml
+
+name: Publish
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: codeberg-small
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: install
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: validate
+        run: |
+          pnpm exec prettier . --write
+          pnpm exec astro check
+        # pnpm test
+
+      - name: build
+        run: |
+          export BUILD_DATE="$(git log -1 --format=%cs)"
+          export CI_COMMIT_SHA="${{ forge.sha }}"
+          echo "building ${{ forge.sha }} dated $BUILD_DATE"
+          pnpm run build
+          ls -a dist/
+
+      - name: publish on larmart.de
+        uses: actions/git-pages@v2
+        with:
+          site: https://larmart.de/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
+#      - name: publish www.larmart.de
+#        uses: actions/git-pages@v2
+#        with:
+#          site: https://www.larmart.de/
+#          server: codeberg.page
+#          token: ${{ forge.token }}
+#          source: dist/
