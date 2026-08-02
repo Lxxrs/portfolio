@@ -8,20 +8,54 @@ const path = "/requested/path";
     <p class="line"><span class="p">$</span> cd {path}</p>
     <p class="line out">bash: cd: {path}: No such file or directory</p>
     <p class="line"><span class="p">$</span> sudo cd {path}</p>
-    <p class="line out warn">lars is not in the sudoers file. This incident will be reported.</p>
-    <p class="line"><span class="p">$</span> <a class="home" href="/">cd ~</a><span class="cursor" aria-hidden="true">▊</span></p>
+    <p class="line out warn">
+      lars is not in the sudoers file. This incident will be reported.
+    </p>
+    <p class="line">
+      <span class="p">$</span>
+      <a class="home" href="/">cd ~</a><span class="cursor" aria-hidden="true"
+        >▊</span
+      >
+    </p>
   </section>
 </BaseLayout>
 
 <style>
-  .err { min-height: 70vh; display: flex; flex-direction: column; justify-content: center;
-    max-width: var(--content-max); margin: 0 auto; padding: calc(var(--nav-h) + 2rem) var(--gutter) 4rem;
-    font-size: var(--t-md); }
-  .line { margin: 0 0 0.5rem; }
-  .p { color: var(--accent); font-weight: 700; margin-right: 0.5rem; }
-  .out { color: var(--text-muted); }
-  .warn { color: var(--warning); }
-  .home { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
-  .home:hover { border-bottom-color: var(--accent); }
-  .cursor { color: var(--accent); animation: blink 1s step-end infinite; margin-left: 0.3rem; }
+  .err {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: calc(var(--nav-h) + 2rem) var(--gutter) 4rem;
+    font-size: var(--t-md);
+  }
+  .line {
+    margin: 0 0 0.5rem;
+  }
+  .p {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+  .out {
+    color: var(--text-muted);
+  }
+  .warn {
+    color: var(--warning);
+  }
+  .home {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-dim);
+  }
+  .home:hover {
+    border-bottom-color: var(--accent);
+  }
+  .cursor {
+    color: var(--accent);
+    animation: blink 1s step-end infinite;
+    margin-left: 0.3rem;
+  }
 </style>

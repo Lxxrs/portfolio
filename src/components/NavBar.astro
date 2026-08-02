@@ -4,7 +4,15 @@ import { site } from "../data/site";
 
 <nav class="navbar" aria-label="Primary">
   <a href="#home" class="brand">
-    <img class="badge" src="/lars_memoji.webp" alt="" width="28" height="28" loading="eager" decoding="async" />
+    <img
+      class="badge"
+      src="/lars_memoji.webp"
+      alt=""
+      width="28"
+      height="28"
+      loading="eager"
+      decoding="async"
+    />
     <span>sysadmin<span class="acc">@local</span>:~/portfolio</span>
   </a>
   <div class="links">
@@ -12,34 +20,96 @@ import { site } from "../data/site";
     <a class="nav-link" href="#skills">skills</a>
     <a class="nav-link" href="#projects">projects</a>
     <a class="nav-link" href="#contact">contact</a>
-    <button class="theme-btn" type="button" data-theme-toggle title="sudo theme --toggle" aria-label="Toggle color theme">☾/☀</button>
+    <button
+      class="theme-btn"
+      type="button"
+      data-theme-toggle
+      title="sudo theme --toggle"
+      aria-label="Toggle color theme">☾/☀</button
+    >
   </div>
 </nav>
 
 <style>
   .navbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-    display: flex; align-items: center; justify-content: space-between;
-    height: var(--nav-h); padding: 0 var(--gutter);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--nav-h);
+    padding: 0 var(--gutter);
     background: color-mix(in srgb, var(--ink) 78%, transparent);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
-  .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; font-size: var(--t-sm); color: var(--text); }
-  .badge { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-strong); }
-  .acc { color: var(--accent); }
-  .links { display: flex; align-items: center; gap: 1.3rem; font-size: var(--t-sm); }
-  .nav-link { text-decoration: none; color: var(--text-muted); transition: color var(--dur-fast) ease; position: relative; }
-  .nav-link::before { content: "./"; color: var(--text-faint); }
-  .nav-link:hover, .nav-link[aria-current="true"] { color: var(--accent); }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    font-size: var(--t-sm);
+    color: var(--text);
+  }
+  .badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+  }
+  .acc {
+    color: var(--accent);
+  }
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 1.3rem;
+    font-size: var(--t-sm);
+  }
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color var(--dur-fast) ease;
+    position: relative;
+  }
+  .nav-link::before {
+    content: "./";
+    color: var(--text-faint);
+  }
+  .nav-link:hover,
+  .nav-link[aria-current="true"] {
+    color: var(--accent);
+  }
   .nav-link[aria-current="true"]::after {
-    content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--accent);
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 1px;
+    background: var(--accent);
   }
   .theme-btn {
-    background: none; border: 1px solid var(--border); color: var(--text-muted);
-    font-family: var(--font-mono); font-size: var(--t-xs);
-    padding: 0.35rem 0.55rem; border-radius: var(--r-sm); cursor: pointer;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--t-xs);
+    padding: 0.35rem 0.55rem;
+    border-radius: var(--r-sm);
+    cursor: pointer;
   }
-  .theme-btn:hover { color: var(--accent); border-color: var(--accent); }
-  @media (max-width: 640px) { .nav-link:nth-child(2) { display: none; } }
+  .theme-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .nav-link:nth-child(2) {
+      display: none;
+    }
+  }
 </style>

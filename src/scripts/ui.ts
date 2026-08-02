@@ -24,10 +24,9 @@ document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
 
 /* ── 2. Scroll: section-rule draw, tree type-in, nav spy ── */
 const navLinks = new Map(
-  [...document.querySelectorAll<HTMLAnchorElement>("nav a[href^='#']")].map((a) => [
-    a.hash.slice(1),
-    a,
-  ]),
+  [...document.querySelectorAll<HTMLAnchorElement>("nav a[href^='#']")].map(
+    (a) => [a.hash.slice(1), a],
+  ),
 );
 const reveal = new IntersectionObserver(
   (entries) => {
@@ -39,7 +38,9 @@ const reveal = new IntersectionObserver(
   },
   { threshold: 0.35 },
 );
-document.querySelectorAll(".manifest, .tree").forEach((el) => reveal.observe(el));
+document
+  .querySelectorAll(".manifest, .tree")
+  .forEach((el) => reveal.observe(el));
 
 const spy = new IntersectionObserver(
   (entries) => {
@@ -61,9 +62,17 @@ const GLYPHS = "!<>-_\\/[]{}—=+*^?#$%&@";
 const nameEl = document.getElementById("decrypt-name");
 let running = false;
 
-function scramble(el: HTMLElement, base: number, perChar: number, slow: number, done?: () => void) {
+function scramble(
+  el: HTMLElement,
+  base: number,
+  perChar: number,
+  slow: number,
+  done?: () => void,
+) {
   const target = el.dataset.text ?? el.textContent ?? "";
-  const resolveAt = [...target].map((_, i) => base + i * perChar + Math.floor(Math.random() * 4));
+  const resolveAt = [...target].map(
+    (_, i) => base + i * perChar + Math.floor(Math.random() * 4),
+  );
   let frame = 0;
   let tickCount = 0;
   const tick = () => {
@@ -72,9 +81,15 @@ function scramble(el: HTMLElement, base: number, perChar: number, slow: number, 
     let out = "";
     let allDone = true;
     for (let i = 0; i < target.length; i++) {
-      if (target[i] === " ") { out += " "; continue; }
+      if (target[i] === " ") {
+        out += " ";
+        continue;
+      }
       if (frame >= (resolveAt[i] ?? 0)) out += target[i];
-      else { out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)]; allDone = false; }
+      else {
+        out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+        allDone = false;
+      }
     }
     el.textContent = out;
     frame++;
@@ -151,13 +166,19 @@ if (egg) {
     clicks++;
     clearTimeout(clickTimer);
     clickTimer = setTimeout(() => (clicks = 0), 2000);
-    if (clicks >= 3) { clicks = 0; showEgg(); }
+    if (clicks >= 3) {
+      clicks = 0;
+      showEgg();
+    }
   });
   egg.addEventListener("click", () => egg.classList.remove("is-on"));
 }
 
 // console greeting for the curious
-console.log("%c\n  hello, friend.\n", "color:#7aa2f7;font-size:16px;font-family:monospace;");
+console.log(
+  "%c\n  hello, friend.\n",
+  "color:#7aa2f7;font-size:16px;font-family:monospace;",
+);
 console.log(
   "%c  you opened the console. respect.\n  source: https://codeberg.org/Lxrs/portfolio\n  no trackers to find in here.\n",
   "color:#7a8aa5;font-family:monospace;",
@@ -167,6 +188,8 @@ console.log(
 {
   const original = document.title;
   document.addEventListener("visibilitychange", () => {
-    document.title = document.hidden ? "[ session idle ] — reconnect?" : original;
+    document.title = document.hidden
+      ? "[ session idle ] — reconnect?"
+      : original;
   });
 }

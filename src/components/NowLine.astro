@@ -3,25 +3,77 @@ import { now } from "../data/now";
 ---
 
 <aside class="now-line" aria-label="What I'm doing right now">
-  <span class="m" aria-hidden="true">$</span><span class="c">now</span><span class="s" aria-hidden="true">·</span>
-  <time datetime={now.month}>{now.month}</time><span class="s" aria-hidden="true">·</span>
+  <span class="m" aria-hidden="true">$</span><span class="c">now</span><span
+    class="s"
+    aria-hidden="true">·</span
+  >
+  <time datetime={now.month}>{now.month}</time><span
+    class="s"
+    aria-hidden="true">·</span
+  >
   <span class="body">
     <span><em>building</em> {now.building}</span>
-    {now.reading && <span><em>reading</em> {now.reading}</span>}
-    {now.listening && <span><em>listening</em> {now.listening}</span>}
-    {now.pondering && <span><em>pondering</em> {now.pondering}</span>}
+    {
+      now.reading && (
+        <span>
+          <em>reading</em> {now.reading}
+        </span>
+      )
+    }
+    {
+      now.listening && (
+        <span>
+          <em>listening</em> {now.listening}
+        </span>
+      )
+    }
+    {
+      now.pondering && (
+        <span>
+          <em>pondering</em> {now.pondering}
+        </span>
+      )
+    }
   </span>
 </aside>
 
 <style>
-  .now-line { display: block; margin: 2.6rem 0 0; padding: 0.75rem 1rem;
-    border: 1px dashed var(--border); border-radius: var(--r-md);
-    color: var(--text-muted); font-size: var(--t-sm); line-height: 1.7; }
-  .m { color: var(--accent); margin-right: 0.4rem; }
-  .c { color: var(--text); margin-right: 0.4rem; }
-  .s { color: var(--text-faint); margin: 0 0.4rem; }
-  time { color: var(--text); font-variant-numeric: tabular-nums; }
-  .body span { margin-right: 1.2rem; display: inline-block; }
-  .body em { color: var(--accent); font-style: normal; text-transform: uppercase;
-    letter-spacing: 0.08em; font-size: 0.85em; margin-right: 0.3rem; }
+  .now-line {
+    display: block;
+    margin: 2.6rem 0 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--r-md);
+    color: var(--text-muted);
+    font-size: var(--t-sm);
+    line-height: 1.7;
+  }
+  .m {
+    color: var(--accent);
+    margin-right: 0.4rem;
+  }
+  .c {
+    color: var(--text);
+    margin-right: 0.4rem;
+  }
+  .s {
+    color: var(--text-faint);
+    margin: 0 0.4rem;
+  }
+  time {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .body span {
+    margin-right: 1.2rem;
+    display: inline-block;
+  }
+  .body em {
+    color: var(--accent);
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85em;
+    margin-right: 0.3rem;
+  }
 </style>
