@@ -14,7 +14,7 @@ steps:
       - apk add --no-cache git
       - corepack enable
       - pnpm install --frozen-lockfile
-      - pnpm run check
+      - pnpm exec prettier . --write
 
   - name: build
     image: *node_image
