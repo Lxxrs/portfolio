@@ -16,7 +16,12 @@ export default defineConfig({
       //   printf '%s' '<script body>' | openssl dgst -sha256 -binary | openssl base64
       scriptDirective: {
         resources: ["'self'"],
-        hashes: [{ hash: "sha256-REPLACE_ME_AFTER_FIRST_BUILD", kind: "element" }],
+        hashes: [
+          {
+            hash: "sha256-wlJS1CP0c1ItA6M/rRl9rhVD/QwTjwLvJE6TiIdV738=",
+            kind: "element",
+          },
+        ],
       },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
       directives: [
