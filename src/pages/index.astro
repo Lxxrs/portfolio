@@ -289,6 +289,10 @@ import memojiSrc from "../assets/lars_memoji.webp";
     animation: typing 0.7s steps(6, end) 0.9s forwards;
     color: var(--text);
   }
+  /* Animating `width` triggers layout, which is normally worth avoiding — but
+     it is the effect: the cursor after this span advances with the text as it
+     types. clip-path would be composited and would park the cursor at the end
+     from the first frame. Two small spans, once at load. Keep it. */
   @keyframes typing {
     to {
       width: 6ch;
