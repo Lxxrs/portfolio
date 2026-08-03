@@ -1,15 +1,2 @@
-# HTTP-only security headers — served by Codeberg Pages (git-pages, Netlify format).
-# The full CSP lives in the Astro-generated <meta> tag with per-build hashes;
-# only frame-ancestors (meta-ineffective) rides here.
 /*
-  X-Robots-Tag: noindex, nofollow, noarchive
-  Strict-Transport-Security: max-age=31536000; includeSubDomains
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: no-referrer
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
-  Cross-Origin-Resource-Policy: same-origin
-  X-Frame-Options: DENY
-  Content-Security-Policy: frame-ancestors 'none'
-  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
   X-Clacks-Overhead: GNU Terry Pratchett
