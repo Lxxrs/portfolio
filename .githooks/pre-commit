@@ -1,0 +1,16 @@
+#!/bin/sh
+# Auto-format staged files before commit — see package.json `postinstall`,
+# which points git at this directory (`git config core.hooksPath .githooks`).
+# CI's `pnpm check` still runs `prettier --check` as a backstop.
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+echo "$staged" | xargs pnpm exec prettier --ignore-unknown --write
+if [ $? -ne 0 ]; then
+  echo "pre-commit: prettier failed" >&2
+  exit 1
+fi
+
+echo "$staged" | xargs git add
+exit 0
