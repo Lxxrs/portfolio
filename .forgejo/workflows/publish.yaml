@@ -23,9 +23,9 @@ jobs:
 
       - name: validate
         run: |
-          pnpm exec prettier . --write
+          pnpm exec prettier . --check
           pnpm exec astro check
-        # pnpm test
+          pnpm test
 
       - name: build
         run: |
