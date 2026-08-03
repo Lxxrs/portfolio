@@ -10,7 +10,10 @@
     "preview": "astro preview",
     "check": "astro check && prettier --check .",
     "format": "prettier --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:launch": "LAUNCH_CHECK=1 vitest run",
+    "postinstall": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {
     "@astrojs/ts-plugin": "^1.10.10",
@@ -21,13 +24,15 @@
     "@rollup/plugin-yaml": "^5.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.1.2",
+    "happy-dom": "^20.11.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "0.8.1",
     "rollup-plugin-visualizer": "^7.0.1",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
   },
   "packageManager": "pnpm@11.18.0"
 }
