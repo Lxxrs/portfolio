@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import SkillsTree from "../components/SkillsTree.astro";
@@ -7,6 +8,7 @@ import NowLine from "../components/NowLine.astro";
 import { site } from "../data/site.ts";
 import { projects } from "../data/projects.ts";
 import { socialLinks } from "../data/social.ts";
+import memojiSrc from "../assets/lars_memoji.webp";
 ---
 
 <BaseLayout>
@@ -62,22 +64,24 @@ import { socialLinks } from "../data/social.ts";
           </div>
         </div>
         <div class="avatar-wrap" aria-hidden="true">
-          <img
+          <Image
             class="avatar-img"
-            src="/lars_memoji.webp"
+            src={memojiSrc}
             alt=""
-            width="1665"
-            height="1665"
+            width={300}
+            height={300}
+            densities={[2]}
             loading="eager"
             fetchpriority="high"
             decoding="async"
           />
-          <img
+          <Image
             class="avatar-img avatar-img--ghost"
-            src="/lars_memoji.webp"
+            src={memojiSrc}
             alt=""
-            width="1665"
-            height="1665"
+            width={300}
+            height={300}
+            densities={[2]}
             loading="eager"
             decoding="async"
           />

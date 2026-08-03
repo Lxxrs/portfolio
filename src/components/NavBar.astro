@@ -1,15 +1,17 @@
 ---
-import { site } from "../data/site.ts";
+import { Image } from "astro:assets";
+import memojiSrc from "../assets/lars_memoji.webp";
 ---
 
 <nav class="navbar" aria-label="Primary">
   <a href="#home" class="brand">
-    <img
+    <Image
       class="badge"
-      src="/lars_memoji.webp"
+      src={memojiSrc}
       alt=""
-      width="28"
-      height="28"
+      width={28}
+      height={28}
+      densities={[2]}
       loading="eager"
       decoding="async"
     />
