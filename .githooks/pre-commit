@@ -2,15 +2,38 @@
 # Auto-format staged files before commit — see package.json `postinstall`,
 # which points git at this directory (`git config core.hooksPath .githooks`).
 # CI's `pnpm check` still runs `prettier --check` as a backstop.
+#
+# Partially staged files (from `git add -p`) are left alone: `git add <file>`
+# stages the whole working-tree copy, which silently drags in every hunk you
+# answered "n" to. They are reported so you can format them yourself.
 
 staged=$(git diff --cached --name-only --diff-filter=ACM)
 [ -z "$staged" ] && exit 0
 
-echo "$staged" | xargs pnpm exec prettier --ignore-unknown --write
-if [ $? -ne 0 ]; then
-  echo "pre-commit: prettier failed" >&2
-  exit 1
+partial=""
+whole=""
+for f in $staged; do
+  # A non-empty worktree-vs-index diff means only part of this file is staged.
+  if [ -n "$(git diff --name-only -- "$f")" ]; then
+    partial="$partial $f"
+  else
+    whole="$whole $f"
+  fi
+done
+
+if [ -n "$whole" ]; then
+  # shellcheck disable=SC2086
+  pnpm exec prettier --ignore-unknown --write $whole || {
+    echo "pre-commit: prettier failed" >&2
+    exit 1
+  }
+  # shellcheck disable=SC2086
+  git add $whole
 fi
 
-echo "$staged" | xargs git add
+if [ -n "$partial" ]; then
+  echo "pre-commit: partially staged, left as-is:$partial" >&2
+  echo "pre-commit: run \`pnpm format\` on them before the next full commit." >&2
+fi
+
 exit 0
