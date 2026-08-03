@@ -6,7 +6,6 @@ export interface NowEntry {
   pondering?: string;
 }
 
-// Update me whenever life changes — this is a one-file edit.
 export const now: NowEntry = {
   month: "2026-07",
   building: "this site that you're reading",

@@ -11,14 +11,9 @@ export interface ProjectEntry {
   stack: string[];
   status: ProjectStatus;
   isPrivate: boolean;
-  /** Show the "Get it on Codeberg" banner inside this case. */
   codebergBanner?: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────────────
-// FACT-CHECK BEFORE LAUNCH: entries marked [placeholder] are written
-// from titles + stack only. Correct dates, numbers, and claims.
-// ─────────────────────────────────────────────────────────────────────
 export const projects: ProjectEntry[] = [
   {
     title: "Provisioning of productive OpenBSD Routers",
@@ -32,7 +27,7 @@ export const projects: ProjectEntry[] = [
       "[placeholder] Rewrote everything in Pyinfra: idempotent modules for the OpenBSD bits (pf, nginx, dhcpd, unbound, pxe).",
     result:
       "[placeholder] Every device boots to a known state. Adding a node or rolling a change is one command. No more drift.",
-    stack: ["OpenBSD", "Python", "pyinfra", "uv", "OpenBSD", "GitLab"],
+    stack: ["OpenBSD", "Python", "pyinfra", "uv", "GitLab"],
     status: "shipped",
     isPrivate: true,
   },
