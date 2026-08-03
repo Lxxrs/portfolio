@@ -8,29 +8,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ── Fonts (self-hosted) ── */
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ── Tokens ── */
 :root {
   --ink: #0a0e1a;
@@ -69,7 +46,7 @@
   --r-sm: 5px;
   --r-md: 9px;
   --r-lg: 14px;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono: var(--font-jetbrains-mono);
 }
 /* Light mode — opt-in via .light on <html>; dark is the default identity. */
 :root.light {
@@ -100,6 +77,7 @@
   --color-secondary: var(--text-muted);
   --color-accent: var(--accent);
   --font-mono: var(--font-mono);
+  --font-sans: var(--font-jetbrains-mono);
 }
 
 /* ── Base ── */

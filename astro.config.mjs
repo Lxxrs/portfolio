@@ -6,6 +6,48 @@ import yaml from "@rollup/plugin-yaml";
 
 export default defineConfig({
   compressHTML: true,
+
+  devToolbar: {
+    enabled: true,
+  },
+
+  experimental: {
+    chromeDevtoolsWorkspace: true,
+    svgOptimizer: svgoOptimizer(),
+  },
+
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "JetBrainsMono",
+      cssVariable: "--font-jetbrains-mono",
+      // Monospace fallbacks so metric-optimized fallback + degraded rendering
+      // still matches the terminal aesthetic (Astro defaults to sans-serif).
+      fallbacks: ["ui-monospace", "SF Mono", "Menlo", "monospace"],
+      options: {
+        variants: [
+          {
+            src: ["./src/assets/fonts/JetBrainsMono-Regular.woff2"],
+            weight: "regular",
+            style: "normal",
+          },
+          {
+            src: ["./src/assets/fonts/JetBrainsMono-Bold.woff2"],
+            weight: "bold",
+            style: "normal",
+          },
+          {
+            src: ["./src/assets/fonts/JetBrainsMono-Medium.woff2"],
+            weight: "medium",
+            style: "normal",
+          },
+        ],
+      },
+    },
+  ],
+
+  output: "static",
+
   security: {
     csp: {
       algorithm: "SHA-256",

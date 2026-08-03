@@ -14,6 +14,7 @@ const { title = `${site.name} | ${site.role}` } = Astro.props;
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+    <Font cssVariable="--font-jetbrains-mono" preload />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -28,20 +29,6 @@ const { title = `${site.name} | ${site.role}` } = Astro.props;
     <meta name="theme-color" content="#0a0e1a" />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link
-      rel="preload"
-      href="/fonts/JetBrainsMono-Regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/JetBrainsMono-Bold.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
     <!-- Theme init before first paint (FOUC guard). If you edit this script,
          recompute its CSP hash — see astro.config.mjs. -->
     <script is:inline>
