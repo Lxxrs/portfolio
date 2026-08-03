@@ -200,6 +200,29 @@ export function initUI(doc: Document = document): void {
     egg.addEventListener("click", () => egg.classList.remove("is-on"));
   }
 
+  /* ── 6. Snowflake proxy — opt-in ──
+     The embed registers an `unload` listener, which costs bfcache eligibility
+     and trips Lighthouse. Injecting it only on click means a normal page load
+     never carries that listener, and no request reaches torproject.org unless
+     the visitor asks — which is what the Privacy column in the footer claims. */
+  const slot = doc.querySelector<HTMLElement>("[data-snowflake]");
+  slot
+    ?.querySelector("[data-snowflake-start]")
+    ?.addEventListener("click", () => {
+      const src = slot.dataset.snowflakeSrc;
+      if (!src) return;
+      const frame = doc.createElement("iframe");
+      // setAttribute throughout: not every engine reflects the IDL properties
+      // (happy-dom drops `loading`), and the attributes are what matter here.
+      frame.setAttribute("src", src);
+      frame.setAttribute("width", "320");
+      frame.setAttribute("height", "240");
+      frame.setAttribute("title", "Tor Snowflake proxy");
+      frame.setAttribute("loading", "lazy");
+      frame.setAttribute("referrerpolicy", "no-referrer");
+      slot.replaceChildren(frame);
+    });
+
   // console greeting for the curious
   console.log(
     "%c\n  hello, friend.\n",

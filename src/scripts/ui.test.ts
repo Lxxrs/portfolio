@@ -280,6 +280,58 @@ describe("easter eggs", () => {
   });
 });
 
+describe("snowflake proxy", () => {
+  const PAGE_WITH_SLOT = `
+    <div class="tor-widget">
+      <div data-snowflake data-snowflake-src="https://snowflake.torproject.org/embed.html">
+        <button type="button" data-snowflake-start>start</button>
+        <p class="tor-note">note</p>
+      </div>
+    </div>`;
+
+  function setupSlot() {
+    const doc = setup();
+    doc.body.innerHTML = PAGE_WITH_SLOT;
+    return doc;
+  }
+
+  it("makes no third-party request until the button is pressed", () => {
+    const doc = setupSlot();
+    initUI(doc);
+    // The whole point: no iframe exists on load, so no `unload` listener and
+    // nothing reaches torproject.org.
+    expect(doc.querySelector("iframe")).toBeNull();
+  });
+
+  it("injects the embed on click", () => {
+    const doc = setupSlot();
+    initUI(doc);
+    doc.querySelector<HTMLButtonElement>("[data-snowflake-start]")!.click();
+
+    const frame = doc.querySelector("iframe")!;
+    expect(frame).not.toBeNull();
+    expect(frame.getAttribute("src")).toBe(
+      "https://snowflake.torproject.org/embed.html",
+    );
+    expect(frame.getAttribute("title")).toBe("Tor Snowflake proxy");
+    expect(frame.getAttribute("loading")).toBe("lazy");
+  });
+
+  it("replaces the button so the embed cannot be stacked", () => {
+    const doc = setupSlot();
+    initUI(doc);
+    const btn = doc.querySelector<HTMLButtonElement>("[data-snowflake-start]")!;
+    btn.click();
+    expect(doc.querySelector("[data-snowflake-start]")).toBeNull();
+    expect(doc.querySelectorAll("iframe").length).toBe(1);
+  });
+
+  it("does nothing on a page with no snowflake slot", () => {
+    const doc = setup();
+    expect(() => initUI(doc)).not.toThrow();
+  });
+});
+
 describe("progressive enhancement contract", () => {
   it("enhances a page that has none of the optional hooks", () => {
     document.body.innerHTML = "<main><p>just text</p></main>";

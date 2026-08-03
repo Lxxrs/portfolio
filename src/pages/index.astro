@@ -176,12 +176,31 @@ import memojiSrc from "../assets/lars_memoji.webp";
             internet</span
           >
         </p>
-        <iframe
-          src="https://snowflake.torproject.org/embed.html"
-          width="320"
-          height="240"
-          title="Tor Snowflake proxy"
-          loading="lazy"></iframe>
+        <!-- Opt-in: the embed is injected by ui.ts on click. Nothing is
+             requested from torproject.org until the visitor asks for it, and
+             the embed's `unload` listener never exists on a normal page load. -->
+        <div
+          class="tor-slot"
+          data-snowflake
+          data-snowflake-src="https://snowflake.torproject.org/embed.html"
+        >
+          <button type="button" class="tor-start" data-snowflake-start>
+            ▶ start proxy
+          </button>
+          <p class="tor-note">
+            Loads an embed from snowflake.torproject.org. Nothing leaves your
+            browser until you press start.
+          </p>
+        </div>
+        <noscript>
+          <p class="tor-note">
+            Needs JavaScript. <a
+              class="inline-link"
+              href="https://snowflake.torproject.org/"
+              rel="noopener noreferrer">Run a proxy on torproject.org</a
+            >
+          </p>
+        </noscript>
       </div>
     </section>
   </article>
@@ -559,10 +578,39 @@ import memojiSrc from "../assets/lars_memoji.webp";
   .tor-widget .sectxt {
     margin: 0 0 0.9rem;
   }
-  .tor-widget iframe {
+  /* :global() because ui.ts creates this iframe at runtime, so it never
+     carries this component's scope attribute. */
+  .tor-widget :global(iframe) {
     display: block;
     max-width: 100%;
     border: 0;
     border-radius: var(--r-sm);
+  }
+  .tor-start {
+    font-family: inherit;
+    font-size: var(--t-sm);
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: var(--r-sm);
+    padding: 0.5rem 0.9rem;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out-quint);
+  }
+  .tor-start:hover {
+    background: var(--accent-glow);
+  }
+  .tor-start:active {
+    transform: translateY(1px);
+  }
+  .tor-note {
+    margin: 0.7rem 0 0;
+    font-size: var(--t-xs);
+    color: var(--text-faint);
+    max-width: 52ch;
+    text-wrap: pretty;
   }
 </style>
