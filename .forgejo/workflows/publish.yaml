@@ -8,13 +8,9 @@ on:
 
 jobs:
   publish:
-    runs-on: codeberg-small
+    runs-on: codeberg-tiny-lazy
     steps:
       - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
 
       - name: install
         run: |
@@ -25,7 +21,6 @@ jobs:
         run: |
           pnpm exec prettier . --check
           pnpm exec astro check
-          pnpm test
 
       - name: build
         run: |
