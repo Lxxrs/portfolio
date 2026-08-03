@@ -4,66 +4,22 @@
    without JS the page is fully readable (name visible, tree expanded,
    first case open, dark theme).
    Sections: theme · scroll reveals + spy · decrypt · spotlight · eggs
+
+   Everything lives in `initUI(doc)` — one entry point, deliberately not
+   split into per-effect modules. The bugs here are in how the effects
+   touch a real document, so the document is the seam: the browser passes
+   the real one, the test suite passes a parsed one.
    ════════════════════════════════════════════════════════════════════ */
 
-document.documentElement.classList.add("js");
-
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ── 1. Theme toggle (dark default; .light opt-in, persisted) ── */
-document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
-  const root = document.documentElement;
-  const light = root.classList.toggle("light");
-  root.classList.toggle("dark", !light);
-  try {
-    localStorage.setItem("theme", light ? "light" : "dark");
-  } catch {
-    /* private mode — theme just won't persist */
-  }
-});
-
-/* ── 2. Scroll: section-rule draw, tree type-in, nav spy ── */
-const navLinks = new Map(
-  [...document.querySelectorAll<HTMLAnchorElement>("nav a[href^='#']")].map(
-    (a) => [a.hash.slice(1), a],
-  ),
-);
-const reveal = new IntersectionObserver(
-  (entries) => {
-    for (const e of entries) {
-      if (!e.isIntersecting) continue;
-      e.target.classList.add("is-visible");
-      reveal.unobserve(e.target);
-    }
-  },
-  { threshold: 0.35 },
-);
-document
-  .querySelectorAll(".manifest, .tree")
-  .forEach((el) => reveal.observe(el));
-
-const spy = new IntersectionObserver(
-  (entries) => {
-    for (const e of entries) {
-      if (!e.isIntersecting) continue;
-      navLinks.forEach((a) => a.removeAttribute("aria-current"));
-      navLinks.get(e.target.id)?.setAttribute("aria-current", "true");
-    }
-  },
-  { rootMargin: "-40% 0px -55% 0px" },
-);
-["home", "about", "skills", "projects", "contact"].forEach((id) => {
-  const el = document.getElementById(id);
-  if (el) spy.observe(el);
-});
-
-/* ── 3. Decrypt engine — boot-in + re-decrypt on hover ── */
 const GLYPHS = "!<>-_\\/[]{}—=+*^?#$%&@";
-const nameEl = document.getElementById("decrypt-name");
-let running = false;
 
+/** Gap between one list row's reveal and the next. */
+const STAGGER_STEP_MS = 55;
+
+/** Resolve a string one character at a time out of random glyphs. */
 function scramble(
   el: HTMLElement,
+  raf: (cb: () => void) => void,
   base: number,
   perChar: number,
   slow: number,
@@ -77,7 +33,7 @@ function scramble(
   let tickCount = 0;
   const tick = () => {
     tickCount++;
-    if (tickCount % slow !== 0) return requestAnimationFrame(tick);
+    if (tickCount % slow !== 0) return raf(tick);
     let out = "";
     let allDone = true;
     for (let i = 0; i < target.length; i++) {
@@ -93,103 +49,172 @@ function scramble(
     }
     el.textContent = out;
     frame++;
-    if (!allDone) requestAnimationFrame(tick);
+    if (!allDone) raf(tick);
     else done?.();
   };
-  requestAnimationFrame(tick);
+  raf(tick);
 }
 
-if (nameEl instanceof HTMLElement) {
-  if (reduced) {
-    nameEl.classList.add("glitch-on");
-  } else {
-    nameEl.textContent = ""; // never show the name before it decrypts
-    running = true;
-    setTimeout(() => {
-      scramble(nameEl, 5, 4, 3, () => {
-        nameEl.classList.add("glitch-on");
-        running = false;
-      });
-    }, 1100);
-  }
-  nameEl.addEventListener("mouseenter", () => {
-    if (reduced || running) return;
-    running = true;
-    scramble(nameEl, 5, 4, 3, () => (running = false));
+/**
+ * @param doc
+ */
+export function initUI(doc: Document = document): void {
+  const win = doc.defaultView ?? window;
+  const root = doc.documentElement;
+
+  root.classList.add("js");
+
+  const reduced = win.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const raf = (cb: () => void) =>
+    win.requestAnimationFrame ? win.requestAnimationFrame(cb) : cb();
+
+  /* ── 1. Theme toggle (dark default; .light opt-in, persisted) ── */
+  doc.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    const light = root.classList.toggle("light");
+    root.classList.toggle("dark", !light);
+    try {
+      win.localStorage.setItem("theme", light ? "light" : "dark");
+    } catch {}
   });
-}
 
-/* ── 4. Cursor spotlight ── */
-{
-  const root = document.documentElement;
-  let queued = false;
-  window.addEventListener(
-    "pointermove",
-    (e) => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        root.style.setProperty("--mx", `${e.clientX}px`);
-        root.style.setProperty("--my", `${e.clientY}px`);
-        queued = false;
-      });
-    },
-    { passive: true },
+  /* ── 2. Scroll: section-rule draw, tree type-in, nav spy ── */
+  const navLinks = new Map(
+    [...doc.querySelectorAll<HTMLAnchorElement>("nav a[href^='#']")].map(
+      (a) => [a.hash.slice(1), a],
+    ),
   );
-}
 
-/* ── 5. Easter eggs ── */
-const egg = document.getElementById("egg-mask");
-let eggTimer: ReturnType<typeof setTimeout> | undefined;
+  const stagger = (el: Element) => {
+    if (reduced) return;
+    [...el.children].forEach((row, i) => {
+      if (row instanceof win.HTMLElement)
+        row.style.animationDelay = `${i * STAGGER_STEP_MS}ms`;
+    });
+  };
 
-function showEgg() {
-  if (!egg) return;
-  egg.classList.add("is-on");
-  clearTimeout(eggTimer);
-  eggTimer = setTimeout(() => egg.classList.remove("is-on"), 4000);
-}
+  if (win.IntersectionObserver) {
+    const reveal = new win.IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          if (e.target.classList.contains("tree")) stagger(e.target);
+          e.target.classList.add("is-visible");
+          reveal.unobserve(e.target);
+        }
+      },
+      { threshold: 0.35 },
+    );
+    doc
+      .querySelectorAll(".manifest, .tree")
+      .forEach((el) => reveal.observe(el));
 
-if (egg) {
-  // trigger 1: type "fsociety" anywhere (last 8 keys only, nothing stored or sent)
-  let buf = "";
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") return egg.classList.remove("is-on");
-    if (e.key.length !== 1) return;
-    buf = (buf + e.key.toLowerCase()).slice(-8);
-    if (buf === "fsociety") showEgg();
-  });
-  // trigger 2: triple-click the footer ¶ within 2s
-  const para = document.getElementById("egg-para");
-  let clicks = 0;
-  let clickTimer: ReturnType<typeof setTimeout> | undefined;
-  para?.addEventListener("click", () => {
-    clicks++;
-    clearTimeout(clickTimer);
-    clickTimer = setTimeout(() => (clicks = 0), 2000);
-    if (clicks >= 3) {
-      clicks = 0;
-      showEgg();
+    const spy = new win.IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          navLinks.forEach((a) => a.removeAttribute("aria-current"));
+          navLinks.get(e.target.id)?.setAttribute("aria-current", "true");
+        }
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
+    ["home", "about", "skills", "projects", "contact"].forEach((id) => {
+      const el = doc.getElementById(id);
+      if (el) spy.observe(el);
+    });
+  }
+
+  /* ── 3. Decrypt engine — boot-in + re-decrypt on hover ── */
+  const nameEl = doc.getElementById("decrypt-name");
+  let running = false;
+
+  if (nameEl instanceof win.HTMLElement) {
+    if (reduced) {
+      nameEl.classList.add("glitch-on");
+    } else {
+      nameEl.textContent = "";
+      running = true;
+      setTimeout(() => {
+        scramble(nameEl, raf, 5, 4, 3, () => {
+          nameEl.classList.add("glitch-on");
+          running = false;
+        });
+      }, 1100);
     }
-  });
-  egg.addEventListener("click", () => egg.classList.remove("is-on"));
-}
+    nameEl.addEventListener("mouseenter", () => {
+      if (reduced || running) return;
+      running = true;
+      scramble(nameEl, raf, 5, 4, 3, () => (running = false));
+    });
+  }
 
-// console greeting for the curious
-console.log(
-  "%c\n  hello, friend.\n",
-  "color:#7aa2f7;font-size:16px;font-family:monospace;",
-);
-console.log(
-  "%c  you opened the console. respect.\n  source: https://codeberg.org/Lxrs/portfolio\n  no trackers to find in here.\n",
-  "color:#7a8aa5;font-family:monospace;",
-);
+  /* ── 4. Cursor spotlight ── */
+  {
+    let queued = false;
+    win.addEventListener(
+      "pointermove",
+      (e) => {
+        if (queued) return;
+        queued = true;
+        raf(() => {
+          root.style.setProperty("--mx", `${e.clientX}px`);
+          root.style.setProperty("--my", `${e.clientY}px`);
+          queued = false;
+        });
+      },
+      { passive: true },
+    );
+  }
 
-// idle tab title
-{
-  const original = document.title;
-  document.addEventListener("visibilitychange", () => {
-    document.title = document.hidden
-      ? "[ session idle ] — reconnect?"
-      : original;
-  });
+  /* ── 5. Easter eggs ── */
+  const egg = doc.getElementById("egg-mask");
+  let eggTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function showEgg() {
+    if (!egg) return;
+    egg.classList.add("is-on");
+    clearTimeout(eggTimer);
+    eggTimer = setTimeout(() => egg.classList.remove("is-on"), 4000);
+  }
+
+  if (egg) {
+    let buf = "";
+    doc.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") return egg.classList.remove("is-on");
+      if (e.key.length !== 1) return;
+      buf = (buf + e.key.toLowerCase()).slice(-8);
+      if (buf === "fsociety") showEgg();
+    });
+    const para = doc.getElementById("egg-para");
+    let clicks = 0;
+    let clickTimer: ReturnType<typeof setTimeout> | undefined;
+    para?.addEventListener("click", () => {
+      clicks++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => (clicks = 0), 2000);
+      if (clicks >= 3) {
+        clicks = 0;
+        showEgg();
+      }
+    });
+    egg.addEventListener("click", () => egg.classList.remove("is-on"));
+  }
+
+  // console greeting for the curious
+  console.log(
+    "%c\n  hello, friend.\n",
+    "color:#7aa2f7;font-size:16px;font-family:monospace;",
+  );
+  console.log(
+    "%c  you opened the console. respect.\n  source: https://codeberg.org/Lxrs/portfolio\n  no trackers to find in here.\n",
+    "color:#7a8aa5;font-family:monospace;",
+  );
+
+  // idle tab title
+  {
+    const original = doc.title;
+    doc.addEventListener("visibilitychange", () => {
+      doc.title = doc.hidden ? "[ session idle ] — reconnect?" : original;
+    });
+  }
 }
