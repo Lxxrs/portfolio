@@ -99,6 +99,8 @@ const num = String(index + 1).padStart(2, "0");
   .title {
     margin: 0;
     font-size: var(--t-lg);
+    /* Titles wrap on narrow viewports; balance is Baseline, pretty is not. */
+    text-wrap: balance;
   }
   .meta {
     margin: 0.35rem 0 0;
@@ -126,7 +128,8 @@ const num = String(index + 1).padStart(2, "0");
   }
   .oneline {
     margin: 0.7rem 0 0;
-    text-wrap: pretty;
+    /* One short sentence — a short block, so balance beats pretty here. */
+    text-wrap: balance;
   }
   .tags {
     display: flex;
