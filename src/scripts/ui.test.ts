@@ -283,7 +283,7 @@ describe("easter eggs", () => {
 describe("snowflake proxy", () => {
   const PAGE_WITH_SLOT = `
     <div class="tor-widget">
-      <div data-snowflake data-snowflake-src="https://snowflake.torproject.org/embed.html">
+      <div data-snowflake data-snowflake-src="about:blank#embed">
         <button type="button" data-snowflake-start>start</button>
         <p class="tor-note">note</p>
       </div>
@@ -310,9 +310,9 @@ describe("snowflake proxy", () => {
 
     const frame = doc.querySelector("iframe")!;
     expect(frame).not.toBeNull();
-    expect(frame.getAttribute("src")).toBe(
-      "https://snowflake.torproject.org/embed.html",
-    );
+    // A dummy src on purpose: ui.ts only passes the value through, and a
+    // real URL here would make the suite hit torproject.org on every run.
+    expect(frame.getAttribute("src")).toBe("about:blank#embed");
     expect(frame.getAttribute("title")).toBe("Tor Snowflake proxy");
     expect(frame.getAttribute("loading")).toBe("lazy");
   });
