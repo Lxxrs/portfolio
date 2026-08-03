@@ -15,9 +15,14 @@
   --ink-3: #1a2236;
   --border: #1f2940;
   --border-strong: #2e3a5a;
-  --text: #e8eef4;
-  --text-muted: #7a8aa5;
-  --text-faint: #4a556e;
+  /* Text ramp. The first three carry content and all clear WCAG AA (4.5:1)
+     on both --ink and --ink-2. --text-chrome is below AA on purpose and is
+     only ever used for aria-hidden ASCII decoration (rails, prompts, the
+     fake `ls` row) — never for anything a reader needs. */
+  --text: #e8eef4; /* 16.5:1 */
+  --text-muted: #93a3bd; /*  7.5:1 */
+  --text-faint: #7583a3; /*  5.1:1 */
+  --text-chrome: #4a556e; /* decorative only */
   --accent: #7aa2f7;
   --accent-dim: rgba(122, 162, 247, 0.13);
   --accent-glow: rgba(122, 162, 247, 0.38);
@@ -46,6 +51,13 @@
   --r-sm: 5px;
   --r-md: 9px;
   --r-lg: 14px;
+  /* One ladder, so no rung ever needs guessing at (or a 9999). */
+  --z-below: -2; /* dot grid, scanlines */
+  --z-spotlight: 0;
+  --z-content: 1;
+  --z-nav: 50;
+  --z-overlay: 200; /* easter-egg mask */
+  --z-skip: 300; /* skip-link must clear everything */
   --font-mono: var(--font-jetbrains-mono);
 }
 /* Light mode — opt-in via .light on <html>; dark is the default identity. */
@@ -55,9 +67,10 @@
   --ink-3: #d6dde7;
   --border: #cbd5e1;
   --border-strong: #94a3b8;
-  --text: #0a0e1a;
-  --text-muted: #475569;
-  --text-faint: #94a3b8;
+  --text: #0a0e1a; /* 17.9:1 */
+  --text-muted: #475569; /*  7.1:1 */
+  --text-faint: #526d8e; /*  5.0:1 */
+  --text-chrome: #94a3b8; /* decorative only */
   --accent: #0369a1;
   --accent-dim: rgba(3, 105, 161, 0.1);
   --accent-glow: rgba(3, 105, 161, 0.25);
@@ -99,7 +112,7 @@ body {
   line-height: 1.65;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   overflow-x: hidden;
   transition:
@@ -111,7 +124,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: var(--z-below);
   pointer-events: none;
   background-image: radial-gradient(
     circle,
@@ -124,7 +137,7 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: calc(var(--z-below) + 1);
   pointer-events: none;
   background-image:
     repeating-linear-gradient(
@@ -180,7 +193,7 @@ h3 {
 .spotlight {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: var(--z-spotlight);
   pointer-events: none;
   background: radial-gradient(
     340px circle at var(--mx, -999px) var(--my, -999px),
@@ -400,7 +413,6 @@ h3 {
   }
 }
 
-/* ── Print: clean one-page resume ── */
 @media print {
   body::before,
   body::after,
