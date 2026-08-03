@@ -89,7 +89,7 @@ const num = String(index + 1).padStart(2, "0");
     align-items: baseline;
   }
   .num {
-    color: var(--text-faint);
+    color: var(--text-chrome);
     font-size: var(--t-lg);
     font-weight: 700;
   }
@@ -103,9 +103,10 @@ const num = String(index + 1).padStart(2, "0");
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    font-weight: 500;
   }
   .sep {
-    color: var(--text-faint);
+    color: var(--text-chrome);
     margin: 0 0.4rem;
   }
   .status[data-status="ongoing"] {
@@ -122,6 +123,7 @@ const num = String(index + 1).padStart(2, "0");
   }
   .oneline {
     margin: 0.7rem 0 0;
+    text-wrap: pretty;
   }
   .tags {
     display: flex;
@@ -147,6 +149,8 @@ const num = String(index + 1).padStart(2, "0");
     padding: 0.8rem 0 0;
     color: var(--accent);
     font-size: var(--t-sm);
+    font-weight: 500;
+    transition: transform var(--dur-fast) var(--ease-out-quint);
   }
   summary::-webkit-details-marker {
     display: none;
@@ -165,6 +169,9 @@ const num = String(index + 1).padStart(2, "0");
   summary:hover {
     text-decoration: underline;
   }
+  summary:active {
+    transform: translateY(1px);
+  }
   .grid {
     display: grid;
     gap: 1rem;
@@ -181,11 +188,13 @@ const num = String(index + 1).padStart(2, "0");
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.12em;
+    font-weight: 500;
   }
   .field p {
     margin: 0;
     font-size: var(--t-sm);
     color: var(--text-muted);
+    text-wrap: pretty;
   }
   .banner {
     margin: 1.1rem 0 0;
@@ -198,13 +207,16 @@ const num = String(index + 1).padStart(2, "0");
     height: 60px;
     width: auto;
     border-radius: 8px;
-    filter: drop-shadow(0 0 8px rgba(71, 147, 204, 0.3));
+    filter: drop-shadow(0 0 8px var(--accent-dim));
     transition:
       filter var(--dur-fast) ease,
       transform var(--dur-fast) var(--ease-out-quint);
   }
   .cb:hover img {
-    filter: drop-shadow(0 0 18px rgba(71, 147, 204, 0.7));
+    filter: drop-shadow(0 0 18px var(--accent-glow));
     transform: translateY(-2px);
+  }
+  .cb:active img {
+    transform: translateY(0);
   }
 </style>

@@ -38,7 +38,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
     top: 0;
     left: 0;
     right: 0;
-    z-index: 50;
+    z-index: var(--z-nav);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -80,7 +80,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
   }
   .nav-link::before {
     content: "./";
-    color: var(--text-faint);
+    color: var(--text-chrome);
   }
   .nav-link:hover,
   .nav-link[aria-current="true"] {
@@ -104,10 +104,19 @@ import memojiSrc from "../assets/lars_memoji.webp";
     padding: 0.35rem 0.55rem;
     border-radius: var(--r-sm);
     cursor: pointer;
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out-quint);
   }
   .theme-btn:hover {
     color: var(--accent);
     border-color: var(--accent);
+  }
+  .theme-btn:active {
+    transform: translateY(1px);
+    background: var(--accent-dim);
   }
   @media (max-width: 640px) {
     .nav-link:nth-child(2) {

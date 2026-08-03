@@ -164,9 +164,10 @@ import memojiSrc from "../assets/lars_memoji.webp";
         }
       </div>
       <p class="sectxt">
-        $ cat /.well-known/security.txt <span
-          >· RFC 9116 vulnerability disclosure</span
+        $ <a class="sec-link" href="/.well-known/security.txt"
+          >cat /.well-known/security.txt</a
         >
+        <span>· RFC 9116 vulnerability disclosure</span>
       </p>
       <div class="tor-widget">
         <p class="sectxt">
@@ -180,8 +181,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
           width="320"
           height="240"
           title="Tor Snowflake proxy"
-          loading="lazy"
-          style="border:0"></iframe>
+          loading="lazy"></iframe>
       </div>
     </section>
   </article>
@@ -248,7 +248,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
     min-width: 3.2rem;
   }
   .boot .det {
-    color: var(--text-faint);
+    color: var(--text-chrome);
   }
   .hero-prompt {
     margin: 0 0 0.5rem;
@@ -293,7 +293,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
     animation: fade-in 0.4s ease 1.3s forwards;
   }
   .br {
-    color: var(--text-faint);
+    color: var(--text-chrome);
   }
   .hero-name {
     margin: 0 0 0.5rem;
@@ -362,6 +362,10 @@ import memojiSrc from "../assets/lars_memoji.webp";
     transform: translateY(-2px);
     box-shadow: 0 0 26px var(--accent-glow);
   }
+  .cta:active {
+    transform: translateY(0);
+    box-shadow: 0 0 12px var(--accent-dim);
+  }
   .cta--ghost {
     background: transparent;
     color: var(--accent);
@@ -383,7 +387,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
     place-items: center;
     box-shadow:
       0 0 0 6px var(--accent-dim),
-      0 10px 30px rgba(0, 0, 0, 0.45),
+      0 10px 30px color-mix(in srgb, var(--ink) 72%, transparent),
       0 0 24px var(--accent-dim);
     transition:
       transform 0.3s ease,
@@ -419,7 +423,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
     transform: translateY(-4px) rotate(3deg);
     box-shadow:
       0 0 0 6px var(--accent-dim),
-      0 16px 40px rgba(0, 0, 0, 0.5),
+      0 16px 40px color-mix(in srgb, var(--ink) 78%, transparent),
       0 0 40px var(--accent-glow);
   }
   .avatar-wrap:hover .avatar-img {
@@ -434,10 +438,13 @@ import memojiSrc from "../assets/lars_memoji.webp";
 
   /* about + contact */
   .about-text {
-    max-width: 44rem;
+    /* Measure in ch, not rem: JetBrains Mono runs ~1.7x wider per character
+       than a proportional face, so 44rem was ~77 characters. */
+    max-width: 68ch;
   }
   .about-text p {
     margin: 0 0 1.1rem;
+    text-wrap: pretty;
   }
   .about-text strong {
     color: var(--accent);
@@ -457,7 +464,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
   }
   .ls-row {
     font-size: var(--t-xs);
-    color: var(--text-faint);
+    color: var(--text-chrome);
     margin: 0 0 1rem;
     letter-spacing: 0.04em;
     white-space: nowrap;
@@ -491,8 +498,9 @@ import memojiSrc from "../assets/lars_memoji.webp";
     animation: led-pulse 2.4s ease-in-out infinite;
   }
   .contact-lede {
-    max-width: 40rem;
+    max-width: 68ch;
     margin: 0 0 1rem;
+    text-wrap: pretty;
   }
   .social-row {
     display: flex;
@@ -506,12 +514,19 @@ import memojiSrc from "../assets/lars_memoji.webp";
     border: 1px solid var(--border);
     border-radius: var(--r-md);
     padding: 0.45rem 0.85rem;
-    transition: all var(--dur-fast) ease;
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out-quint);
   }
   .social-chip:hover {
     color: var(--accent);
     border-color: var(--accent);
     background: var(--accent-dim);
+  }
+  .social-chip:active {
+    transform: translateY(1px);
   }
   .sectxt {
     font-size: var(--t-xs);
@@ -521,6 +536,18 @@ import memojiSrc from "../assets/lars_memoji.webp";
   }
   .sectxt span {
     color: var(--text-muted);
+  }
+  .sec-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-strong);
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease;
+  }
+  .sec-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
   }
   .tor-widget {
     margin-top: 1.4rem;
@@ -535,6 +562,7 @@ import memojiSrc from "../assets/lars_memoji.webp";
   .tor-widget iframe {
     display: block;
     max-width: 100%;
+    border: 0;
     border-radius: var(--r-sm);
   }
 </style>

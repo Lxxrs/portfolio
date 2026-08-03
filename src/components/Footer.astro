@@ -79,7 +79,7 @@ const date = new Date().toISOString().slice(0, 10);
     max-width: var(--content-max);
     margin: 0 auto;
     position: relative;
-    z-index: 1;
+    z-index: var(--z-content);
   }
   .para {
     background: none;
@@ -89,6 +89,15 @@ const date = new Date().toISOString().slice(0, 10);
     font-size: var(--t-lg);
     cursor: pointer;
     padding: 0;
+    transition:
+      color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out-quint);
+  }
+  .para:hover {
+    color: var(--text-muted);
+  }
+  .para:active {
+    transform: translateY(1px);
   }
   .grid {
     display: grid;
@@ -105,6 +114,7 @@ const date = new Date().toISOString().slice(0, 10);
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.12em;
+    font-weight: 500;
     margin: 0 0 0.5rem;
   }
   .line {
