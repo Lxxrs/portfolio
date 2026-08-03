@@ -35,8 +35,6 @@ export default defineConfig({
       provider: fontProviders.local(),
       name: "JetBrainsMono",
       cssVariable: "--font-jetbrains-mono",
-      // Monospace fallbacks so metric-optimized fallback + degraded rendering
-      // still matches the terminal aesthetic (Astro defaults to sans-serif).
       fallbacks: ["ui-monospace", "SF Mono", "Menlo", "monospace"],
       options: {
         variants: [
@@ -65,21 +63,15 @@ export default defineConfig({
   security: {
     csp: {
       algorithm: "SHA-256",
-      // Astro hashes every bundled script/style automatically.
-      // The one manual hash below is for the theme-init inline script in
-      // BaseLayout.astro — recompute it if you EVER edit that script:
-      //   pnpm build, copy the <script> body from dist/index.html, then:
-      //   printf '%s' '<script body>' | openssl dgst -sha256 -binary | openssl base64
+
       scriptDirective: {
-        resources: ["'self'"],
-        hashes: [
-          {
-            hash: "sha256-wlJS1CP0c1ItA6M/rRl9rhVD/QwTjwLvJE6TiIdV738=",
-            kind: "element",
-          },
-        ],
+        resources: ["'self'", { resource: "'none'", kind: "attribute" }],
       },
-      styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
+
+      styleDirective: {
+        resources: ["'self'", { resource: "'none'", kind: "attribute" }],
+      },
+
       directives: [
         "default-src 'none'",
         "img-src 'self' data:",
@@ -90,9 +82,7 @@ export default defineConfig({
         "base-uri 'none'",
         "form-action 'none'",
         "manifest-src 'none'",
-        // One deliberate exception to the otherwise strict default-src 'none':
-        // the Tor Snowflake proxy widget embedded in the Contact section.
-        "frame-src https://snowflake.torproject.org",
+        "frame-src https://snowflake.torproject.org https://embed-snowflake.torproject.org",
       ],
     },
   },
