@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { site } from "../data/site.ts";
 import palestineFlag from "../assets/palestine-flag.png";
+import astroBadge from "../assets/badges/built-with-astro.svg";
 
 const commit = (process.env.CI_COMMIT_SHA ?? "dev").slice(0, 7);
 const date = new Date().toISOString().slice(0, 10);
@@ -59,11 +60,11 @@ const date = new Date().toISOString().slice(0, 10);
       >[build {commit} · {date} · exit 0]</span
     >
     <a class="astro-badge" href="https://astro.build" rel="noopener noreferrer">
-      <img
-        src="src/assets/badges/built-with-astro.svg"
+      <Image
+        src={astroBadge}
         alt="Built with Astro"
-        width="120"
-        height="20"
+        width={120}
+        height={20}
         loading="lazy"
         decoding="async"
       />

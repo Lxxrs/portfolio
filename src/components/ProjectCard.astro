@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import type { ProjectEntry } from "../data/projects.ts";
+import codebergBadge from "../assets/badges/get-it-on-codeberg.svg";
 
 interface Props {
   project: ProjectEntry;
@@ -53,10 +55,10 @@ const num = String(index + 1).padStart(2, "0");
       project.codebergBanner && (
         <p class="banner">
           <a class="cb" href="https://codeberg.org/Lxrs/portfolio">
-            <img
-              src="src/assets/badges/get-it-on-codeberg.svg"
+            <Image
+              src={codebergBadge}
               alt="Get it on Codeberg"
-              height="60"
+              height={60}
               loading="lazy"
               decoding="async"
             />

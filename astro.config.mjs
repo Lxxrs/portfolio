@@ -42,7 +42,7 @@ export default defineConfig({
         variants: [
           {
             src: ["./src/assets/fonts/JetBrainsMono-Regular.woff2"],
-            weight: "regular",
+            weight: "normal",
             style: "normal",
           },
           {
@@ -52,7 +52,7 @@ export default defineConfig({
           },
           {
             src: ["./src/assets/fonts/JetBrainsMono-Medium.woff2"],
-            weight: "medium",
+            weight: 500,
             style: "normal",
           },
         ],
