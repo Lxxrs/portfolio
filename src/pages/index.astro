@@ -164,6 +164,21 @@ import { socialLinks } from "../data/social";
           >· RFC 9116 vulnerability disclosure</span
         >
       </p>
+      <div class="tor-widget">
+        <p class="sectxt">
+          $ proxy --tor <span
+            >· run a Snowflake proxy in this tab to help others reach the open
+            internet</span
+          >
+        </p>
+        <iframe
+          src="https://snowflake.torproject.org/embed.html"
+          width="320"
+          height="240"
+          title="Tor Snowflake proxy"
+          loading="lazy"
+          style="border:0"></iframe>
+      </div>
     </section>
   </article>
 </BaseLayout>
@@ -502,5 +517,20 @@ import { socialLinks } from "../data/social";
   }
   .sectxt span {
     color: var(--text-muted);
+  }
+  .tor-widget {
+    margin-top: 1.4rem;
+    padding: 1.2rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--ink-2);
+  }
+  .tor-widget .sectxt {
+    margin: 0 0 0.9rem;
+  }
+  .tor-widget iframe {
+    display: block;
+    max-width: 100%;
+    border-radius: var(--r-sm);
   }
 </style>

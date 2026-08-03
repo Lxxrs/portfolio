@@ -67,7 +67,7 @@ export default defineConfig({
       },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
       directives: [
-        "default-src 'self'",
+        "default-src 'none'",
         "img-src 'self' data:",
         "font-src 'self'",
         "connect-src 'none'",
@@ -76,6 +76,9 @@ export default defineConfig({
         "base-uri 'none'",
         "form-action 'none'",
         "manifest-src 'none'",
+        // One deliberate exception to the otherwise strict default-src 'none':
+        // the Tor Snowflake proxy widget embedded in the Contact section.
+        "frame-src https://snowflake.torproject.org",
       ],
     },
   },

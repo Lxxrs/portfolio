@@ -3,7 +3,8 @@
 [![Built with Astro](src/assets/badges/built-with-astro.svg)](https://astro.build) [![status-badge](https://codeberg.org/Lxrs/portfolio/badges/workflows/publish.yaml/badge.svg)](https://codeberg.org/Lxrs/portfolio/actions)
 
 One-page portfolio with a terminal/fsociety-lite aesthetic. Privacy-first:
-no analytics, no cookies, no third-party requests, noindex everywhere.
+no analytics, no cookies, noindex everywhere, and no third-party requests
+except one opt-in exception — an embedded Tor Snowflake proxy widget.
 
 | Layer     | Technology                            |
 | --------- | ------------------------------------- |
