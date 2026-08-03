@@ -12,8 +12,16 @@
 
 import { createHash } from "node:crypto";
 
+/**
+ * Order of precedence, resolved before first paint:
+ *   1. an explicit choice the visitor made (localStorage)
+ *   2. the operating system's preference
+ *   3. dark — the site's default identity
+ *
+ * Kept on one line so `compressHTML` cannot alter the bytes the hash covers.
+ */
 export const themeBootSource =
-  '(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}var light=t==="light";var c=document.documentElement.classList;c.toggle("light",light);c.toggle("dark",!light)})();';
+  '(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}var light=t?t==="light":matchMedia("(prefers-color-scheme: light)").matches;var c=document.documentElement.classList;c.toggle("light",light);c.toggle("dark",!light)})();';
 
 export const themeBootHash = `sha256-${createHash("sha256")
   .update(themeBootSource)
