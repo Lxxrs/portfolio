@@ -88,8 +88,11 @@ const num = String(index + 1).padStart(2, "0");
     gap: 1.1rem;
     align-items: baseline;
   }
+  /* Not --text-chrome: aria-hidden hides these from screen readers, not from
+     eyes. The case numbers are visible content a low-vision reader may want,
+     unlike the purely ornamental rails and prompts. */
   .num {
-    color: var(--text-chrome);
+    color: var(--text-faint);
     font-size: var(--t-lg);
     font-weight: 700;
   }
