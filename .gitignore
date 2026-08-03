@@ -28,24 +28,6 @@ Temporary Items
 
 
 
-
-
-# ---> VisualStudioCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
-!*.code-workspace
-
-# Built Visual Studio Code Extensions
-*.vsix
-
-
-
-
-
 # ---> Node
 # Logs
 logs
@@ -204,9 +186,11 @@ vite.config.ts.timestamp-*
 # Built Visual Studio Code Extensions
 *.vsix
 
-
 .astro/
 
 .agents/
-
+.claude/
 .github/
+skills-lock.json
+
+docs/
