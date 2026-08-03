@@ -1,33 +1,8 @@
 ---
-import { skillGroups, statusChar, statusLabel } from "../data/skills.ts";
+import { statusChar, statusLabel } from "../data/skills.ts";
+import { treeRows } from "../lib/skill-tree.ts";
 
-// Precompute ASCII connectors: groups get ├──/└──, leaves get │/space rails.
-const rows: {
-  conn: string;
-  kind: "root" | "dir" | "leaf";
-  text: string;
-  hint?: string;
-  status?: keyof typeof statusChar;
-}[] = [{ conn: "", kind: "root", text: "skills/" }];
-skillGroups.forEach((g, gi) => {
-  const lastGroup = gi === skillGroups.length - 1;
-  rows.push({
-    conn: lastGroup ? "└── " : "├── ",
-    kind: "dir",
-    text: `${g.label}/`,
-    hint: g.hint,
-  });
-  const rail = lastGroup ? "    " : "│   ";
-  g.children.forEach((c, ci) => {
-    const lastLeaf = ci === g.children.length - 1;
-    rows.push({
-      conn: rail + (lastLeaf ? "└── " : "├── "),
-      kind: "leaf",
-      text: c.label,
-      status: c.status,
-    });
-  });
-});
+const rows = treeRows();
 ---
 
 <p class="lede">
@@ -40,9 +15,13 @@ skillGroups.forEach((g, gi) => {
 
 <ul class="tree" aria-label="Skills, grouped">
   {
-    rows.map((r, i) => (
-      <li style={`--i:${i}`}>
-        {r.conn && <span class="conn">{r.conn}</span>}
+    rows.map((r) => (
+      <li>
+        {r.conn && (
+          <span class="conn" aria-hidden="true">
+            {r.conn}
+          </span>
+        )}
         {r.kind !== "leaf" ? (
           <>
             <span class="dir">{r.text}</span>
@@ -88,21 +67,29 @@ skillGroups.forEach((g, gi) => {
   .tree li {
     white-space: nowrap;
   }
-  /* type-in reveal: hidden only pre-reveal so no-JS users see everything */
   :global(html.js) .tree li {
     opacity: 0;
     transform: translateX(-6px);
   }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .tree li {
+      opacity: 1;
+      transform: none;
+    }
+  }
   :global(html.js) .tree.is-visible li {
-    animation: boot-line 0.16s ease-out forwards;
-    animation-delay: calc(var(--i) * 55ms);
+    animation-name: boot-line;
+    animation-duration: 0.16s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
   }
   .conn {
-    color: var(--text-faint);
+    color: var(--text-chrome);
     white-space: pre;
   }
   .dir {
     color: var(--text);
+    font-weight: 500;
   }
   .hint {
     color: var(--text-faint);
