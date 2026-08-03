@@ -3,12 +3,27 @@ import "../styles/global.css";
 import NavBar from "../components/NavBar.astro";
 import Footer from "../components/Footer.astro";
 import OperatorMask from "../components/OperatorMask.astro";
-import { site } from "../data/site";
+import { Font, getImage } from "astro:assets";
+import { site } from "../data/site.ts";
+import memojiSrc from "../assets/lars_memoji.webp";
 
 interface Props {
   title?: string;
 }
 const { title = `${site.name} | ${site.role}` } = Astro.props;
+
+const favicon = await getImage({
+  src: memojiSrc,
+  width: 32,
+  height: 32,
+  format: "png",
+});
+const appleTouchIcon = await getImage({
+  src: memojiSrc,
+  width: 180,
+  height: 180,
+  format: "png",
+});
 ---
 
 <!doctype html>
@@ -28,6 +43,9 @@ const { title = `${site.name} | ${site.role}` } = Astro.props;
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0a0e1a" />
     <title>{title}</title>
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon.src} />
+    <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIcon.src} />
+    <!-- Legacy/secondary fallback for browsers that prefer a vector favicon. -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Theme init before first paint (FOUC guard). If you edit this script,
          recompute its CSP hash — see astro.config.mjs. -->

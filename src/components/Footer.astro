@@ -1,6 +1,8 @@
 ---
-import { site } from "../data/site";
-// Build stamp: baked at build time. Woodpecker sets CI_COMMIT_SHA.
+import { Image } from "astro:assets";
+import { site } from "../data/site.ts";
+import palestineFlag from "../assets/palestine-flag.png";
+
 const commit = (process.env.CI_COMMIT_SHA ?? "dev").slice(0, 7);
 const date = new Date().toISOString().slice(0, 10);
 ---
@@ -36,6 +38,20 @@ const date = new Date().toISOString().slice(0, 10);
         no third-party requests (except the Tor Snowflake widget)
       </p>
       <p class="line">noindex · robots.txt: Disallow /</p>
+    </div>
+    <div>
+      <p class="col-title">Stand</p>
+      <p class="line">
+        <a
+          class="link stand-link"
+          href="https://palestine.un.org/en"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Free Palestine
+          <Image src={palestineFlag} width="16" height="16" alt="" />
+        </a>
+      </p>
     </div>
   </div>
   <p class="exit-line">
@@ -80,7 +96,7 @@ const date = new Date().toISOString().slice(0, 10);
   }
   @media (min-width: 720px) {
     .grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   }
   .col-title {
@@ -103,6 +119,15 @@ const date = new Date().toISOString().slice(0, 10);
   .link:hover {
     color: var(--accent);
     border-bottom-color: var(--accent);
+  }
+  .stand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .stand-link :global(img) {
+    display: inline-block;
+    border-radius: 2px;
   }
   .exit-line {
     margin: 2rem 0 0;
