@@ -9,41 +9,31 @@
 # A rule containing even ONE non-allowlisted header is discarded *whole*
 # (`validateHeaderRule` -> `AddProblem` -> `continue`, src/headers.go), and only
 # the first matching rule is applied per URL (`matchPathRules`) — extra `/*`
-# blocks do not stack. That is why the old single `/*` rule listing HSTS,
-# Referrer-Policy, COOP/COEP/CORP and X-Frame-Options served *nothing*, not
-# even X-Clacks-Overhead.
+# blocks do not stack.
 #
-# ── ALLOWLIST PROBE (temporary — delete once answered) ──────────────────────
-# The earlier test proved "at least one of those headers is refused", not
-# "all of them are". Each candidate below sits on its own path so a refusal
-# can only take down its own rule. After this deploys, run:
+# ── SETTLED: the allowlist really is just X-Clacks-Overhead ─────────────────
+# Measured 2026-08-05 by deploying each candidate on its own path, so that a
+# refusal could only discard its own rule. Every one was refused:
 #
-#   curl -sI https://larmart.de/robots.txt  | grep -i x-frame-options
-#   curl -sI https://larmart.de/humans.txt  | grep -i cross-origin-resource
-#   curl -sI https://larmart.de/favicon.svg | grep -i strict-transport
-#   curl -sI https://larmart.de/sw.js       | grep -i content-security-policy
+#   /robots.txt   X-Frame-Options                 -> not served
+#   /humans.txt   Cross-Origin-Resource-Policy    -> not served
+#   /favicon.svg  Strict-Transport-Security       -> not served
+#   /sw.js        Content-Security-Policy         -> not served
 #
-# Whatever comes back is allowlisted and can move into the `/*` rule below.
-# Anything that stays silent is refused by git-pages and is not achievable
-# on this host. These paths lose X-Clacks-Overhead while the probe is in
-# place, because only the first matching rule applies.
-
-/robots.txt
-  X-Frame-Options: DENY
-
-/humans.txt
-  Cross-Origin-Resource-Policy: same-origin
-
-/favicon.svg
-  Strict-Transport-Security: max-age=31536000; includeSubDomains
-
-/sw.js
-  Content-Security-Policy: frame-ancestors 'none'
-
-# ── Live rule ───────────────────────────────────────────────────────────────
-# X-Content-Type-Options: nosniff is already sent by git-pages itself.
-# Referrer-Policy is delivered via <meta name="referrer"> in BaseLayout.astro.
-# The real CSP ships as an Astro-generated <meta> with per-build hashes.
+# Each probe path kept returning X-Clacks-Overhead from the `/*` rule below,
+# which is the proof the probe rules were thrown away rather than merged.
+#
+# Consequences — do not re-litigate without re-measuring:
+#   - XFO and CORP are unreachable on this host. `frame-ancestors` cannot
+#     substitute: it is ignored in a <meta> CSP, header-only by spec.
+#   - HSTS is unreachable. Codeberg terminates TLS and sets its own.
+#   - Mozilla Observatory therefore tops out at C+ here (score 60 = 100 - 20
+#     for HSTS - 20 for XFO). Only a different host changes that.
+#
+# What ships instead:
+#   - X-Content-Type-Options: nosniff — already sent by git-pages itself.
+#   - Referrer-Policy — via <meta name="referrer"> in BaseLayout.astro.
+#   - The real CSP — an Astro-generated <meta> with per-build hashes.
 
 /*
   X-Clacks-Overhead: GNU Terry Pratchett
