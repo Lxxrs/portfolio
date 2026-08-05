@@ -29,48 +29,71 @@ export const skillGroups: SkillGroup[] = [
       node("NixOS", "learning"),
     ],
   },
+
   {
     id: "net",
     label: "networking-and-services",
-    hint: "[placeholder] self-hosted stack",
+    hint: "what I route, resolve and filter",
     children: [
+      node("TCP/IP · VLANs · Routing", "prod"),
       node("DNS / Unbound", "prod"),
-      node("Reverse Proxy (Nginx / Caddy)", "familiar"),
-      node("VPN (WireGuard / Tailscale)", "familiar"),
-      node("Firewall (PF)", "familiar"),
+      node("DNSSEC (deSEC)", "prod"),
+      node("Firewall (pf / OPNsense)", "familiar"),
+      node("Let's Encrypt / ACME", "familiar"),
+      node("Reverse Proxy (nginx / Caddy)", "familiar"),
       node("DHCP (ISC DHCP / Kea)", "familiar"),
-      node("Containerlab", "learning"),
-      node("NetBox", "learning"),
+      node("VPN (WireGuard / Tailscale)", "familiar"),
+      node("PXE / netboot", "familiar"),
     ],
   },
+
   {
     id: "ops",
     label: "operations-and-iac",
     hint: "automate before you forget",
     children: [
-      node("Git / GitLab", "prod"),
       node("pyinfra", "prod"),
+      node("Git / GitLab", "prod"),
+      node("Forgejo / Codeberg CI", "familiar"),
       node("Docker", "familiar"),
-      node("Proxmox / KVM", "familiar"),
+      node("Containerlab", "familiar"),
+      node("vrnetlab", "familiar"),
+      node("Proxmox VE / KVM", "familiar"),
+      node("Backups (S3 / rsync)", "familiar"),
       node("Ansible", "learning"),
       node("OpenTofu / Terraform", "learning"),
-      node("Observability (Prometheus / Grafana)", "learning"),
       node("Kubernetes (K3s / K8s)", "learning"),
+      node("NetBox", "learning"),
     ],
   },
+
+  {
+    id: "obs",
+    label: "observability",
+    hint: "knowing before the phone rings",
+    children: [
+      node("Uptime Kuma", "prod"),
+      node("Prometheus Exporter (node / pf / nginx", "familiar"),
+      node("Prometheus", "learning"),
+      node("Grafana", "learning"),
+    ],
+  },
+
   {
     id: "code",
     label: "code-and-tooling",
     hint: "things I reach for",
     children: [
       node("Bash / POSIX sh", "prod"),
+      node("Neovim", "prod"),
       node("Python", "familiar"),
-      node("HTML/CSS", "familiar"),
-      node("SQL", "familiar"),
+      node("SQL (MySQL / MariaDB)", "familiar"),
+      node("HTML / CSS", "familiar"),
       node("TypeScript / Astro", "learning"),
       node("Golang", "learning"),
     ],
   },
+
   {
     id: "lab",
     label: "lab-and-hardware",
@@ -83,6 +106,7 @@ export const skillGroups: SkillGroup[] = [
       node("MikroTik (RouterOS)", "learning"),
     ],
   },
+
   {
     id: "certs",
     label: "certifications",

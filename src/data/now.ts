@@ -7,7 +7,7 @@ export interface NowEntry {
 }
 
 export const now: NowEntry = {
-  month: "2026-07",
+  month: "2026-08",
   building: "this site that you're reading",
   reading: "Florian Dalwigk - Cyberspionage",
   pondering:
