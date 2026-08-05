@@ -101,7 +101,7 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
       yaml(),
-      visualizer({ emitFile: true, filename: "stats.html" }),
+      visualizer({ emitFile: false, filename: "stats.html" }),
     ],
   },
 });
