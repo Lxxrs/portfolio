@@ -77,11 +77,15 @@ const num = String(index + 1).padStart(2, "0");
     border-radius: var(--r-lg);
     transition:
       border-color var(--dur-fast) ease,
-      box-shadow var(--dur-fast) ease;
+      box-shadow var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out-quint);
   }
   .case:hover {
     border-color: var(--border-strong);
-    box-shadow: 0 0 0 3px var(--accent-dim);
+    box-shadow:
+      0 0 0 3px var(--accent-dim),
+      0 12px 30px color-mix(in srgb, var(--ink) 60%, transparent);
+    transform: translate3d(0, -3px, 0);
   }
   .head {
     display: flex;
