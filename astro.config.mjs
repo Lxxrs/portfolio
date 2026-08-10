@@ -71,27 +71,24 @@ export default defineConfig({
   security: {
     csp: {
       algorithm: "SHA-256",
-
-      scriptDirective: {
-        resources: ["'self'", { resource: "'none'", kind: "attribute" }],
-      },
-
-      styleDirective: {
-        resources: ["'self'", { resource: "'none'", kind: "attribute" }],
-      },
-
       directives: [
         "default-src 'none'",
-        "img-src 'self' data:",
+        "base-uri 'self'",
+        "connect-src 'self'",
+        "img-src 'self'",
         "font-src 'self'",
-        "connect-src 'none'",
-        "media-src 'none'",
+        "form-action 'self'",
         "object-src 'none'",
-        "base-uri 'none'",
-        "form-action 'none'",
-        "manifest-src 'none'",
+        "frame-ancestors 'none'",
         "frame-src https://snowflake.torproject.org https://embed-snowflake.torproject.org",
+        "worker-src 'self'",
       ],
+      styleDirective: {
+        resources: [
+          { resource: "'self'", kind: "element" },
+          { resource: "'unsafe-inline'", kind: "attribute" },
+        ],
+      },
     },
   },
 

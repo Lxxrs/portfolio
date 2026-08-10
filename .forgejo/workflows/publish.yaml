@@ -27,13 +27,12 @@ jobs:
           export CI_COMMIT_SHA="${{ forge.sha }}"
           echo "building ${{ forge.sha }} dated $BUILD_DATE"
           pnpm build
-          ls -a dist/
 
       - name: publish to larmart.de
         uses: actions/git-pages@v2
         with:
           site: https://larmart.de/
-          # server: codeberg.page (only needed on first run, if no TLS certicifate is present)
+          server: codeberg.page #(only needed on first run, if no TLS certicifate is present)
           token: ${{ forge.token }}
           source: dist/
 

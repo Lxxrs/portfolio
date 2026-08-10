@@ -32,9 +32,6 @@ const appleTouchIcon = await getImage({
 <!doctype html>
 <html lang="en" class="dark">
   <head>
-    <!-- charset FIRST: browsers only scan the opening 1024 bytes for it, and
-         <Font> emits ~1.7kB of @font-face ahead of everything else. Past that
-         window the page's box-drawing glyphs (├── § ¶ ▶ —) can mis-decode. -->
     <meta charset="utf-8" />
     <Font cssVariable="--font-jetbrains-mono" preload />
     <meta
