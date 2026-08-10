@@ -10,38 +10,37 @@ jobs:
   publish:
     runs-on: codeberg-tiny-lazy
     steps:
-      - uses: actions/checkout@v7
+      - name: checkout repo
+        uses: actions/checkout@v7
 
-      - name: install
+      - name: setup pnpm & install deps
         run: |
           corepack enable
           pnpm install --frozen-lockfile
 
-      - name: validate
-        run: |
-          pnpm exec prettier . --check
-          pnpm exec astro check
+      - name: format
+        run: pnpm format
 
-      - name: build
+      - name: check & build
         run: |
           export BUILD_DATE="$(git log -1 --format=%cs)"
           export CI_COMMIT_SHA="${{ forge.sha }}"
           echo "building ${{ forge.sha }} dated $BUILD_DATE"
-          pnpm run build
+          pnpm build
           ls -a dist/
 
-      - name: publish on larmart.de
+      - name: publish to larmart.de
         uses: actions/git-pages@v2
         with:
           site: https://larmart.de/
-          server: codeberg.page
+          # server: codeberg.page (only needed on first run, if no TLS certicifate is present)
           token: ${{ forge.token }}
           source: dist/
 
-#      - name: publish www.larmart.de
-#        uses: actions/git-pages@v2
-#        with:
-#          site: https://www.larmart.de/
-#          server: codeberg.page
-#          token: ${{ forge.token }}
-#          source: dist/
+      - name: publish to www.larmart.de
+        uses: actions/git-pages@v2
+        with:
+          site: https://www.larmart.de/
+          server: codeberg.page #(only needed on first run, if no TLS certicifate is present)
+          token: ${{ forge.token }}
+          source: dist/
