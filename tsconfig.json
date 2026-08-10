@@ -3,10 +3,21 @@
   "include": [".astro/types.d.ts", "**/*", "node"],
   "exclude": ["dist"],
   "compilerOptions": {
+    "paths": {
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@data/*": ["./src/data/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@scripts/*": ["./src/scripts/*"],
+      "@styles/*": ["./src/styles/*"]
+    },
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
       }
-    ]
+    ],
+    "verbatimModuleSyntax": true
   }
 }
