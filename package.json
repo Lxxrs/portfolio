@@ -16,23 +16,23 @@
     "postinstall": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {
-    "@astrojs/ts-plugin": "^1.10.10",
-    "astro": "^7.1.6"
+    "@astrojs/ts-plugin": "latest",
+    "astro": "latest"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@rollup/plugin-yaml": "^5.0.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.1.2",
-    "happy-dom": "^20.11.1",
-    "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "0.8.1",
-    "rollup-plugin-visualizer": "^7.0.1",
-    "sharp": "^0.35.3",
-    "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.10"
+    "@astrojs/check": "latest",
+    "@rollup/plugin-yaml": "latest",
+    "@tailwindcss/vite": "latest",
+    "@types/node": "latest",
+    "happy-dom": "latest",
+    "prettier": "latest",
+    "prettier-plugin-astro": "latest",
+    "prettier-plugin-tailwindcss": "latest",
+    "rollup-plugin-visualizer": "latest",
+    "sharp": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
   },
-  "packageManager": "pnpm@11.18.0"
+  "packageManager": "pnpm@11.21.0"
 }
