@@ -6,10 +6,10 @@
   "scripts": {
     "astro": "astro",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
-    "check": "astro check && prettier --check .",
-    "format": "prettier --write .",
+    "check": "astro check",
+    "format": "prettier . --write",
     "test": "vitest run",
     "test:watch": "vitest",
     "check:launch": "LAUNCH_CHECK=1 vitest run",
