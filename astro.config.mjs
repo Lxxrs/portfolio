@@ -5,10 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 import yaml from "@rollup/plugin-yaml";
 
 export default defineConfig({
-  // The two stylesheets are ~19kB and ~15kB, so the default "auto" (inline
-  // under 4kB) leaves them as <link>s — a second round trip before anything
-  // can paint. Inlining trades HTML size for that round trip; Astro still
-  // hashes the resulting <style> for the CSP.
   build: {
     inlineStylesheets: "always",
   },
@@ -21,6 +17,10 @@ export default defineConfig({
 
   experimental: {
     chromeDevtoolsWorkspace: true,
+
+    contentIntellisense: true,
+
+    incrementalBuild: true,
 
     svgOptimizer: svgoOptimizer({
       multipass: true,
