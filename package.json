@@ -31,8 +31,8 @@
     "rollup-plugin-visualizer": "latest",
     "sharp": "latest",
     "tailwindcss": "latest",
-    "typescript": "latest",
+    "typescript": "^6.0.3",
     "vitest": "latest"
   },
-  "packageManager": "pnpm@11.21.0"
+  "packageManager": "pnpm@12.9.0"
 }
