@@ -3,37 +3,36 @@ import { now } from "../data/now.ts";
 ---
 
 <aside class="now-line" aria-label="What I'm doing right now">
-  <span class="m" aria-hidden="true">$</span><span class="c">now</span><span
-    class="s"
-    aria-hidden="true">·</span
-  >
-  <time datetime={now.month}>{now.month}</time><span
-    class="s"
-    aria-hidden="true">·</span
-  >
+  <span class="m" aria-hidden="true">
+    $
+  </span>
+  <span class="c">now</span>
+  <span class="s" aria-hidden="true">
+    ·
+  </span>
+  <time datetime={now.month}>{now.month}</time>
+  <span class="s" aria-hidden="true">
+    ·
+  </span>
   <span class="body">
-    <span><em>building</em> {now.building}</span>
-    {
-      now.reading && (
-        <span>
-          <em>reading</em> {now.reading}
-        </span>
-      )
-    }
-    {
-      now.listening && (
-        <span>
-          <em>listening</em> {now.listening}
-        </span>
-      )
-    }
-    {
-      now.pondering && (
-        <span>
-          <em>pondering</em> {now.pondering}
-        </span>
-      )
-    }
+    <span>
+      <em>building</em> {now.building}
+    </span>
+    {now.reading && (
+      <span>
+        <em>reading</em> {now.reading}
+      </span>
+    )}
+    {now.listening && (
+      <span>
+        <em>listening</em> {now.listening}
+      </span>
+    )}
+    {now.pondering && (
+      <span>
+        <em>pondering</em> {now.pondering}
+      </span>
+    )}
   </span>
 </aside>
 

@@ -8,37 +8,35 @@ const rows = treeRows();
 <p class="lede">
   Things I reach for.
   <span class="legend" aria-hidden="true">
-    — <b class="st-prod">■</b> production · <b class="st-familiar">◐</b> familiar
-    · <b class="st-learning">○</b> learning
+    — <b class="st-prod">■</b> production · <b class="st-familiar">◐</b>{" "}
+    familiar · <b class="st-learning">○</b> learning
   </span>
 </p>
 
 <ul class="tree" aria-label="Skills, grouped">
-  {
-    rows.map((r) => (
-      <li>
-        {r.conn && (
-          <span class="conn" aria-hidden="true">
-            {r.conn}
-          </span>
-        )}
-        {r.kind !== "leaf" ? (
-          <>
-            <span class="dir">{r.text}</span>
-            {r.hint && <span class="hint"> — {r.hint}</span>}
-          </>
-        ) : (
-          <>
-            <span class={`st-${r.status}`} aria-hidden="true">
-              {statusChar[r.status!]}
-            </span>{" "}
-            <span class="leaf">{r.text}</span>
-            <span class="visually-hidden">({statusLabel[r.status!]})</span>
-          </>
-        )}
-      </li>
-    ))
-  }
+  {rows.map((r) => (
+    <li>
+      {r.conn && (
+        <span class="conn" aria-hidden="true">
+          {r.conn}
+        </span>
+      )}
+      {r.kind !== "leaf" ? (
+        <>
+          <span class="dir">{r.text}</span>
+          {r.hint && <span class="hint"> — {r.hint}</span>}
+        </>
+      ) : (
+        <>
+          <span class={`st-${r.status}`} aria-hidden="true">
+            {statusChar[r.status!]}
+          </span>{" "}
+          <span class="leaf">{r.text}</span>
+          <span class="visually-hidden">({statusLabel[r.status!]})</span>
+        </>
+      )}
+    </li>
+  ))}
 </ul>
 
 <style>

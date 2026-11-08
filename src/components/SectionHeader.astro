@@ -7,10 +7,13 @@ const { num, command } = Astro.props;
 ---
 
 <header class="manifest">
-  <span class="marker"
-    ><span class="num">§ {num}</span><span class="p">$</span> {command}</span
-  >
-  <span class="rule" aria-hidden="true"><span class="fill"></span></span>
+  <span class="marker">
+    <span class="num">§ {num}</span>
+    <span class="p">$</span> {command}
+  </span>
+  <span class="rule" aria-hidden="true">
+    <span class="fill"></span>
+  </span>
 </header>
 
 <style>

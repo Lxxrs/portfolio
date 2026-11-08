@@ -23,30 +23,28 @@ import memojiSrc from "../assets/lars_memoji.webp";
         <div>
           <div class="boot" aria-hidden="true">
             <p>
-              <span class="ok">[ ok ]</span> term <span class="det"
-                >/dev/tty0 — phosphor-blue</span
-              >
+              <span class="ok">[ ok ]</span> term{" "}
+              <span class="det">/dev/tty0 — phosphor-blue</span>
             </p>
             <p>
-              <span class="ok">[ ok ]</span> link <span class="det"
-                >uplink stable</span
-              >
+              <span class="ok">[ ok ]</span> link{" "}
+              <span class="det">uplink stable</span>
             </p>
             <p>
-              <span class="ok">[ ok ]</span> auth <span class="det"
-                >operator verified</span
-              >
+              <span class="ok">[ ok ]</span> auth{" "}
+              <span class="det">operator verified</span>
             </p>
             <p>
-              <span class="ok">[ ok ]</span> ready <span class="det"
-                >console idle</span
-              >
+              <span class="ok">[ ok ]</span> ready{" "}
+              <span class="det">console idle</span>
             </p>
           </div>
           <p class="hero-prompt">
-            <span class="prompt" aria-hidden="true">$</span><span class="typed"
-              >whoami</span
-            ><span class="cursor-blink" aria-hidden="true"></span>
+            <span class="prompt" aria-hidden="true">
+              $
+            </span>
+            <span class="typed">whoami</span>
+            <span class="cursor-blink" aria-hidden="true"></span>
           </p>
           <p class="hero-callsign" aria-hidden="true">
             <span class="br">[</span>
@@ -54,13 +52,21 @@ import memojiSrc from "../assets/lars_memoji.webp";
             <span class="br">]</span>
           </p>
           <h1 id="home-title" class="hero-name">
-            <span id="decrypt-name" data-text={site.name}>{site.name}</span>
+            <span id="decrypt-name" data-text={site.name}>
+              {site.name}
+            </span>
           </h1>
-          <p class="hero-role"><span class="typed2">{site.role}</span></p>
+          <p class="hero-role">
+            <span class="typed2">{site.role}</span>
+          </p>
           <p class="hero-lede">{site.lede}</p>
           <div class="hero-cta">
-            <a class="cta" href="#projects">$ ls projects/</a>
-            <a class="cta cta--ghost" href="#contact">$ ping lars</a>
+            <a class="cta" href="#projects">
+              $ ls projects/
+            </a>
+            <a class="cta cta--ghost" href="#contact">
+              $ ping lars
+            </a>
           </div>
         </div>
         <div class="avatar-wrap" aria-hidden="true">
@@ -93,21 +99,22 @@ import memojiSrc from "../assets/lars_memoji.webp";
     <!-- ── ABOUT ────────────────────────────────────────────────── -->
     <section id="about" class="section" aria-labelledby="about-title">
       <SectionHeader num="01" command="cat about.md" />
-      <h2 id="about-title" class="visually-hidden">About</h2>
+      <h2 id="about-title" class="visually-hidden">
+        About
+      </h2>
       <div class="about-text">
         <p>
-          I'm <strong>{site.name}</strong>, a Junior System Engineer in <strong
-            >{site.location}</strong
-          >. I build, break, and automate — <em>Infrastructure as Code</em>,
-          <em>Network Automation</em>, git and CI/CD is for what drives me. Hire
-          me ;)
+          I'm <strong>{site.name}</strong>, a Junior System Engineer in{" "}
+          <strong>{site.location}</strong>. I build, break, and automate —{" "}
+          <em>Infrastructure as Code</em>,<em>Network Automation</em>, git and
+          CI/CD is for what drives me. Hire me ;)
         </p>
         <p>
-          I work quietly. I document what I do. Source on <a
-            class="inline-link"
-            href={site.repo}
-            rel="noopener noreferrer">Codeberg</a
-          >.
+          I work quietly. I document what I do. Source on{" "}
+          <a class="inline-link" href={site.repo} rel="noopener noreferrer">
+            Codeberg
+          </a>
+          .
         </p>
       </div>
     </section>
@@ -115,64 +122,69 @@ import memojiSrc from "../assets/lars_memoji.webp";
     <!-- ── SKILLS ───────────────────────────────────────────────── -->
     <section id="skills" class="section" aria-labelledby="skills-title">
       <SectionHeader num="02" command="tree skills/" />
-      <h2 id="skills-title" class="visually-hidden">Skills</h2>
+      <h2 id="skills-title" class="visually-hidden">
+        Skills
+      </h2>
       <SkillsTree />
     </section>
 
     <!-- ── PROJECTS ─────────────────────────────────────────────── -->
     <section id="projects" class="section" aria-labelledby="projects-title">
       <SectionHeader num="03" command="ls -la projects/" />
-      <h2 id="projects-title" class="visually-hidden">Projects</h2>
+      <h2 id="projects-title" class="visually-hidden">
+        Projects
+      </h2>
       <p class="ls-row" aria-hidden="true">
         total {projects.length}&nbsp;&nbsp;·&nbsp;&nbsp;<b>drwxr-xr-x</b>&nbsp;
-        lars &nbsp;operators&nbsp; <b>4096</b>&nbsp; {
-          new Date().toISOString().slice(0, 10)
-        }&nbsp; <b>./</b>
+        lars &nbsp;operators&nbsp; <b>4096</b>&nbsp;{" "}
+        {new Date().toISOString().slice(0, 10)}&nbsp; <b>./</b>
       </p>
       <ul class="case-stack" role="list">
-        {
-          projects.map((p, i) => (
-            <li>
-              <ProjectCard project={p} index={i} />
-            </li>
-          ))
-        }
+        {projects.map((p, i) => (
+          <li>
+            <ProjectCard project={p} index={i} />
+          </li>
+        ))}
       </ul>
     </section>
 
     <!-- ── CONTACT ──────────────────────────────────────────────── -->
     <section id="contact" class="section" aria-labelledby="contact-title">
       <SectionHeader num="04" command="ping lars" />
-      <h2 id="contact-title" class="visually-hidden">Contact</h2>
+      <h2 id="contact-title" class="visually-hidden">
+        Contact
+      </h2>
       <p class="avail">
         <span class="led" aria-hidden="true"></span>status: open for sysadmin /
         network engineering / security work
       </p>
       <p class="contact-lede">
         End-to-end encryption is the only kind I trust:
-        <a class="inline-link" href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="inline-link" href={`mailto:${site.email}`}>
+          {site.email}
+        </a>
       </p>
       <div class="social-row">
-        {
-          socialLinks.map((s) => (
-            <a class="social-chip" href={s.url} rel="noopener noreferrer">
-              {s.name}
-            </a>
-          ))
-        }
+        {socialLinks.map((s) => (
+          <a class="social-chip" href={s.url} rel="noopener noreferrer">
+            {s.name}
+          </a>
+        ))}
       </div>
       <p class="sectxt">
-        $ <a class="sec-link" href="/.well-known/security.txt"
-          >cat /.well-known/security.txt</a
-        >
+        ${" "}
+        <a class="sec-link" href="/.well-known/security.txt">
+          cat /.well-known/security.txt
+        </a>
         <span>· RFC 9116 vulnerability disclosure</span>
       </p>
       <div class="tor-widget">
         <p class="sectxt">
-          $ proxy --tor <span
-            >· run a Snowflake proxy in this tab to help others reach the open
-            internet</span
-          >
+          $ proxy --tor{" "}
+          <span>
+            · run a Snowflake proxy in this tab to help others reach the open
+            internet
+          </span>
         </p>
         <!-- Opt-in: the embed is injected by ui.ts on click. Nothing is
              requested from torproject.org until the visitor asks for it, and
@@ -192,11 +204,14 @@ import memojiSrc from "../assets/lars_memoji.webp";
         </div>
         <noscript>
           <p class="tor-note">
-            Needs JavaScript. <a
+            Needs JavaScript.{" "}
+            <a
               class="inline-link"
               href="https://snowflake.torproject.org/"
-              rel="noopener noreferrer">Run a proxy on torproject.org</a
+              rel="noopener noreferrer"
             >
+              Run a proxy on torproject.org
+            </a>
           </p>
         </noscript>
       </div>

@@ -5,17 +5,24 @@ const path = "/requested/path";
 
 <BaseLayout title="404 — Lars M.">
   <section class="err">
-    <p class="line"><span class="p">$</span> cd {path}</p>
+    <p class="line">
+      <span class="p">$</span> cd {path}
+    </p>
     <p class="line out">bash: cd: {path}: No such file or directory</p>
-    <p class="line"><span class="p">$</span> sudo cd {path}</p>
+    <p class="line">
+      <span class="p">$</span> sudo cd {path}
+    </p>
     <p class="line out warn">
       lars is not in the sudoers file. This incident will be reported.
     </p>
     <p class="line">
       <span class="p">$</span>
-      <a class="home" href="/">cd ~</a><span class="cursor" aria-hidden="true"
-        >▊</span
-      >
+      <a class="home" href="/">
+        cd ~
+      </a>
+      <span class="cursor" aria-hidden="true">
+        ▊
+      </span>
     </p>
   </section>
 </BaseLayout>

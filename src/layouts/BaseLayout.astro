@@ -60,9 +60,13 @@ const appleTouchIcon = await getImage({
          └──────────────────────────────────────────────┘
     -->
     <div class="spotlight" aria-hidden="true"></div>
-    <a class="skip-link" href="#main">skip to content</a>
+    <a class="skip-link" href="#main">
+      skip to content
+    </a>
     <NavBar />
-    <main id="main" tabindex="-1"><slot /></main>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
     <Footer />
     <OperatorMask />
     <script>

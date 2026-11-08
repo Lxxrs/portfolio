@@ -11,62 +11,60 @@ const layer = ["l2", "l3", "l1"] as const;
   aria-modal="true"
 >
   <div class="stage">
-    {
-      colors.map((c, i) => (
-        <div class={`layer ${layer[i]}`} aria-hidden="true">
-          <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M18 28 Q18 8 60 8 Q102 8 102 28 L102 84 Q102 116 60 132 Q18 116 18 84 Z"
-              fill="none"
-              stroke={c}
-              stroke-width="4"
-            />
-            <path
-              d="M26 44 Q38 34 50 42"
-              fill="none"
-              stroke={c}
-              stroke-width="4"
-              stroke-linecap="round"
-            />
-            <path
-              d="M94 44 Q82 34 70 42"
-              fill="none"
-              stroke={c}
-              stroke-width="4"
-              stroke-linecap="round"
-            />
-            <text
-              x="30"
-              y="66"
-              font-family="JetBrains Mono, monospace"
-              font-size="24"
-              font-weight="700"
-              fill={c}
-            >
-              &gt;
-            </text>
-            <text
-              x="72"
-              y="66"
-              font-family="JetBrains Mono, monospace"
-              font-size="24"
-              font-weight="700"
-              fill={c}
-            >
-              &lt;
-            </text>
-            <path
-              d="M34 92 L46 100 L54 90 L60 100 L66 90 L74 100 L86 92"
-              fill="none"
-              stroke={c}
-              stroke-width="4"
-              stroke-linejoin="round"
-              stroke-linecap="round"
-            />
-          </svg>
-        </div>
-      ))
-    }
+    {colors.map((c, i) => (
+      <div class={`layer ${layer[i]}`} aria-hidden="true">
+        <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M18 28 Q18 8 60 8 Q102 8 102 28 L102 84 Q102 116 60 132 Q18 116 18 84 Z"
+            fill="none"
+            stroke={c}
+            stroke-width="4"
+          />
+          <path
+            d="M26 44 Q38 34 50 42"
+            fill="none"
+            stroke={c}
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M94 44 Q82 34 70 42"
+            fill="none"
+            stroke={c}
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <text
+            x="30"
+            y="66"
+            font-family="JetBrains Mono, monospace"
+            font-size="24"
+            font-weight="700"
+            fill={c}
+          >
+            &gt;
+          </text>
+          <text
+            x="72"
+            y="66"
+            font-family="JetBrains Mono, monospace"
+            font-size="24"
+            font-weight="700"
+            fill={c}
+          >
+            &lt;
+          </text>
+          <path
+            d="M34 92 L46 100 L54 90 L60 100 L66 90 L74 100 L86 92"
+            fill="none"
+            stroke={c}
+            stroke-width="4"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+    ))}
   </div>
   <p class="cap">hello, friend.</p>
 </div>

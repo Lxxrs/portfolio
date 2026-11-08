@@ -9,27 +9,31 @@ const date = new Date().toISOString().slice(0, 10);
 ---
 
 <footer class="colophon">
-  <button type="button" id="egg-para" class="para" aria-label="paragraph mark"
-    >¶</button
-  >
+  <button type="button" id="egg-para" class="para" aria-label="paragraph mark">
+    ¶
+  </button>
   <div class="grid">
     <div>
       <p class="col-title">Edition</p>
-      <p class="line">© {new Date().getFullYear()} {site.name}</p>
+      <p class="line">
+        © {new Date().getFullYear()} {site.name}
+      </p>
       <p class="line">
         <a
           class="link"
           href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-          rel="license noopener noreferrer">CC BY-NC-SA 4.0</a
+          rel="license noopener noreferrer"
         >
+          CC BY-NC-SA 4.0
+        </a>
       </p>
     </div>
     <div>
       <p class="col-title">Source</p>
       <p class="line">
-        <a class="link" href={site.repo} rel="noopener noreferrer"
-          >codeberg.org/Lxrs/portfolio</a
-        >
+        <a class="link" href={site.repo} rel="noopener noreferrer">
+          codeberg.org/Lxrs/portfolio
+        </a>
       </p>
     </div>
     <div>
@@ -56,9 +60,10 @@ const date = new Date().toISOString().slice(0, 10);
     </div>
   </div>
   <p class="exit-line">
-    <span class="p">$</span> exit&nbsp;&nbsp;<span class="ok"
-      >[build {commit} · {date} · exit 0]</span
-    >
+    <span class="p">$</span> exit&nbsp;&nbsp;
+    <span class="ok">
+      [build {commit} · {date} · exit 0]
+    </span>
     <a class="astro-badge" href="https://astro.build" rel="noopener noreferrer">
       <Image
         src={astroBadge}
