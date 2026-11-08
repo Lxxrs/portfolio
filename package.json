@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@astrojs/ts-plugin": "latest",
+    "@emnapi/runtime": "latest",
     "astro": "latest"
   },
   "devDependencies": {
@@ -31,8 +32,8 @@
     "rollup-plugin-visualizer": "latest",
     "sharp": "latest",
     "tailwindcss": "latest",
-    "typescript": "^6.0.3",
+    "typescript": "6",
     "vitest": "latest"
   },
-  "packageManager": "pnpm@12.9.0"
+  "packageManager": "pnpm@12.18.0"
 }
